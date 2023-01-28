@@ -1,9 +1,11 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import '../src/index.scss';
-import App from '../src/App';
+import { Provider } from 'react-redux';
 import reportWebVitals from '../src/reportWebVitals';
+import store from '../src/store';
+import App from '../src/App';
+import '../src/index.scss';
 
 const container = document.getElementById('root') as HTMLDivElement;
 
@@ -12,7 +14,9 @@ const root = createRoot(container);
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <Provider store={store}>
+        <App />
+      </Provider>
     </BrowserRouter>
   </React.StrictMode>
 );
