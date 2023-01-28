@@ -5,7 +5,7 @@ import { toggleStatus } from './store/reducers';
 import { useAppSelector, useAppDispatch } from './store/hooks';
 
 function App(): JSX.Element {
-  const { exists } = useAppSelector((state) => state.slice);
+  const { exists } = useAppSelector((state) => state.example);
   const dispatch = useAppDispatch();
 
   useEffect(() => {

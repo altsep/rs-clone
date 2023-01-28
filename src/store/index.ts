@@ -1,9 +1,9 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import slice, { ExampleStore } from './reducers';
+import example, { ExampleStore } from './reducers';
 
-const combinedReducers = combineReducers({ slice });
+const combinedReducers = combineReducers({ example });
 
-const store = configureStore<{ slice: ExampleStore }>({
+const store = configureStore<{ example: ExampleStore }>({
   reducer: (state, action) => combinedReducers(state, action),
 });
 
