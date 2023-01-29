@@ -1,31 +1,33 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-export interface ExampleStore {
+interface DefaultState {
   exists: boolean;
   value: null | string;
 }
 
-const initialState: ExampleStore = {
+const initialState: DefaultState = {
   exists: false,
   value: null,
 };
 
-export const exampleSlice = createSlice({
-  name: 'example',
+export const slice = createSlice({
+  name: 'default',
   initialState,
   reducers: {
     setProperty: (state, action) => {
-      const { name, value } = action.payload as { name: keyof ExampleStore; value: unknown };
+      const { name, value } = action.payload as { name: keyof DefaultState; value: unknown };
       return { ...state, [name]: value };
     },
     setValue: (state, action) => ({
       ...state,
       value: action.payload as string,
     }),
-    toggleStatus: (state) => ({ ...state, exists: true }),
+    toggleStatus: (state) => ({ ...state, exists: !state.exists }),
   },
 });
 
-export const { setProperty, setValue, toggleStatus } = exampleSlice.actions;
+export type { DefaultState };
 
-export default exampleSlice.reducer;
+export const { setProperty, setValue, toggleStatus } = slice.actions;
+
+export default slice.reducer;

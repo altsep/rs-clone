@@ -13,7 +13,7 @@ interface Placeholder {
 }
 
 function App(): JSX.Element {
-  const { exists } = useAppSelector((state) => state.example);
+  const { exists } = useAppSelector((state) => state.reducers);
   const dispatch = useAppDispatch();
 
   const { data, isLoading } = useSWR<Placeholder>('https://jsonplaceholder.typicode.com/todos/1', fetcher);
@@ -33,9 +33,17 @@ function App(): JSX.Element {
   return (
     <div>
       <h1>Hello</h1>
-      <Button variant="outlined">Material UI button</Button>
-      <Button variant="contained">Another button</Button>
+      <p>Exists: {String(exists)}</p>
       <p>{isLoading ? 'Loading...' : data && JSON.stringify(data)}</p>
+      <Button
+        variant="outlined"
+        onClick={(): void => {
+          dispatch(toggleStatus());
+        }}
+      >
+        Material UI button
+      </Button>
+      <Button variant="contained">Another button</Button>
     </div>
   );
 }

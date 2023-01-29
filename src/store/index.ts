@@ -1,9 +1,9 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import example, { ExampleStore } from './reducers';
+import reducers, { DefaultState } from './reducers';
 
-const combinedReducers = combineReducers({ example });
+const combinedReducers = combineReducers({ reducers });
 
-const store = configureStore<{ example: ExampleStore }>({
+const store = configureStore<{ reducers: DefaultState }>({
   reducer: (state, action) => combinedReducers(state, action),
 });
 
