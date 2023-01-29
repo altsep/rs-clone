@@ -10,7 +10,7 @@ const initialState: DefaultState = {
   value: null,
 };
 
-export const slice = createSlice({
+const slice = createSlice({
   name: 'default',
   initialState,
   reducers: {
