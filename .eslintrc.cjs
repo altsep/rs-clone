@@ -36,7 +36,6 @@ module.exports = {
   rules: {
     'no-console': [1, { allow: ['warn', 'error'] }],
     'no-param-reassign': 0,
-    '@typescript-eslint/explicit-function-return-type': 0,
     '@typescript-eslint/explicit-member-accessibility': 0,
     'import/prefer-default-export': 0,
     'react-hooks/exhaustive-deps': 1,
@@ -60,7 +59,6 @@ module.exports = {
     {
       files: ['*.ts', '*.mts', '*.cts', '*.tsx'],
       rules: {
-        '@typescript-eslint/explicit-function-return-type': 2,
         '@typescript-eslint/explicit-member-accessibility': [
           2,
           { accessibility: 'explicit', overrides: { constructors: 'no-public' } },
