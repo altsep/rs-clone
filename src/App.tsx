@@ -1,7 +1,4 @@
-import React, { useEffect } from 'react';
-import { Button } from '@mui/material';
 import useSWR from 'swr';
-import { toggleStatus } from './store/reducers';
 import { useAppSelector, useAppDispatch } from './store/hooks';
 import { fetcher } from './utils/fetcher';
 
