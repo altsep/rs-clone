@@ -1,24 +1,14 @@
-import useSWR from 'swr';
-import { useAppSelector, useAppDispatch } from './store/hooks';
-import { fetcher } from './utils/fetcher';
-
-interface Placeholder {
-  userId: number;
-  id: number;
-  title: string;
-  completed: boolean;
-}
+import { Container } from '@mui/material';
+import { Routes, Route } from 'react-router-dom';
+import Profile from './pages/Profile';
 
 function App() {
-  const { exists } = useAppSelector((state) => state.reducers);
-  const dispatch = useAppDispatch();
-
-  const { data, isLoading } = useSWR<Placeholder>('https://jsonplaceholder.typicode.com/todos/1', fetcher);
-
   return (
-    <div>
-      <h1>Hello</h1>
-    </div>
+    <Container>
+      <Routes>
+        <Route path="/:id" element={<Profile />} />
+      </Routes>
+    </Container>
   );
 }
 
