@@ -14,9 +14,11 @@ type HideUserArg = Pick<IUser, 'password'>;
 interface IAddUserProps {
   arg: AddUserArg;
 }
+
 interface IUpdateUserProps {
   arg: UpdateUserArg;
 }
+
 interface IHideUserProps {
   arg: HideUserArg;
 }
