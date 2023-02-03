@@ -1,10 +1,10 @@
-const BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = 'http://localhost:3000/api';
 
-const enum PATH {
+const enum ApiPath {
   posts = '/posts',
   users = '/users',
   comments = 'comments',
   auth = '/posts-auth',
 }
 
-export { BASE_URL, PATH };
+export { API_BASE_URL, ApiPath };
