@@ -13,6 +13,7 @@ interface UpdatePostProps {
     commentsIds?: number[];
   };
 }
+
 interface RemovePostProps {
   arg: {
     password: string;

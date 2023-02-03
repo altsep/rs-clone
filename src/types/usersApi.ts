@@ -23,6 +23,7 @@ interface UpdateUserProps {
     friendsIds?: number[];
   };
 }
+
 interface HideUserProps {
   arg: {
     password: string;
