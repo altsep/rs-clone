@@ -1,23 +1,29 @@
+interface AddPostArg {
+  userId: number;
+  description: string;
+  createdAt: string;
+}
+
+interface UpdatePostArg {
+  description?: string;
+  likes?: number;
+  commentsIds?: number[];
+}
+
+interface RemovePostArg {
+  password: string;
+}
+
 interface AddPostProps {
-  arg: {
-    userId: number;
-    description: string;
-    createdAt: string;
-  };
+  arg: AddPostArg;
 }
 
 interface UpdatePostProps {
-  arg: {
-    description?: string;
-    likes?: number;
-    commentsIds?: number[];
-  };
+  arg: UpdatePostArg;
 }
 
 interface RemovePostProps {
-  arg: {
-    password: string;
-  };
+  arg: RemovePostArg;
 }
 
-export type { AddPostProps, UpdatePostProps, RemovePostProps };
+export type { AddPostProps, UpdatePostProps, RemovePostProps, AddPostArg, UpdatePostArg, RemovePostArg };

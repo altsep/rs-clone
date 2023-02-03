@@ -1,33 +1,37 @@
+interface AddUserArg {
+  name: string;
+  email: string;
+  password: string;
+  country: string;
+  birthDate: string;
+  createdAt: string;
+  alias: string;
+}
+
+interface UpdateUserArg {
+  name?: string;
+  email?: string;
+  password?: string;
+  country?: string;
+  birthDate?: string;
+  alias?: string;
+  avatarURL?: string;
+  postsIds?: number[];
+  friendsIds?: number[];
+}
+
+interface HideUserArg {
+  password: string;
+}
+
 interface AddUserProps {
-  arg: {
-    name: string;
-    email: string;
-    password: string;
-    country: string;
-    birthDate: string;
-    createdAt: string;
-    alias: string;
-  };
+  arg: AddUserArg;
 }
-
 interface UpdateUserProps {
-  arg: {
-    name?: string;
-    email?: string;
-    password?: string;
-    country?: string;
-    birthDate?: string;
-    alias?: string;
-    avatarURL?: string;
-    postsIds?: number[];
-    friendsIds?: number[];
-  };
+  arg: UpdateUserArg;
 }
-
 interface HideUserProps {
-  arg: {
-    password: string;
-  };
+  arg: HideUserArg;
 }
 
-export type { AddUserProps, UpdateUserProps, HideUserProps };
+export type { AddUserArg, UpdateUserArg, HideUserArg, AddUserProps, UpdateUserProps, HideUserProps };
