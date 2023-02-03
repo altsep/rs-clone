@@ -1,37 +1,24 @@
-interface AddUserArg {
-  name: string;
-  email: string;
-  password: string;
-  country: string;
-  birthDate: string;
-  createdAt: string;
-  alias: string;
-}
+import { IUser } from './data';
 
-interface UpdateUserArg {
-  name?: string;
-  email?: string;
-  password?: string;
-  country?: string;
-  birthDate?: string;
-  alias?: string;
-  avatarURL?: string;
-  postsIds?: number[];
-  friendsIds?: number[];
-}
+type AddUserArg = Pick<IUser, 'name' | 'email' | 'password' | 'country' | 'birthDate' | 'createdAt' | 'alias'>;
 
-interface HideUserArg {
-  password: string;
-}
+type UpdateUserArg = Partial<
+  Pick<
+    IUser,
+    'name' | 'email' | 'password' | 'country' | 'birthDate' | 'alias' | 'avatarURL' | 'postsIds' | 'friendsIds'
+  >
+>;
 
-interface AddUserProps {
+type HideUserArg = Pick<IUser, 'password'>;
+
+interface IAddUserProps {
   arg: AddUserArg;
 }
-interface UpdateUserProps {
+interface IUpdateUserProps {
   arg: UpdateUserArg;
 }
-interface HideUserProps {
+interface IHideUserProps {
   arg: HideUserArg;
 }
 
-export type { AddUserArg, UpdateUserArg, HideUserArg, AddUserProps, UpdateUserProps, HideUserProps };
+export type { AddUserArg, UpdateUserArg, HideUserArg, IAddUserProps, IUpdateUserProps, IHideUserProps };

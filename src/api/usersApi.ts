@@ -1,6 +1,6 @@
-import { AddUserProps, UpdateUserProps, HideUserProps } from '../types/usersApi';
+import { IAddUserProps, IUpdateUserProps, IHideUserProps } from '../types/usersApi';
 
-const addUser = async (url: string, { arg }: AddUserProps): Promise<void> => {
+const addUser = async (url: string, { arg }: IAddUserProps): Promise<void> => {
   await fetch(url, {
     method: 'POST',
     headers: {
@@ -10,7 +10,7 @@ const addUser = async (url: string, { arg }: AddUserProps): Promise<void> => {
   });
 };
 
-const updateUser = async (url: string, { arg }: UpdateUserProps): Promise<void> => {
+const updateUser = async (url: string, { arg }: IUpdateUserProps): Promise<void> => {
   await fetch(url, {
     method: 'PATCH',
     headers: {
@@ -20,7 +20,7 @@ const updateUser = async (url: string, { arg }: UpdateUserProps): Promise<void> 
   });
 };
 
-const hideUser = async (url: string, { arg }: HideUserProps): Promise<void> => {
+const hideUser = async (url: string, { arg }: IHideUserProps): Promise<void> => {
   await fetch(url, {
     method: 'DELETE',
     headers: {

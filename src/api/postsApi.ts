@@ -1,6 +1,6 @@
-import { AddPostProps, UpdatePostProps, RemovePostProps } from '../types/postsApi';
+import { IAddPostProps, IUpdatePostProps, IRemovePostProps } from '../types/postsApi';
 
-const addPost = async (url: string, { arg }: AddPostProps): Promise<void> => {
+const addPost = async (url: string, { arg }: IAddPostProps): Promise<void> => {
   await fetch(url, {
     method: 'POST',
     headers: {
@@ -10,7 +10,7 @@ const addPost = async (url: string, { arg }: AddPostProps): Promise<void> => {
   });
 };
 
-const updatePost = async (url: string, { arg }: UpdatePostProps): Promise<void> => {
+const updatePost = async (url: string, { arg }: IUpdatePostProps): Promise<void> => {
   await fetch(url, {
     method: 'PATCH',
     headers: {
@@ -20,7 +20,7 @@ const updatePost = async (url: string, { arg }: UpdatePostProps): Promise<void> 
   });
 };
 
-const removePost = async (url: string, { arg }: RemovePostProps): Promise<void> => {
+const removePost = async (url: string, { arg }: IRemovePostProps): Promise<void> => {
   await fetch(url, {
     method: 'DELETE',
     headers: {

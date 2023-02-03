@@ -1,10 +1,10 @@
 import useSWR from 'swr';
-import { BASE_URL, PATH } from '../constants';
-import { IUsers } from '../types/data';
+import { API_BASE_URL, ApiPath } from '../constants';
+import { IUser } from '../types/data';
 import { fetcher } from '../utils/fetcher';
 
 export default function useUsers() {
-  const { data, isLoading, error, mutate } = useSWR<IUsers, Error>(`${BASE_URL}${PATH.users}`, fetcher);
+  const { data, isLoading, error, mutate } = useSWR<IUser[], Error>(`${API_BASE_URL}${ApiPath.users}`, fetcher);
 
   return {
     users: data,
