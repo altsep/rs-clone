@@ -3,7 +3,7 @@ import { API_BASE_URL, ApiPath } from '../constants';
 import { IPost } from '../types/data';
 import { fetcher } from '../utils/fetcher';
 
-export default function usePost() {
+export default function usePosts() {
   const { data, isLoading, error, mutate } = useSWR<IPost[], Error>(`${API_BASE_URL}${ApiPath.posts}`, fetcher);
 
   return {
