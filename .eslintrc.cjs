@@ -39,6 +39,14 @@ module.exports = {
     '@typescript-eslint/explicit-member-accessibility': 0,
     'import/prefer-default-export': 0,
     'react-hooks/exhaustive-deps': 1,
+    '@typescript-eslint/no-misused-promises': [
+      2,
+      {
+        checksVoidReturn: {
+          attributes: false,
+        },
+      },
+    ],
   },
   ignorePatterns: ['dist', '*.cjs', '*.config.js', '*setup.js'],
   settings: {
