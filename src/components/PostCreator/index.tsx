@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { changeCreatePost } from '../../store/reducers/inputsState';
 import { updateUser } from '../../api/usersApi';
 import useUser from '../../hooks/useUser';
-import { isAddPostResponse } from '../../utils/checkers';
+import { isAddPostResponse } from '../../types/predicates';
 import { UpdateUserArg } from '../../types/usersApi';
 import { idCurrentAuthorizedUser } from '../../mock-data/data';
 import ClickableAvatar from '../ClickableAvatar';

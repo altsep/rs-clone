@@ -1,4 +1,4 @@
-import { AddPostResponse } from '../types/postsApi';
+import { AddPostResponse } from './postsApi';
 
 function isAddPostResponse(value: unknown): value is AddPostResponse {
   const valueWithType = value as AddPostResponse;
