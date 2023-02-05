@@ -16,7 +16,7 @@ const enum ReducerNames {
 const enum Locales {
   en = 'en-EN',
   ru = 'ru-RU',
-  cn = 'cn-CN',
+  cn = 'zh-CN',
 }
 
 export { API_BASE_URL, KEY_LOCAL_STORAGE, ApiPath, ReducerNames, Locales };
