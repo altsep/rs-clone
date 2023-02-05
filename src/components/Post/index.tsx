@@ -1,3 +1,4 @@
+import { useState, MouseEvent } from 'react';
 import useSWRMutation from 'swr/mutation';
 import {
   Button,
@@ -8,7 +9,12 @@ import {
   CardMedia,
   CircularProgress,
   IconButton,
+  Menu,
+  MenuItem,
   Typography,
+  Avatar,
+  Stack,
+  Box,
 } from '@mui/material';
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
@@ -19,21 +25,29 @@ import { IPost } from '../../types/data';
 import useUser from '../../hooks/useUser';
 import usePosts from '../../hooks/usePosts';
 import { API_BASE_URL, ApiPath } from '../../constants';
-import { UpdatePostArg } from '../../types/postsApi';
-import { updatePost } from '../../api/postsApi';
+import { RemovePostArg, UpdatePostArg } from '../../types/postsApi';
+import { removePost, updatePost } from '../../api/postsApi';
 import ClickableAvatar from '../ClickableAvatar';
 import { currentLocales, idCurrentAuthorizedUser } from '../../mock-data/data';
+import useUsers from '../../hooks/useUsers';
 
 interface IPostProps {
   postData: IPost;
 }
 
 export default function Post({ postData }: IPostProps) {
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const open = Boolean(anchorEl);
+
   const { user, isLoading } = useUser(postData.userId);
+  const { users } = useUsers();
+
+  const { user: currentAuthorizedUser } = useUser(idCurrentAuthorizedUser);
 
   const { mutate } = usePosts();
 
   const { trigger: triggerUpdatePost } = useSWRMutation(`${API_BASE_URL}${ApiPath.posts}/${postData.id}`, updatePost);
+  const { trigger: triggerRemovePost } = useSWRMutation(`${API_BASE_URL}${ApiPath.posts}/${postData.id}`, removePost);
 
   const handleLikeButtonClick = async () => {
     try {
@@ -58,6 +72,22 @@ export default function Post({ postData }: IPostProps) {
     }
   };
 
+  const handleMoreButtonClick = (e: MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(e.currentTarget);
+  };
+
+  const handleMoreMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleDeletePostClick = async () => {
+    //
+  };
+
+  const handleEditPostClick = async () => {
+    //
+  };
+
   return (
     <Card>
       {isLoading ? (
@@ -74,14 +104,36 @@ export default function Post({ postData }: IPostProps) {
               minute: '2-digit',
             })}
             action={
-              <IconButton aria-label="settings">
+              <IconButton
+                aria-label="post-settings"
+                id="post-button"
+                onClick={handleMoreButtonClick}
+                aria-controls={open ? 'post-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
+              >
                 <MoreHorizOutlinedIcon />
               </IconButton>
             }
           />
         )
       )}
-
+      <Menu
+        id="post-menu"
+        anchorEl={anchorEl}
+        open={open}
+        MenuListProps={{
+          'aria-labelledby': 'resources-button',
+        }}
+        onClose={handleMoreMenuClose}
+      >
+        <MenuItem aria-label="post-delete" onClick={handleDeletePostClick}>
+          Delete post
+        </MenuItem>
+        <MenuItem aria-label="post-edit" onClick={handleEditPostClick}>
+          Edit
+        </MenuItem>
+      </Menu>
       <CardContent>
         <Typography variant="body1">{postData.description}</Typography>
       </CardContent>
@@ -90,6 +142,26 @@ export default function Post({ postData }: IPostProps) {
         height="200"
         image="https://www.rgo.ru/sites/default/files/node/32473/yuriy-ufimcev-fioletovyy-zakat-536530.jpg"
       />
+      <Stack direction="row" spacing={0.5}>
+        {postData &&
+          postData.likedUserIds &&
+          postData.likedUserIds
+            .slice(-3)
+            .reverse()
+            .map((likedUserId) => {
+              if (users) {
+                const currentUser = users.find((val) => val.id === likedUserId);
+                return currentUser && <ClickableAvatar key={likedUserId} user={currentUser} />;
+              }
+              return '';
+            })}
+        <Box>
+          {postData && postData.likedUserIds && postData.likedUserIds.length > 3 && (
+            <Avatar>{`+${postData.likedUserIds.length - 3}`}</Avatar>
+          )}
+        </Box>
+      </Stack>
+
       <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Button
           aria-label="Like"
@@ -102,7 +174,6 @@ export default function Post({ postData }: IPostProps) {
             <FavoriteBorderOutlinedIcon />
           )}
 
-          <Typography>{postData.likes > 0 && postData.likes}</Typography>
           <Typography>Like</Typography>
         </Button>
         <Button aria-label="Comments" sx={{ gap: 1 }}>
