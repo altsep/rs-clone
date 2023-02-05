@@ -1,7 +1,13 @@
+import { useParams } from 'react-router-dom';
 import { Box, Button, Typography, Badge, Avatar, IconButton } from '@mui/material';
 import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined';
+import useUser from '../../hooks/useUser';
 
 export default function ProfileHeader() {
+  const { id: idCurrentProfile } = useParams();
+
+  const { user } = useUser(Number(idCurrentProfile));
+
   return (
     <Box sx={{ borderRadius: 2, boxShadow: 1 }}>
       <Box sx={{ position: 'relative' }}>
@@ -34,7 +40,11 @@ export default function ProfileHeader() {
             }
             anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
           >
-            <Avatar alt="Avatar" sx={{ width: 150, height: 150, border: 3, borderColor: 'common.white' }} />
+            <Avatar
+              src={user && user.avatarURL}
+              alt="Avatar"
+              sx={{ width: 150, height: 150, border: 3, borderColor: 'common.white' }}
+            />
           </Badge>
           <Button variant="contained" startIcon={<CloudDownloadOutlinedIcon />}>
             Edit Cover Photo
@@ -43,7 +53,7 @@ export default function ProfileHeader() {
       </Box>
 
       <Box sx={{ display: 'flex', justifyContent: 'space-between', px: 2, pb: 3, pt: 5 }}>
-        <Typography variant="h5">Saleh Ahmed</Typography>
+        <Typography variant="h5">{user && user.name}</Typography>
         <Button>Edit basic info</Button>
       </Box>
     </Box>

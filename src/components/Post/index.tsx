@@ -1,11 +1,12 @@
+import useSWRMutation from 'swr/mutation';
 import {
-  Avatar,
   Button,
   Card,
   CardActions,
   CardContent,
   CardHeader,
   CardMedia,
+  CircularProgress,
   IconButton,
   Typography,
 } from '@mui/material';
@@ -13,22 +14,64 @@ import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
 import ReplyOutlinedIcon from '@mui/icons-material/ReplyOutlined';
+import { IPost } from '../../types/data';
+import useUser from '../../hooks/useUser';
+import usePosts from '../../hooks/usePosts';
+import { API_BASE_URL, ApiPath } from '../../constants';
+import { UpdatePostArg } from '../../types/postsApi';
+import { updatePost } from '../../api/postsApi';
+import ClickableAvatar from '../ClickableAvatar';
+import { currentLocales } from '../../mock-data/data';
 
-export default function Post() {
+interface IPostProps {
+  postData: IPost;
+}
+
+export default function Post({ postData }: IPostProps) {
+  const { user, isLoading } = useUser(postData.userId);
+
+  const { mutate } = usePosts();
+
+  const { trigger } = useSWRMutation(`${API_BASE_URL}${ApiPath.posts}/${postData.id}`, updatePost);
+
+  const handleLikeButtonClick = async () => {
+    try {
+      const arg: UpdatePostArg = {
+        likes: postData.likes + 1,
+      };
+      await trigger(arg);
+      await mutate();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <Card>
-      <CardHeader
-        avatar={<Avatar>B</Avatar>}
-        title="Saleh ahmed"
-        subheader="Just Now"
-        action={
-          <IconButton aria-label="settings">
-            <MoreHorizOutlinedIcon />
-          </IconButton>
-        }
-      />
+      {isLoading ? (
+        <CircularProgress />
+      ) : (
+        user && (
+          <CardHeader
+            avatar={<ClickableAvatar user={user} />}
+            title={user.name}
+            subheader={new Date(postData.createdAt).toLocaleString(currentLocales, {
+              day: 'numeric',
+              month: 'short',
+              hour: '2-digit',
+              minute: '2-digit',
+            })}
+            action={
+              <IconButton aria-label="settings">
+                <MoreHorizOutlinedIcon />
+              </IconButton>
+            }
+          />
+        )
+      )}
+
       <CardContent>
-        <Typography variant="body1">If you think adventure is dangerous, try routine</Typography>
+        <Typography variant="body1">{postData.description}</Typography>
       </CardContent>
       <CardMedia
         component="img"
@@ -36,8 +79,13 @@ export default function Post() {
         image="https://www.rgo.ru/sites/default/files/node/32473/yuriy-ufimcev-fioletovyy-zakat-536530.jpg"
       />
       <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Button aria-label="Like" sx={{ gap: 1 }}>
+        <Button
+          aria-label="Like"
+          sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+          onClick={handleLikeButtonClick}
+        >
           <FavoriteBorderOutlinedIcon />
+          <Typography>{postData.likes > 0 && postData.likes}</Typography>
           <Typography>Like</Typography>
         </Button>
         <Button aria-label="Comments" sx={{ gap: 1 }}>
