@@ -1,6 +1,9 @@
 import useSWR from 'swr';
+import { Routes, Route } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from './store/hooks';
 import { fetcher } from './utils/fetcher';
+import Login from './pages/Login';
+import Registration from './pages/Registration';
 
 interface Placeholder {
   userId: number;
@@ -16,9 +19,16 @@ function App() {
   const { data, isLoading } = useSWR<Placeholder>('https://jsonplaceholder.typicode.com/todos/1', fetcher);
 
   return (
-    <div>
-      <h1>Hello</h1>
-    </div>
+    <>
+      <header />
+      <main>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/registration" element={<Registration />} />
+        </Routes>
+      </main>
+      <footer />
+    </>
   );
 }
 
