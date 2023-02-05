@@ -21,7 +21,7 @@ export default function ClickableAvatar({ user }: IClickableAvatarProps) {
     <Avatar
       src={user && user.avatarURL && user.avatarURL}
       onClick={() => handleClickAvatar(user.id)}
-      sx={{ textTransform: 'capitalize' }}
+      sx={{ textTransform: 'capitalize', cursor: 'pointer' }}
     >
       {user && getFirstLetter(user.name)}
     </Avatar>
