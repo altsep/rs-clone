@@ -34,7 +34,6 @@ export default function PostCreator() {
       description: valueCreatePost,
       userId: idCurrentAuthorizedUser,
     };
-
     try {
       const responseData = await triggerAddPost(argAddPost);
       if (isAddPostResponse(responseData) && user) {
@@ -46,7 +45,6 @@ export default function PostCreator() {
     } catch (err) {
       console.error(err);
     }
-
     dispatch(changeCreatePost(''));
   };
 
@@ -70,9 +68,15 @@ export default function PostCreator() {
       <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Button aria-label="Upload photo" sx={{ gap: 1 }}>
           <AddPhotoAlternateOutlinedIcon />
-          <Typography>Photo</Typography>
+          <Typography sx={{ display: { xs: 'none', md: 'block' } }}>Photo</Typography>
         </Button>
-        <Button onClick={handleClickCreatePost} variant="contained" aria-label="Create post" sx={{ gap: 1 }}>
+        <Button
+          variant="contained"
+          aria-label="Create post"
+          onClick={handleClickCreatePost}
+          disabled={Boolean(!valueCreatePost)}
+          sx={{ gap: 1 }}
+        >
           <Typography>Post</Typography>
         </Button>
       </CardActions>
