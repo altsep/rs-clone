@@ -6,9 +6,9 @@ import usePosts from '../hooks/usePosts';
 import useUser from '../hooks/useUser';
 
 export default function ProfileFeed() {
-  const { id: idCurrentProfile } = useParams();
+  const { id: idCurrentProfileString } = useParams();
 
-  const { user } = useUser(Number(idCurrentProfile));
+  const { user } = useUser(Number(idCurrentProfileString));
 
   const { posts, isLoading } = usePosts();
 

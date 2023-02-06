@@ -19,4 +19,9 @@ const enum Locales {
   cn = 'zh-CN',
 }
 
-export { API_BASE_URL, KEY_LOCAL_STORAGE, ApiPath, ReducerNames, Locales };
+const enum VariantsMoreMenu {
+  default = 'default',
+  withoutEdit = 'withoutEdit',
+}
+
+export { API_BASE_URL, KEY_LOCAL_STORAGE, ApiPath, ReducerNames, Locales, VariantsMoreMenu };

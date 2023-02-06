@@ -16,16 +16,16 @@ import ClickableAvatar from './ClickableAvatar';
 
 export default function PostCreator() {
   const dispatch = useAppDispatch();
-  const { id: idCurrentProfile } = useParams();
+  const { id: idCurrentProfileString } = useParams();
   const { valueCreatePost } = useAppSelector((state) => state.inputs);
 
   const { trigger: triggerAddPost } = useSWRMutation(`${API_BASE_URL}${ApiPath.posts}`, addPost);
   const { trigger: triggerUpdateUser } = useSWRMutation(
-    `${API_BASE_URL}${ApiPath.users}/${Number(idCurrentProfile)}`,
+    `${API_BASE_URL}${ApiPath.users}/${Number(idCurrentProfileString)}`,
     updateUser
   );
 
-  const { user } = useUser(Number(idCurrentProfile));
+  const { user } = useUser(Number(idCurrentProfileString));
   const { user: currentAuthorizedUser } = useUser(idCurrentAuthorizedUser);
 
   const handleClickCreatePost = async () => {

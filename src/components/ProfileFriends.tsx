@@ -5,9 +5,9 @@ import useUsers from '../hooks/useUsers';
 import ClickableAvatar from './ClickableAvatar';
 
 export default function ProfileFriends() {
-  const { id: idCurrentProfile } = useParams();
+  const { id: idCurrentProfileString } = useParams();
 
-  const { user } = useUser(Number(idCurrentProfile));
+  const { user } = useUser(Number(idCurrentProfileString));
   const { users } = useUsers();
 
   if (user && user.friendsIds && user.friendsIds.length > 0) {

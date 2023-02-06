@@ -6,9 +6,9 @@ import useUser from '../hooks/useUser';
 import { currentLocales } from '../mock-data/data';
 
 export default function ProfileIntro() {
-  const { id: idCurrentProfile } = useParams();
+  const { id: idCurrentProfileString } = useParams();
 
-  const { user } = useUser(Number(idCurrentProfile));
+  const { user } = useUser(Number(idCurrentProfileString));
 
   return (
     <Card>

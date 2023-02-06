@@ -4,9 +4,9 @@ import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined
 import useUser from '../hooks/useUser';
 
 export default function ProfileHeader() {
-  const { id: idCurrentProfile } = useParams();
+  const { id: idCurrentProfileString } = useParams();
 
-  const { user } = useUser(Number(idCurrentProfile));
+  const { user } = useUser(Number(idCurrentProfileString));
 
   return (
     <Box sx={{ borderRadius: 2, boxShadow: 1 }}>

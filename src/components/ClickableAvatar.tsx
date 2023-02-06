@@ -9,10 +9,10 @@ interface IClickableAvatarProps {
 
 export default function ClickableAvatar({ user }: IClickableAvatarProps) {
   const navigate = useNavigate();
-  const { id: idCurrentProfile } = useParams();
+  const { id: idCurrentProfileString } = useParams();
 
   const handleClickAvatar = (id: number): void => {
-    if (Number(idCurrentProfile) !== id) {
+    if (Number(idCurrentProfileString) !== id) {
       navigate(`/${id}`);
     }
   };
