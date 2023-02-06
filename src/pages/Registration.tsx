@@ -14,13 +14,13 @@ export default function Registration() {
       <Grid
         container
         direction="column"
-        borderRadius={4}
-        boxShadow={3}
         sx={{
           p: '30px',
           width: '500px',
           maxWidth: 1,
           alignItems: 'center',
+          borderRadius: 4,
+          boxShadow: 3,
           // bgcolor: 'secondary.main',
         }}
       >
