@@ -4,18 +4,18 @@ import { VariantsMoreMenu } from '../constants';
 interface IMoreMenuProps {
   anchorEl: HTMLElement | null;
   open: boolean;
-  handleMoreMenuClose: () => void;
-  handleDeletePostClick: () => void;
-  handleEditPostClick: () => void;
+  handleCloseMoreMenu: () => void;
+  handleClickDeletePost: () => void;
+  handleClickEditPost: () => void;
   type: VariantsMoreMenu;
 }
 
 export default function MoreMenu({
   anchorEl,
   open,
-  handleMoreMenuClose,
-  handleDeletePostClick,
-  handleEditPostClick,
+  handleCloseMoreMenu,
+  handleClickDeletePost,
+  handleClickEditPost,
   type,
 }: IMoreMenuProps) {
   return (
@@ -26,13 +26,13 @@ export default function MoreMenu({
       MenuListProps={{
         'aria-labelledby': 'resources-button',
       }}
-      onClose={handleMoreMenuClose}
+      onClose={handleCloseMoreMenu}
     >
-      <MenuItem aria-label="post-delete" onClick={handleDeletePostClick}>
+      <MenuItem aria-label="post-delete" onClick={handleClickDeletePost}>
         Delete post
       </MenuItem>
       {type === VariantsMoreMenu.default && (
-        <MenuItem aria-label="post-edit" onClick={handleEditPostClick}>
+        <MenuItem aria-label="post-edit" onClick={handleClickEditPost}>
           Edit
         </MenuItem>
       )}

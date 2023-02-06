@@ -28,7 +28,7 @@ export default function PostCreator() {
   const { user } = useUser(Number(idCurrentProfileString));
   const { user: currentAuthorizedUser } = useUser(idCurrentAuthorizedUser);
 
-  const handleClickCreatePost = async () => {
+  const handleClickCreatePost = async (): Promise<void> => {
     const argAddPost: AddPostArg = {
       createdAt: new Date(Date.now()).toISOString(),
       description: valueCreatePost,
@@ -50,7 +50,7 @@ export default function PostCreator() {
     dispatch(changeCreatePost(''));
   };
 
-  const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
     dispatch(changeCreatePost(e.target.value));
   };
 

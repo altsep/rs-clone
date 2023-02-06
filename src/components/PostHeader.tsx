@@ -26,21 +26,21 @@ export default function PostHeader({ postData, setIsEdit }: IPostHeaderProps) {
 
   const { trigger: triggerRemovePost } = useSWRMutation(`${API_BASE_URL}${ApiPath.posts}/${postData.id}`, removePost);
 
-  const handleMoreButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleMoreButtonClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
     setAnchorEl(e.currentTarget);
   };
 
-  const handleMoreMenuClose = () => {
+  const handleCloseMoreMenu = (): void => {
     setAnchorEl(null);
   };
 
-  const handleDeletePostClick = async () => {
+  const handleClickDeletePost = async (): Promise<void> => {
     // LOOK_AGAIN the delete functionality has not yet been fixed on the backend
     setAnchorEl(null);
     await triggerRemovePost();
   };
 
-  const handleEditPostClick = () => {
+  const handleClickEditPost = (): void => {
     setAnchorEl(null);
     setIsEdit(true);
   };
@@ -80,9 +80,9 @@ export default function PostHeader({ postData, setIsEdit }: IPostHeaderProps) {
       <MoreMenu
         anchorEl={anchorEl}
         open={open}
-        handleMoreMenuClose={handleMoreMenuClose}
-        handleDeletePostClick={handleDeletePostClick}
-        handleEditPostClick={handleEditPostClick}
+        handleCloseMoreMenu={handleCloseMoreMenu}
+        handleClickDeletePost={handleClickDeletePost}
+        handleClickEditPost={handleClickEditPost}
         type={postData.userId === idCurrentAuthorizedUser ? VariantsMoreMenu.default : VariantsMoreMenu.withoutEdit}
       />
     </>

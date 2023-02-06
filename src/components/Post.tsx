@@ -38,7 +38,7 @@ export default function Post({ postData }: IPostProps) {
 
   const { trigger: triggerUpdatePost } = useSWRMutation(`${API_BASE_URL}${ApiPath.posts}/${postData.id}`, updatePost);
 
-  const handleLikeButtonClick = async () => {
+  const handleClickLikeButton = async (): Promise<void> => {
     try {
       if (postData.likedUserIds && postData.likedUserIds.includes(idCurrentAuthorizedUser)) {
         const argUpdatePost: UpdatePostArg = {
@@ -61,7 +61,7 @@ export default function Post({ postData }: IPostProps) {
     }
   };
 
-  const handleSaveButtonClick = async () => {
+  const handleClickSaveButton = async (): Promise<void> => {
     try {
       const argUpdatePost: UpdatePostArg = {
         description: valueInputDescription,
@@ -74,7 +74,7 @@ export default function Post({ postData }: IPostProps) {
     }
   };
 
-  const handleChangeInputDescription = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChangeInputDescription = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
     if (e.target) {
       setValueInputDescription(e.target.value);
     }
@@ -96,7 +96,7 @@ export default function Post({ postData }: IPostProps) {
               onChange={handleChangeInputDescription}
               sx={{ flexGrow: 1 }}
             />
-            <Button onClick={handleSaveButtonClick}>Save</Button>
+            <Button onClick={handleClickSaveButton}>Save</Button>
           </Box>
         )}
       </CardContent>
@@ -129,7 +129,7 @@ export default function Post({ postData }: IPostProps) {
         <Button
           aria-label="Like"
           sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
-          onClick={handleLikeButtonClick}
+          onClick={handleClickLikeButton}
         >
           {postData.likedUserIds && postData.likedUserIds.includes(idCurrentAuthorizedUser) ? (
             <FavoriteOutlinedIcon />
