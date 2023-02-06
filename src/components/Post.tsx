@@ -33,7 +33,8 @@ export default function Post({ postData }: IPostProps) {
   const [isEdit, setIsEdit] = useState(false);
   const [valueInputDescription, setValueInputDescription] = useState(postData.description);
 
-  const { users } = useUsers();
+  const { users, isLoading: isLoadingUsers } = useUsers();
+  const { isLoading: isLoadingPosts } = usePosts();
   const { mutate } = usePosts();
 
   const { trigger: triggerUpdatePost } = useSWRMutation(`${API_BASE_URL}${ApiPath.posts}/${postData.id}`, updatePost);
@@ -79,6 +80,10 @@ export default function Post({ postData }: IPostProps) {
       setValueInputDescription(e.target.value);
     }
   };
+
+  // if (isLoadingPosts || isLoadingUsers) {
+  // FIX_ME Add skeleton
+  // }
 
   return (
     <Card>
@@ -128,7 +133,7 @@ export default function Post({ postData }: IPostProps) {
       <CardActions sx={{ display: 'flex', justifyContent: 'space-between', px: 2 }}>
         <Button
           aria-label="Like"
-          sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+          sx={{ display: 'flex', alignItems: 'center', gap: 1, p: { xs: 0, sm: '6px' } }}
           onClick={handleClickLikeButton}
         >
           {postData.likedUserIds && postData.likedUserIds.includes(idCurrentAuthorizedUser) ? (
@@ -137,15 +142,15 @@ export default function Post({ postData }: IPostProps) {
             <FavoriteBorderOutlinedIcon />
           )}
 
-          <Typography>Like</Typography>
+          <Typography sx={{ display: { xs: 'none', md: 'block' } }}>Like</Typography>
         </Button>
-        <Button aria-label="Comments" sx={{ gap: 1 }}>
+        <Button aria-label="Comments" sx={{ gap: 1, p: { xs: 0, sm: '6px' } }}>
           <CommentOutlinedIcon />
-          <Typography>Comments</Typography>
+          <Typography sx={{ display: { xs: 'none', md: 'block' } }}>Comments</Typography>
         </Button>
-        <Button aria-label="Share" sx={{ gap: 1 }}>
+        <Button aria-label="Share" sx={{ gap: 1, p: { xs: 0, sm: '6px' } }}>
           <ReplyOutlinedIcon sx={{ transform: 'scaleX(-1)' }} />
-          <Typography>Share</Typography>
+          <Typography sx={{ display: { xs: 'none', md: 'block' } }}>Share</Typography>
         </Button>
       </CardActions>
     </Card>

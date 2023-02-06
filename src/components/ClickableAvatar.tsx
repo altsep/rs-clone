@@ -19,11 +19,11 @@ export default function ClickableAvatar({ user }: IClickableAvatarProps) {
 
   return (
     <Avatar
-      src={user && user.avatarURL && user.avatarURL}
+      src={user.avatarURL}
       onClick={() => handleClickAvatar(user.id)}
       sx={{ textTransform: 'capitalize', cursor: 'pointer' }}
     >
-      {user && getFirstLetter(user.name)}
+      {getFirstLetter(user.name)}
     </Avatar>
   );
 }
