@@ -5,7 +5,7 @@ import FormFooter from '../components/FormFooter';
 
 export default function Login() {
   const { breakpoints } = useTheme();
-  const { up, down } = breakpoints;
+  const { up } = breakpoints;
   return (
     <Container
       sx={{
@@ -16,13 +16,12 @@ export default function Login() {
     >
       <Grid
         sx={{
-          [down('sm')]: { p: '10px' },
-          [up('sm')]: { width: '450px', boxShadow: 3, borderRadius: 3 },
-          p: '20px',
+          p: '10px',
           width: '400px',
           maxWidth: 1,
           alignItems: 'center',
           // bgcolor: 'secondary.main',
+          [up('sm')]: { p: '20px', width: '450px', boxShadow: 3, borderRadius: 3 },
         }}
       >
         <FormHeader>Sign In</FormHeader>

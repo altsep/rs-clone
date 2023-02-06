@@ -5,7 +5,7 @@ import RegistrationForm from '../components/RegistrationForm';
 
 export default function Registration() {
   const { breakpoints } = useTheme();
-  const { up, down } = breakpoints;
+  const { up } = breakpoints;
   return (
     <Container
       sx={{
@@ -18,14 +18,13 @@ export default function Registration() {
         container
         direction="column"
         sx={{
-          [down('sm')]: { p: '10px' },
-          [up('sm')]: { width: '550px', boxShadow: 3, borderRadius: 3 },
-          [up('md')]: { width: '650px' },
-          p: '30px',
+          p: '10px',
           width: '500px',
           maxWidth: 1,
           alignItems: 'center',
           // bgcolor: 'secondary.main',
+          [up('sm')]: { p: '30px', width: '550px', boxShadow: 3, borderRadius: 3 },
+          [up('md')]: { width: '650px' },
         }}
       >
         <Grid item>
