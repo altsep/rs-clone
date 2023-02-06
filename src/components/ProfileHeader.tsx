@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import { Box, Button, Typography, Badge, Avatar, IconButton } from '@mui/material';
 import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined';
 import useUser from '../hooks/useUser';
+import { idCurrentAuthorizedUser } from '../mock-data/data';
 
 export default function ProfileHeader() {
   const { id: idCurrentProfileString } = useParams();
@@ -46,15 +47,17 @@ export default function ProfileHeader() {
               sx={{ width: 150, height: 150, border: 3, borderColor: 'common.white' }}
             />
           </Badge>
-          <Button variant="contained" startIcon={<CloudDownloadOutlinedIcon />}>
-            Edit Cover Photo
-          </Button>
+          {Number(idCurrentProfileString) === idCurrentAuthorizedUser && (
+            <Button variant="contained" startIcon={<CloudDownloadOutlinedIcon />}>
+              Edit Cover Photo
+            </Button>
+          )}
         </Box>
       </Box>
 
       <Box sx={{ display: 'flex', justifyContent: 'space-between', px: 2, pb: 3, pt: 5 }}>
         <Typography variant="h5">{user && user.name}</Typography>
-        <Button>Edit basic info</Button>
+        {Number(idCurrentProfileString) === idCurrentAuthorizedUser && <Button>Edit basic info</Button>}
       </Box>
     </Box>
   );
