@@ -17,6 +17,8 @@ export default function RegistrationForm() {
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
   const [birthdate, setBirthdate] = useState<string | null>('');
 
+  moment.locale('en');
+
   const schema: yup.SchemaOf<IFormValues> = yup.object().shape({
     email: yup.string().required('Email is required').email('yourmail@example.com'),
     password: yup
@@ -40,8 +42,8 @@ export default function RegistrationForm() {
       .required('Birthdate is required')
       .test(
         'birthDate',
-        'Please choose a valid date of birth',
-        (date: string | undefined): boolean => moment().diff(moment(date), 'years') >= 14
+        'Invalid date. Age cannot be less than 14',
+        (date: string | undefined): boolean => moment().diff(moment(date, 'MM-DD-YYYY'), 'years') >= 14
       ),
   });
 
@@ -168,7 +170,6 @@ export default function RegistrationForm() {
               OpenPickerButtonProps={{
                 size: 'small',
               }}
-              inputFormat="DD/MM/YYYY"
               value={birthdate}
               onChange={(val: string | null): void => setBirthdate(val)}
               renderInput={(props: TextFieldProps): JSX.Element => (
