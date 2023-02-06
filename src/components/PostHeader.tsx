@@ -1,4 +1,4 @@
-// import useSWRMutation from 'swr/mutation';
+import useSWRMutation from 'swr/mutation';
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
@@ -8,9 +8,8 @@ import { IPost } from '../types/data';
 import { currentLocales, idCurrentAuthorizedUser } from '../mock-data/data';
 import MoreMenu from './MoreMenu';
 import useUser from '../hooks/useUser';
-import { VariantsMoreMenu } from '../constants';
-// import { removePost } from '../api/postsApi';
-// import { ApiPath, API_BASE_URL } from '../constants';
+import { VariantsMoreMenu, ApiPath, API_BASE_URL } from '../constants';
+import { removePost } from '../api/postsApi';
 
 interface IPostHeaderProps {
   postData: IPost;
@@ -18,16 +17,14 @@ interface IPostHeaderProps {
 }
 
 export default function PostHeader({ postData, setIsEdit }: IPostHeaderProps) {
+  const { id: idCurrentProfileString } = useParams();
+
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const open = Boolean(anchorEl);
 
   const { user } = useUser(postData.userId);
-  const { user: currentAuthorizedUser } = useUser(idCurrentAuthorizedUser);
 
-  const { id: idCurrentProfileString } = useParams();
-
-  // FIX_ME Not implemented, left before the removal of password from removePost
-  // const { trigger: triggerRemovePost } = useSWRMutation(`${API_BASE_URL}${ApiPath.posts}/${postData.id}`, removePost);
+  const { trigger: triggerRemovePost } = useSWRMutation(`${API_BASE_URL}${ApiPath.posts}/${postData.id}`, removePost);
 
   const handleMoreButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(e.currentTarget);
@@ -37,9 +34,10 @@ export default function PostHeader({ postData, setIsEdit }: IPostHeaderProps) {
     setAnchorEl(null);
   };
 
-  const handleDeletePostClick = () => {
-    // FIX_ME Not implemented, left before the removal of password from removePost
+  const handleDeletePostClick = async () => {
+    // LOOK_AGAIN the delete functionality has not yet been fixed on the backend
     setAnchorEl(null);
+    await triggerRemovePost();
   };
 
   const handleEditPostClick = () => {
