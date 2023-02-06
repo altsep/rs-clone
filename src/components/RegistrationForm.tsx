@@ -10,7 +10,6 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
 import PublicIcon from '@mui/icons-material/Public';
-import { useTheme } from '@mui/material/styles';
 import { IFormValues } from '../types/formValues';
 import FormInput from './FormInput';
 
