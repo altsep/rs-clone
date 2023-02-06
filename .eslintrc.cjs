@@ -11,10 +11,10 @@ module.exports = {
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
     'plugin:react/recommended',
     'plugin:react/jsx-runtime',
-    'plugin:prettier/recommended',
     'plugin:testing-library/react',
     'plugin:jest-dom/recommended',
     'plugin:json/recommended',
+    'plugin:prettier/recommended',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
