@@ -1,3 +1,4 @@
+import { CssBaseline } from '@mui/material';
 import { Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Registration from './pages/Registration';
@@ -11,6 +12,7 @@ function App() {
   // const dispatch = useAppDispatch();
   return (
     <>
+      <CssBaseline />
       <header />
       <main>
         <Routes>
