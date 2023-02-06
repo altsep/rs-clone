@@ -2,8 +2,8 @@ import { useParams } from 'react-router-dom';
 import { Box, Card, CardContent, CardHeader, Typography } from '@mui/material';
 import CakeOutlinedIcon from '@mui/icons-material/CakeOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
-import useUser from '../../hooks/useUser';
-import { currentLocales } from '../../mock-data/data';
+import useUser from '../hooks/useUser';
+import { currentLocales } from '../mock-data/data';
 
 export default function ProfileIntro() {
   const { id: idCurrentProfile } = useParams();

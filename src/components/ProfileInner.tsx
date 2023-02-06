@@ -1,7 +1,7 @@
 import { Stack } from '@mui/material';
-import ProfileRightColumn from '../ProfileRightColumn';
-import ProfileFeed from '../ProfileFeed';
-import ProfileIntro from '../ProfileIntro';
+import ProfileRightColumn from './ProfileRightColumn';
+import ProfileFeed from './ProfileFeed';
+import ProfileIntro from './ProfileIntro';
 
 export default function ProfileInner() {
   return (

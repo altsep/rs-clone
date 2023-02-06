@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { Box, Button, Typography, Badge, Avatar, IconButton } from '@mui/material';
 import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined';
-import useUser from '../../hooks/useUser';
+import useUser from '../hooks/useUser';
 
 export default function ProfileHeader() {
   const { id: idCurrentProfile } = useParams();

@@ -1,7 +1,7 @@
 import { Avatar } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
-import { IUser } from '../../types/data';
-import { getFirstLetter } from '../../utils/common';
+import { IUser } from '../types/data';
+import { getFirstLetter } from '../utils/common';
 
 interface IClickableAvatarProps {
   user: IUser;

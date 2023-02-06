@@ -2,17 +2,17 @@ import { useParams } from 'react-router-dom';
 import { Avatar, Box, Button, Card, CardActions, CardContent, TextField, Typography } from '@mui/material';
 import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
 import useSWRMutation from 'swr/mutation';
-import { API_BASE_URL, ApiPath } from '../../constants';
-import { addPost } from '../../api/postsApi';
-import { AddPostArg } from '../../types/postsApi';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { changeCreatePost } from '../../store/reducers/inputsState';
-import { updateUser } from '../../api/usersApi';
-import useUser from '../../hooks/useUser';
-import { isAddPostResponse } from '../../types/predicates';
-import { UpdateUserArg } from '../../types/usersApi';
-import { idCurrentAuthorizedUser } from '../../mock-data/data';
-import ClickableAvatar from '../ClickableAvatar';
+import { API_BASE_URL, ApiPath } from '../constants';
+import { addPost } from '../api/postsApi';
+import { AddPostArg } from '../types/postsApi';
+import { useAppDispatch, useAppSelector } from '../hooks/redux';
+import { changeCreatePost } from '../store/reducers/inputsState';
+import { updateUser } from '../api/usersApi';
+import useUser from '../hooks/useUser';
+import { isAddPostResponse } from '../types/predicates';
+import { UpdateUserArg } from '../types/usersApi';
+import { idCurrentAuthorizedUser } from '../mock-data/data';
+import ClickableAvatar from './ClickableAvatar';
 
 export default function PostCreator() {
   const dispatch = useAppDispatch();

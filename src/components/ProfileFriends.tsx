@@ -1,8 +1,8 @@
 import { Avatar, Card, CardContent, CardHeader, Grid } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import useUser from '../../hooks/useUser';
-import useUsers from '../../hooks/useUsers';
-import ClickableAvatar from '../ClickableAvatar';
+import useUser from '../hooks/useUser';
+import useUsers from '../hooks/useUsers';
+import ClickableAvatar from './ClickableAvatar';
 
 export default function ProfileFriends() {
   const { id: idCurrentProfile } = useParams();

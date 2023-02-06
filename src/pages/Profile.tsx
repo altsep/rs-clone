@@ -1,6 +1,6 @@
 import { Stack } from '@mui/material';
-import ProfileHeader from '../../components/ProfileHeader';
-import ProfileInner from '../../components/ProfileInner';
+import ProfileHeader from '../components/ProfileHeader';
+import ProfileInner from '../components/ProfileInner';
 
 export default function Profile() {
   return (

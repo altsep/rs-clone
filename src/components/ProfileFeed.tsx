@@ -1,9 +1,9 @@
 import { useParams } from 'react-router-dom';
 import { CircularProgress, Stack } from '@mui/material';
-import Post from '../Post';
-import PostCreator from '../PostCreator';
-import usePosts from '../../hooks/usePosts';
-import useUser from '../../hooks/useUser';
+import Post from './Post';
+import PostCreator from './PostCreator';
+import usePosts from '../hooks/usePosts';
+import useUser from '../hooks/useUser';
 
 export default function ProfileFeed() {
   const { id: idCurrentProfile } = useParams();

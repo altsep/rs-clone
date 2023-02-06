@@ -21,15 +21,15 @@ import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlin
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
 import ReplyOutlinedIcon from '@mui/icons-material/ReplyOutlined';
-import { IPost } from '../../types/data';
-import useUser from '../../hooks/useUser';
-import usePosts from '../../hooks/usePosts';
-import { API_BASE_URL, ApiPath } from '../../constants';
-import { RemovePostArg, UpdatePostArg } from '../../types/postsApi';
-import { removePost, updatePost } from '../../api/postsApi';
-import ClickableAvatar from '../ClickableAvatar';
-import { currentLocales, idCurrentAuthorizedUser } from '../../mock-data/data';
-import useUsers from '../../hooks/useUsers';
+import { IPost } from '../types/data';
+import useUser from '../hooks/useUser';
+import usePosts from '../hooks/usePosts';
+import { API_BASE_URL, ApiPath } from '../constants';
+import { RemovePostArg, UpdatePostArg } from '../types/postsApi';
+import { removePost, updatePost } from '../api/postsApi';
+import ClickableAvatar from './ClickableAvatar';
+import { currentLocales, idCurrentAuthorizedUser } from '../mock-data/data';
+import useUsers from '../hooks/useUsers';
 
 interface IPostProps {
   postData: IPost;
