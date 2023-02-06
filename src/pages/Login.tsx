@@ -18,9 +18,9 @@ export default function Login() {
           maxWidth: 1,
           alignItems: 'center',
           // bgcolor: 'secondary.main',
+          boxShadow: 3,
+          borderRadius: 3,
         }}
-        boxShadow={3}
-        borderRadius={4}
       >
         <FormHeader>Sign In</FormHeader>
         <LoginForm />

@@ -14,7 +14,7 @@ export default function Registration() {
       <Grid
         container
         direction="column"
-        borderRadius={4}
+        borderRadius={3}
         boxShadow={3}
         sx={{
           p: '30px',
