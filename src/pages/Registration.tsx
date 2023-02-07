@@ -9,6 +9,7 @@ export default function Registration() {
       sx={{
         display: 'flex',
         justifyContent: 'center',
+        mt: '100px',
       }}
     >
       <Grid
@@ -21,7 +22,7 @@ export default function Registration() {
           alignItems: 'center',
           borderRadius: 4,
           boxShadow: 3,
-          // bgcolor: 'secondary.main',
+          bgcolor: 'secondary.main',
         }}
       >
         <Grid item>
