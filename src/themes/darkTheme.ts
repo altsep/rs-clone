@@ -8,6 +8,7 @@ const darkTheme: Theme = createTheme({
     },
     secondary: {
       main: blueGrey[800],
+      contrastText: grey[50],
     },
     background: {
       default: blueGrey[900],
@@ -27,9 +28,6 @@ const darkTheme: Theme = createTheme({
             fontSize: '0.8rem',
             lineHeight: 2,
           },
-          '& label.Mui-focused': {
-            color: blueGrey[100],
-          },
           '& label.Mui-error': {
             color: blueGrey[100],
           },
@@ -38,9 +36,6 @@ const darkTheme: Theme = createTheme({
               borderColor: blueGrey.A400,
               padding: '5px',
               borderRadius: '10px',
-            },
-            '&.Mui-focused fieldset': {
-              borderColor: blueGrey.A400,
             },
             '&.Mui-error fieldset': {
               borderColor: blueGrey.A400,
@@ -61,6 +56,13 @@ const darkTheme: Theme = createTheme({
         root: {
           borderRadius: '5px',
           textTransform: 'capitalize',
+        },
+      },
+    },
+    MuiSelect: {
+      styleOverrides: {
+        icon: {
+          color: '#fff',
         },
       },
     },
