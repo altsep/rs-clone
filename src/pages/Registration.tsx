@@ -1,27 +1,30 @@
-import { Container, Grid } from '@mui/material';
+import { Container, Grid, useTheme } from '@mui/material';
 import FormFooter from '../components/FormFooter';
 import FormHeader from '../components/FormHeader';
 import RegistrationForm from '../components/RegistrationForm';
 
 export default function Registration() {
+  const { breakpoints } = useTheme();
+  const { up } = breakpoints;
   return (
     <Container
       sx={{
         display: 'flex',
         justifyContent: 'center',
+        marginTop: '10vh',
       }}
     >
       <Grid
         container
         direction="column"
         sx={{
-          p: '30px',
+          p: '10px',
           width: '500px',
           maxWidth: 1,
           alignItems: 'center',
-          borderRadius: 4,
-          boxShadow: 3,
           // bgcolor: 'secondary.main',
+          [up('sm')]: { p: '30px', width: '550px', boxShadow: 3, borderRadius: 3 },
+          [up('md')]: { width: '650px' },
         }}
       >
         <Grid item>

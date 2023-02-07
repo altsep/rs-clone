@@ -29,7 +29,12 @@ export default function LoginForm() {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data: TLoginValues): void => console.log(data);
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+    handleSubmit((data: TLoginValues): void => console.log(data));
+  };
+
+  const onClick = (): void => setPasswordVisible((prev: boolean): boolean => !prev);
 
   return (
     <Box
@@ -40,10 +45,7 @@ export default function LoginForm() {
         mb: '30px',
         alignItems: 'center',
       }}
-      onSubmit={(e: React.FormEvent<HTMLFormElement>): void => {
-        e.preventDefault();
-        handleSubmit(onSubmit)(e).catch((err: Error) => err);
-      }}
+      onSubmit={onSubmit}
     >
       <Grid container rowSpacing={2} sx={{ mb: '20px' }}>
         <Grid item xs={12}>
@@ -70,11 +72,7 @@ export default function LoginForm() {
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton
-                    onClick={(): void => setPasswordVisible((prev: boolean): boolean => !prev)}
-                    edge="end"
-                    size="small"
-                  >
+                  <IconButton onClick={onClick} edge="end" size="small">
                     {passwordVisible ? <Visibility fontSize="small" /> : <VisibilityOff fontSize="small" />}
                   </IconButton>
                 </InputAdornment>

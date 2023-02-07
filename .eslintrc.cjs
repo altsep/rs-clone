@@ -11,10 +11,10 @@ module.exports = {
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
     'plugin:react/recommended',
     'plugin:react/jsx-runtime',
-    'plugin:prettier/recommended',
     'plugin:testing-library/react',
     'plugin:jest-dom/recommended',
     'plugin:json/recommended',
+    'plugin:prettier/recommended',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -37,8 +37,6 @@ module.exports = {
     'no-console': [1, { allow: ['warn', 'error'] }],
     'no-param-reassign': 0,
     '@typescript-eslint/explicit-member-accessibility': 0,
-    'import/prefer-default-export': 0,
-    'react-hooks/exhaustive-deps': 1,
     '@typescript-eslint/no-misused-promises': [
       2,
       {
@@ -47,6 +45,9 @@ module.exports = {
         },
       },
     ],
+    'import/prefer-default-export': 0,
+    'react/jsx-props-no-spreading': 0,
+    'react-hooks/exhaustive-deps': 1,
   },
   ignorePatterns: ['dist', '*.cjs', '*.config.js', '*setup.js'],
   settings: {

@@ -65,16 +65,16 @@ export default function RegistrationForm() {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = handleSubmit((data: IFormValues): void => console.log(data));
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+    handleSubmit((data: IFormValues): void => console.log(data));
+  };
 
   return (
     <Box
       component="form"
       sx={{ mb: '30px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
-      onSubmit={(e: React.FormEvent<HTMLFormElement>): void => {
-        e.preventDefault();
-        onSubmit().catch((err: Error): Error => err);
-      }}
+      onSubmit={onSubmit}
     >
       <Grid container rowSpacing={2} columnSpacing={2} sx={{ mb: '20px' }}>
         <Grid item xs={12} md={6}>
@@ -175,9 +175,7 @@ export default function RegistrationForm() {
               renderInput={(props: TextFieldProps): JSX.Element => (
                 <TextField
                   type="date"
-                  // eslint-disable-next-line react/jsx-props-no-spreading
                   {...props}
-                  // eslint-disable-next-line react/jsx-props-no-spreading
                   {...register('birthDate')}
                   label="Your Birthdate*"
                   size="medium"
