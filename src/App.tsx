@@ -1,3 +1,4 @@
+import { CssBaseline } from '@mui/material';
 import { Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Registration from './pages/Registration';
@@ -7,6 +8,8 @@ function App() {
   return (
     <>
       <Header />
+      <CssBaseline />
+      <header />
       <main>
         <Routes>
           <Route path="/" element={<Login />} />

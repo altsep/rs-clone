@@ -204,9 +204,7 @@ export default function RegistrationForm() {
               renderInput={(props: TextFieldProps): JSX.Element => (
                 <TextField
                   type="date"
-                  // eslint-disable-next-line react/jsx-props-no-spreading
                   {...props}
-                  // eslint-disable-next-line react/jsx-props-no-spreading
                   {...register('birthDate')}
                   label="Your Birthdate*"
                   size="medium"
