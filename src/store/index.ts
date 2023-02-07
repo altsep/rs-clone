@@ -1,6 +1,6 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { themeState } from './themeSlice';
-import { langState } from './langSlice';
+import { themeState } from './reducers/themeSlice';
+import { langState } from './reducers/langSlice';
 
 const combinedReducers = combineReducers({ theme: themeState, language: langState });
 
