@@ -1,4 +1,3 @@
-import { useParams } from 'react-router-dom';
 import { Avatar, Box, Button, Card, CardActions, CardContent, TextField, Typography } from '@mui/material';
 import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
 import useSWRMutation from 'swr/mutation';
@@ -11,28 +10,29 @@ import { updateUser } from '../api/usersApi';
 import useUser from '../hooks/useUser';
 import { isAddPostResponse } from '../types/predicates';
 import { UpdateUserArg } from '../types/usersApi';
-import { idCurrentAuthorizedUser } from '../mock-data/data';
+import { idAuthorizedUser } from '../mock-data/data';
 import ClickableAvatar from './ClickableAvatar';
+import useParamsIdCurrentProfile from '../hooks/useParamsIdCurrentProfile';
 
 export default function PostCreator() {
+  const { idCurrentProfile } = useParamsIdCurrentProfile();
+
   const dispatch = useAppDispatch();
-  const { id: idCurrentProfileString } = useParams();
   const { valueCreatePost } = useAppSelector((state) => state.inputs);
 
+  const { user } = useUser(idCurrentProfile);
+  const { user: currentAuthorizedUser } = useUser(idAuthorizedUser);
   const { trigger: triggerAddPost } = useSWRMutation(`${API_BASE_URL}${ApiPath.posts}`, addPost);
   const { trigger: triggerUpdateUser } = useSWRMutation(
-    `${API_BASE_URL}${ApiPath.users}/${Number(idCurrentProfileString)}`,
+    `${API_BASE_URL}${ApiPath.users}/${idCurrentProfile}`,
     updateUser
   );
-
-  const { user } = useUser(Number(idCurrentProfileString));
-  const { user: currentAuthorizedUser } = useUser(idCurrentAuthorizedUser);
 
   const handleClickCreatePost = async (): Promise<void> => {
     const argAddPost: AddPostArg = {
       createdAt: new Date(Date.now()).toISOString(),
       description: valueCreatePost,
-      userId: idCurrentAuthorizedUser,
+      userId: idAuthorizedUser,
     };
     try {
       const responseData = await triggerAddPost(argAddPost);

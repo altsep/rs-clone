@@ -5,7 +5,7 @@ import ProfileInner from '../components/ProfileInner';
 export default function Profile() {
   return (
     <Container>
-      <Stack direction="column" gap={2}>
+      <Stack sx={{ direction: 'column', gap: 2 }}>
         <ProfileHeader />
         <ProfileInner />
       </Stack>

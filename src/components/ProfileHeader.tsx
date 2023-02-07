@@ -1,26 +1,24 @@
-import { useParams } from 'react-router-dom';
 import useSWRMutation from 'swr/mutation';
-import { Box, Button, Typography, Badge, Avatar, IconButton, Skeleton } from '@mui/material';
+import { Box, Button, Typography, Badge, Avatar, IconButton } from '@mui/material';
 import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined';
 import useUser from '../hooks/useUser';
-import { idCurrentAuthorizedUser } from '../mock-data/data';
+import { idAuthorizedUser } from '../mock-data/data';
 import { ApiPath, API_BASE_URL } from '../constants';
 import { updateUser } from '../api/usersApi';
 import { UpdateUserArg } from '../types/usersApi';
+import useParamsIdCurrentProfile from '../hooks/useParamsIdCurrentProfile';
 
 export default function ProfileHeader() {
-  const { id: idCurrentProfileString } = useParams();
+  const { idCurrentProfile } = useParamsIdCurrentProfile();
 
-  const { user: userCurrentProfile, isLoading: isLoadingUserCurrentProfile } = useUser(Number(idCurrentProfileString));
-  const { user: currentAuthorizedUser } = useUser(idCurrentAuthorizedUser);
-
+  const { user: userCurrentProfile, isLoading: isLoadingUserCurrentProfile } = useUser(idCurrentProfile);
+  const { user: currentAuthorizedUser } = useUser(idAuthorizedUser);
   const { trigger: triggerUpdateCurrentAuthorizedUser } = useSWRMutation(
-    `${API_BASE_URL}${ApiPath.users}/${idCurrentAuthorizedUser}`,
+    `${API_BASE_URL}${ApiPath.users}/${idAuthorizedUser}`,
     updateUser
   );
-
   const { trigger: triggerUpdateCurrentProfileUser } = useSWRMutation(
-    `${API_BASE_URL}${ApiPath.users}/${Number(idCurrentProfileString)}`,
+    `${API_BASE_URL}${ApiPath.users}/${idCurrentProfile}`,
     updateUser
   );
 
@@ -32,14 +30,14 @@ export default function ProfileHeader() {
       if (userCurrentProfile && currentAuthorizedUser) {
         const argUpdateCurrentAuthorizedUser: UpdateUserArg = {
           friendsIds: currentAuthorizedUser.friendsIds
-            ? [...currentAuthorizedUser.friendsIds, Number(idCurrentProfileString)]
-            : [Number(idCurrentProfileString)],
+            ? [...currentAuthorizedUser.friendsIds, idCurrentProfile]
+            : [idCurrentProfile],
         };
         await triggerUpdateCurrentAuthorizedUser(argUpdateCurrentAuthorizedUser);
         const argUpdateCurrentProfileUser: UpdateUserArg = {
           friendsIds: userCurrentProfile.friendsIds
-            ? [...userCurrentProfile.friendsIds, idCurrentAuthorizedUser]
-            : [idCurrentAuthorizedUser],
+            ? [...userCurrentProfile.friendsIds, idAuthorizedUser]
+            : [idAuthorizedUser],
         };
         await triggerUpdateCurrentProfileUser(argUpdateCurrentProfileUser);
       }
@@ -86,7 +84,7 @@ export default function ProfileHeader() {
               sx={{ width: 150, height: 150, border: 3, borderColor: 'common.white' }}
             />
           </Badge>
-          {Number(idCurrentProfileString) === idCurrentAuthorizedUser && (
+          {idCurrentProfile === idAuthorizedUser && (
             <Button variant="contained" startIcon={<CloudDownloadOutlinedIcon />}>
               Edit Cover Photo
             </Button>
@@ -94,31 +92,19 @@ export default function ProfileHeader() {
         </Box>
       </Box>
 
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', px: 2, pb: 3, pt: 5 }}>
-        <Typography variant="h5">
-          {isLoadingUserCurrentProfile ? (
-            <Skeleton sx={{ width: '100px' }} />
-          ) : (
-            userCurrentProfile && userCurrentProfile.name
-          )}
-        </Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', px: 2, pb: 3, pt: 5, minHeight: '36.5px' }}>
+        <Typography variant="h5">{userCurrentProfile && userCurrentProfile.name}</Typography>
 
-        {Number(idCurrentProfileString) === idCurrentAuthorizedUser ? (
+        {idCurrentProfile === idAuthorizedUser ? (
           <Button>Edit basic info</Button>
         ) : (
           <Box>
             {(userCurrentProfile &&
               userCurrentProfile.friendsIds &&
-              userCurrentProfile.friendsIds.includes(idCurrentAuthorizedUser) && (
+              userCurrentProfile.friendsIds.includes(idAuthorizedUser) && (
                 <Button onClick={handleClickRemoveFriend}>Remove friend</Button>
               )) ||
-              (!isLoadingUserCurrentProfile ? (
-                <Button onClick={handleClickAddFriend}>Add friend</Button>
-              ) : (
-                <Skeleton>
-                  <Button sx={{ width: '120px' }}>*</Button>
-                </Skeleton>
-              ))}
+              (!isLoadingUserCurrentProfile ? <Button onClick={handleClickAddFriend}>Add friend</Button> : <Button />)}
           </Box>
         )}
       </Box>

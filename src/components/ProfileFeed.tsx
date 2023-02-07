@@ -1,20 +1,20 @@
-import { useParams } from 'react-router-dom';
 import { Stack } from '@mui/material';
 import Post from './Post';
 import PostCreator from './PostCreator';
 import usePosts from '../hooks/usePosts';
 import useUser from '../hooks/useUser';
+import useParamsIdCurrentProfile from '../hooks/useParamsIdCurrentProfile';
 
 export default function ProfileFeed() {
-  const { id: idCurrentProfileString } = useParams();
+  const { idCurrentProfile } = useParamsIdCurrentProfile();
 
-  const { user } = useUser(Number(idCurrentProfileString));
+  const { user } = useUser(idCurrentProfile);
   const { posts } = usePosts();
 
   return (
-    <Stack direction="column" gap={2} sx={{ flexGrow: '1' }}>
+    <Stack sx={{ flexDirection: 'column', gap: 2, flexGrow: '1', order: { xs: 3, md: 2 } }}>
       <PostCreator />
-      <Stack direction="column" gap={2}>
+      <Stack sx={{ flexDirection: 'column', gap: 2 }}>
         {posts &&
           user &&
           posts

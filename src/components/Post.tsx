@@ -21,7 +21,7 @@ import { API_BASE_URL, ApiPath } from '../constants';
 import { UpdatePostArg } from '../types/postsApi';
 import { updatePost } from '../api/postsApi';
 import ClickableAvatar from './ClickableAvatar';
-import { idCurrentAuthorizedUser } from '../mock-data/data';
+import { idAuthorizedUser } from '../mock-data/data';
 import useUsers from '../hooks/useUsers';
 import PostHeader from './PostHeader';
 
@@ -33,26 +33,22 @@ export default function Post({ postData }: IPostProps) {
   const [isEdit, setIsEdit] = useState(false);
   const [valueInputDescription, setValueInputDescription] = useState(postData.description);
 
-  const { users, isLoading: isLoadingUsers } = useUsers();
-  const { isLoading: isLoadingPosts } = usePosts();
+  const { users } = useUsers();
   const { mutate } = usePosts();
-
   const { trigger: triggerUpdatePost } = useSWRMutation(`${API_BASE_URL}${ApiPath.posts}/${postData.id}`, updatePost);
 
   const handleClickLikeButton = async (): Promise<void> => {
     try {
-      if (postData.likedUserIds && postData.likedUserIds.includes(idCurrentAuthorizedUser)) {
+      if (postData.likedUserIds && postData.likedUserIds.includes(idAuthorizedUser)) {
         const argUpdatePost: UpdatePostArg = {
           likes: postData.likes - 1,
-          likedUserIds: postData.likedUserIds.filter((likedUserId) => likedUserId !== idCurrentAuthorizedUser),
+          likedUserIds: postData.likedUserIds.filter((likedUserId) => likedUserId !== idAuthorizedUser),
         };
         await triggerUpdatePost(argUpdatePost);
       } else {
         const argUpdatePost: UpdatePostArg = {
           likes: postData.likes + 1,
-          likedUserIds: postData.likedUserIds
-            ? [...postData.likedUserIds, idCurrentAuthorizedUser]
-            : [idCurrentAuthorizedUser],
+          likedUserIds: postData.likedUserIds ? [...postData.likedUserIds, idAuthorizedUser] : [idAuthorizedUser],
         };
         await triggerUpdatePost(argUpdatePost);
       }
@@ -80,10 +76,6 @@ export default function Post({ postData }: IPostProps) {
       setValueInputDescription(e.target.value);
     }
   };
-
-  // if (isLoadingPosts || isLoadingUsers) {
-  // FIX_ME Add skeleton
-  // }
 
   return (
     <Card>
@@ -130,13 +122,13 @@ export default function Post({ postData }: IPostProps) {
         {postData.commentsIds && <Typography>{`${postData.commentsIds.length} Comments`}</Typography>}
       </Box>
 
-      <CardActions sx={{ display: 'flex', justifyContent: 'space-between', px: 2 }}>
+      <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Button
           aria-label="Like"
           sx={{ display: 'flex', alignItems: 'center', gap: 1, p: { xs: 0, sm: '6px' } }}
           onClick={handleClickLikeButton}
         >
-          {postData.likedUserIds && postData.likedUserIds.includes(idCurrentAuthorizedUser) ? (
+          {postData.likedUserIds && postData.likedUserIds.includes(idAuthorizedUser) ? (
             <FavoriteOutlinedIcon />
           ) : (
             <FavoriteBorderOutlinedIcon />

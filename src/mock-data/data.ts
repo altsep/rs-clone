@@ -1,7 +1,7 @@
 import { Locales } from '../constants';
 
-const idCurrentAuthorizedUser = 1;
+const idAuthorizedUser = 1;
 
 const currentLocales = Locales.en;
 
-export { idCurrentAuthorizedUser, currentLocales };
+export { idAuthorizedUser, currentLocales };

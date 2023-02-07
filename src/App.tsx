@@ -7,7 +7,7 @@ function App() {
       <header />
       <main>
         <Routes>
-          <Route path="/:id" element={<Profile />} />
+          <Route path="/id/:id" element={<Profile />} />
         </Routes>
       </main>
       <footer />

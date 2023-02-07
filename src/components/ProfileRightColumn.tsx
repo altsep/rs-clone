@@ -3,7 +3,7 @@ import ProfileFriends from './ProfileFriends';
 
 export default function ProfileRightColumn() {
   return (
-    <Stack direction="column" sx={{ gap: 2, flex: '0 0 20%' }}>
+    <Stack sx={{ flexDirection: 'column', gap: 2, flex: '0 0 20%', order: { xs: 2, md: 3 } }}>
       <ProfileFriends />
     </Stack>
   );
