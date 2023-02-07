@@ -9,6 +9,7 @@ export default function Login() {
       sx={{
         display: 'flex',
         justifyContent: 'center',
+        mt: '100px',
       }}
     >
       <Grid
@@ -19,7 +20,7 @@ export default function Login() {
           alignItems: 'center',
           boxShadow: 3,
           borderRadius: 4,
-          // bgcolor: 'secondary.main',
+          bgcolor: 'secondary.main',
         }}
       >
         <FormHeader>Sign In</FormHeader>
