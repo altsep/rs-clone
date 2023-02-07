@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { LocalizationProvider, DesktopDatePicker } from '@mui/x-date-pickers';
 import moment from 'moment';
-import { Button, InputAdornment, IconButton, Box, TextField, TextFieldProps, Grid } from '@mui/material';
+import { Button, InputAdornment, IconButton, Box, TextField, TextFieldProps, Grid, Typography } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
@@ -16,6 +16,8 @@ import FormInput from './FormInput';
 export default function RegistrationForm() {
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
   const [birthdate, setBirthdate] = useState<string | null>('');
+  const [loginError, setLoginError] = useState<string>('');
+  const [loginSuccess, setLoginSuccess] = useState<string>('');
 
   moment.locale('en');
 
@@ -65,16 +67,43 @@ export default function RegistrationForm() {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = handleSubmit((data: IFormValues): void => console.log(data));
+  const registerUser = async (url: string, arg: Omit<IFormValues, 'passwordConfirm'>): Promise<Response> => {
+    const res: Response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(arg),
+    });
+    return res;
+  };
+
+  const onSubmit: SubmitHandler<IFormValues> = (data: IFormValues): void => {
+    setLoginError('');
+    setLoginSuccess('');
+    const { email, password, name, country, birthDate } = data;
+    registerUser('http://localhost:3000/api/users', {
+      email,
+      password,
+      name,
+      country,
+      birthDate: new Date(birthDate).toISOString(),
+    })
+      .then((res: Response): void => {
+        if (res.status === 500) {
+          setLoginError('User with this email already exists');
+        } else {
+          setLoginSuccess('To verify your account, follow the link sent to your email');
+        }
+      })
+      .catch((err: Error): Error => err);
+  };
 
   return (
     <Box
       component="form"
       sx={{ mb: '30px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
-      onSubmit={(e: React.FormEvent<HTMLFormElement>): void => {
-        e.preventDefault();
-        onSubmit().catch((err: Error): Error => err);
-      }}
+      onSubmit={handleSubmit(onSubmit)}
     >
       <Grid container rowSpacing={2} columnSpacing={2} sx={{ mb: '20px' }}>
         <Grid item xs={12} md={6}>
@@ -191,9 +220,13 @@ export default function RegistrationForm() {
           </LocalizationProvider>
         </Grid>
       </Grid>
-      <Button variant="contained" fullWidth type="submit">
+      <Button variant="contained" fullWidth type="submit" sx={{ mb: '10px' }}>
         Sign up
       </Button>
+      <Box sx={{ height: '1.5rem', mb: '5px' }}>
+        {loginError && <Typography sx={{ color: 'red' }}>{loginError}</Typography>}
+        {loginSuccess && <Typography sx={{ color: 'green' }}>{loginSuccess}</Typography>}
+      </Box>
     </Box>
   );
 }
