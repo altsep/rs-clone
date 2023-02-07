@@ -62,7 +62,7 @@ const darkTheme: Theme = createTheme({
     MuiSelect: {
       styleOverrides: {
         icon: {
-          color: '#fff',
+          color: grey[50],
         },
       },
     },
