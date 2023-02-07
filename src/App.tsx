@@ -1,24 +1,21 @@
-import useSWR from 'swr';
-import { useAppSelector, useAppDispatch } from './store/hooks';
-import { fetcher } from './utils/fetcher';
-
-interface Placeholder {
-  userId: number;
-  id: number;
-  title: string;
-  completed: boolean;
-}
+import { CssBaseline } from '@mui/material';
+import { Routes, Route } from 'react-router-dom';
+import Login from './pages/Login';
+import Registration from './pages/Registration';
 
 function App() {
-  const { exists } = useAppSelector((state) => state.reducers);
-  const dispatch = useAppDispatch();
-
-  const { data, isLoading } = useSWR<Placeholder>('https://jsonplaceholder.typicode.com/todos/1', fetcher);
-
   return (
-    <div>
-      <h1>Hello</h1>
-    </div>
+    <>
+      <CssBaseline />
+      <header />
+      <main>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/registration" element={<Registration />} />
+        </Routes>
+      </main>
+      <footer />
+    </>
   );
 }
 
