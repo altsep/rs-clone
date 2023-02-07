@@ -20,8 +20,7 @@ export default function Login() {
           width: '400px',
           maxWidth: 1,
           alignItems: 'center',
-          // bgcolor: 'secondary.main',
-          [up('sm')]: { p: '20px', width: '450px', boxShadow: 3, borderRadius: 3 },
+          [up('sm')]: { p: '20px', width: '450px', boxShadow: 3, borderRadius: 3, bgcolor: 'secondary.main' },
         }}
       >
         <FormHeader>Sign In</FormHeader>

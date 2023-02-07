@@ -22,8 +22,7 @@ export default function Registration() {
           width: '500px',
           maxWidth: 1,
           alignItems: 'center',
-          // bgcolor: 'secondary.main',
-          [up('sm')]: { p: '30px', width: '550px', boxShadow: 3, borderRadius: 3 },
+          [up('sm')]: { p: '30px', width: '550px', boxShadow: 3, borderRadius: 3, bgcolor: 'secondary.main' },
           [up('md')]: { width: '650px' },
         }}
       >

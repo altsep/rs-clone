@@ -1,15 +1,18 @@
-import { CssBaseline } from '@mui/material';
 import { Routes, Route } from 'react-router-dom';
+import { CssBaseline, ThemeProvider } from '@mui/material';
+import { darkTheme } from './themes/darkTheme';
+import { lightTheme } from './themes/lightTheme';
+import { useAppSelector } from './hooks/hooks';
 import Login from './pages/Login';
 import Registration from './pages/Registration';
 import Header from './components/Header';
 
 function App() {
+  const theme: string = useAppSelector((state) => state.theme.mode);
   return (
-    <>
-      <Header />
+    <ThemeProvider theme={theme === 'Light' ? lightTheme : darkTheme}>
       <CssBaseline />
-      <header />
+      <Header />
       <main>
         <Routes>
           <Route path="/" element={<Login />} />
@@ -17,7 +20,7 @@ function App() {
         </Routes>
       </main>
       <footer />
-    </>
+    </ThemeProvider>
   );
 }
 

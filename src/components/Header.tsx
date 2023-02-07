@@ -4,14 +4,21 @@ import { styled } from '@mui/material/styles';
 import { yellow, purple } from '@mui/material/colors';
 import LanguageIcon from '@mui/icons-material/Language';
 import LightModeIcon from '@mui/icons-material/LightMode';
-import { useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../hooks/hooks';
+import { changeTheme } from '../store/reducers/themeSlice';
+import { changeLanguage } from '../store/reducers/langSlice';
 
 export default function Header() {
-  const [colorMode, setColorMode] = useState<string>('Light');
-  const [language, setLanguage] = useState<string>('EN');
+  const dispatch = useAppDispatch();
 
-  const changeColorMode = (e: SelectChangeEvent<unknown>): void => setColorMode(e.target.value as string);
-  const changeLanguage = (e: SelectChangeEvent<unknown>): void => setLanguage(e.target.value as string);
+  const theme: string = useAppSelector((state) => state.theme.mode);
+  const language: string = useAppSelector((state) => state.language.lang);
+
+  const selectThemeHandler = (e: SelectChangeEvent<unknown>): { payload: string; type: 'theme/changeTheme' } =>
+    dispatch(changeTheme(e.target.value as string));
+
+  const selectLanguageHandler = (e: SelectChangeEvent<unknown>): { payload: string; type: 'language/changeLanguage' } =>
+    dispatch(changeLanguage(e.target.value as string));
 
   const SelectWrapper = styled(Select)({
     fontSize: '0.9rem',
@@ -36,11 +43,11 @@ export default function Header() {
         <SelectWrapper
           startAdornment={
             <LightModeIcon
-              sx={{ mr: '5px', fontSize: 'medium', color: colorMode === 'Light' ? yellow.A700 : purple[600] }}
+              sx={{ mr: '5px', fontSize: 'medium', color: theme === 'Light' ? yellow.A700 : purple[600] }}
             />
           }
-          defaultValue={colorMode}
-          onChange={changeColorMode}
+          defaultValue={theme}
+          onChange={selectThemeHandler}
         >
           <MenuItem value="Light" sx={{ fontSize: '0.9rem' }}>
             Light
@@ -52,13 +59,16 @@ export default function Header() {
         <SelectWrapper
           startAdornment={<LanguageIcon sx={{ mr: '5px', fontSize: 'medium' }} />}
           defaultValue={language}
-          onChange={changeLanguage}
+          onChange={selectLanguageHandler}
         >
           <MenuItem value="EN" sx={{ fontSize: '0.9rem' }}>
             EN
           </MenuItem>
           <MenuItem value="RU" sx={{ fontSize: '0.9rem' }}>
             RU
+          </MenuItem>
+          <MenuItem value="ES" sx={{ fontSize: '0.9rem' }}>
+            ES
           </MenuItem>
         </SelectWrapper>
       </Container>
