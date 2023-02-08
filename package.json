@@ -10,7 +10,7 @@
   "private": true,
   "scripts": {
     "start": "vite serve root",
-    "build": "vite build root",
+    "build": "tsc && vite build root",
     "test": "jest",
     "lint": "tsc && eslint . --ext .js,.jsx,.ts,.tsx",
     "lint-fix": "tsc && eslint . --ext .js,.jsx,.ts,.tsx --fix && prettier --write src tests",
