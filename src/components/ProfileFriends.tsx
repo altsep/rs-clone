@@ -8,10 +8,10 @@ import ClickableAvatar from './ClickableAvatar';
 export default function ProfileFriends() {
   const { idCurrentProfile } = useParamsIdCurrentProfile();
 
-  const { user, isLoading } = useUser(idCurrentProfile);
-  const { users, isLoading: isLoadingUsers } = useUsers();
+  const { user, isLoading, isError } = useUser(idCurrentProfile);
+  const { users, isLoading: isLoadingUsers, isError: isErrorUsers } = useUsers();
 
-  if (isLoading || isLoadingUsers) {
+  if (isLoading || isLoadingUsers || isError || isErrorUsers) {
     return (
       <Card sx={{ minHeight: { xs: '200px', sm: '150px', md: '200px' } }}>
         <CardHeader title="Friends" sx={{ textAlign: 'center' }} />

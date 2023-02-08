@@ -111,7 +111,7 @@ export default function Post({ postData }: IPostProps) {
               })}
           </AvatarGroup>
         )}
-        {postData.commentsIds && <Typography>{`${postData.commentsIds.length} Comments`}</Typography>}
+        <Typography>{`${postData.commentsIds ? postData.commentsIds.length : 0} Comments`}</Typography>
       </Box>
 
       <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>

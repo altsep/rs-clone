@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Card, CardActions, CardContent, TextField, Typography } from '@mui/material';
+import { Avatar, Box, Button, Card, CardActions, CardContent, Skeleton, TextField, Typography } from '@mui/material';
 import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
 import useSWRMutation from 'swr/mutation';
 import { API_BASE_URL, ApiPath } from '../constants';
@@ -54,7 +54,13 @@ export default function PostCreator() {
     <Card>
       <Box>
         <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          {currentAuthorizedUser ? <ClickableAvatar user={currentAuthorizedUser} /> : <Avatar />}
+          {currentAuthorizedUser ? (
+            <ClickableAvatar user={currentAuthorizedUser} />
+          ) : (
+            <Skeleton variant="circular">
+              <Avatar />
+            </Skeleton>
+          )}
           <TextField
             onChange={handleChangeInput}
             label="What's happening?"
