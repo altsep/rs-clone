@@ -111,7 +111,9 @@ export default function Post({ postData }: IPostProps) {
               })}
           </AvatarGroup>
         )}
-        <Typography>{`${postData.commentsIds ? postData.commentsIds.length : 0} Comments`}</Typography>
+        <Typography sx={{ ml: 'auto' }}>{`${
+          postData.commentsIds ? postData.commentsIds.length : 0
+        } Comments`}</Typography>
       </Box>
 
       <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
