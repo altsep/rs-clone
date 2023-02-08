@@ -7,6 +7,7 @@ import { ApiPath, API_BASE_URL } from '../constants';
 import { updateUser } from '../api/usersApi';
 import { UpdateUserArg } from '../types/usersApi';
 import useParamsIdCurrentProfile from '../hooks/useParamsIdCurrentProfile';
+import temporary from '../assets/temporary-2.webp';
 
 export default function ProfileHeader() {
   const { idCurrentProfile } = useParamsIdCurrentProfile();
@@ -47,7 +48,7 @@ export default function ProfileHeader() {
     <Box sx={{ borderRadius: 2, boxShadow: 1 }}>
       <Box
         component="img"
-        src="https://wallpaperaccess.com/full/106956.jpg"
+        src={temporary}
         alt="Background image"
         sx={{ width: '100%', maxHeight: '300px', objectFit: 'cover', borderRadius: 2 }}
       />

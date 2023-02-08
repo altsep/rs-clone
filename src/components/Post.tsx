@@ -24,6 +24,7 @@ import ClickableAvatar from './ClickableAvatar';
 import { idAuthorizedUser } from '../mock-data/data';
 import useUsers from '../hooks/useUsers';
 import PostHeader from './PostHeader';
+import temporary from '../assets/temporary-1.jpg';
 
 interface IPostProps {
   postData: IPost;
@@ -89,11 +90,7 @@ export default function Post({ postData }: IPostProps) {
           </Box>
         )}
       </CardContent>
-      <CardMedia
-        component="img"
-        height="200"
-        image="https://www.rgo.ru/sites/default/files/node/32473/yuriy-ufimcev-fioletovyy-zakat-536530.jpg"
-      />
+      <CardMedia component="img" height="200" image={temporary} />
       <Box
         sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', px: 2, py: 1, height: '44px' }}
       >
