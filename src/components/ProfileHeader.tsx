@@ -1,5 +1,5 @@
 import useSWRMutation from 'swr/mutation';
-import { Box, Button, Typography, Badge, Avatar, IconButton } from '@mui/material';
+import { Box, Button, Typography, Badge, Avatar, IconButton, Skeleton } from '@mui/material';
 import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined';
 import useUser from '../hooks/useUser';
 import { idAuthorizedUser } from '../mock-data/data';
@@ -11,7 +11,7 @@ import useParamsIdCurrentProfile from '../hooks/useParamsIdCurrentProfile';
 export default function ProfileHeader() {
   const { idCurrentProfile } = useParamsIdCurrentProfile();
 
-  const { user: userCurrentProfile, isLoading: isLoadingUserCurrentProfile } = useUser(idCurrentProfile);
+  const { user: userCurrentProfile, isLoading: isLoadingUserCurrentProfile, isError } = useUser(idCurrentProfile);
   const { user: currentAuthorizedUser } = useUser(idAuthorizedUser);
   const { trigger: triggerUpdateCurrentAuthorizedUser } = useSWRMutation(
     `${API_BASE_URL}${ApiPath.users}/${idAuthorizedUser}`,
@@ -62,26 +62,38 @@ export default function ProfileHeader() {
               bottom: -20,
               left: 0,
               width: '100%',
+              gap: 1,
             }}
           >
-            <Badge
-              overlap="circular"
-              badgeContent={
-                <IconButton sx={{ background: 'white', p: 0.5, borderRadius: '50%', minWidth: '0' }}>
-                  <input hidden accept="image/*" type="file" />
-                  <CloudDownloadOutlinedIcon />
-                </IconButton>
-              }
-              anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-            >
-              <Avatar
-                src={userCurrentProfile && userCurrentProfile.avatarURL}
-                alt="Avatar"
-                sx={{ width: 150, height: 150, border: 3, borderColor: 'common.white' }}
-              />
-            </Badge>
+            {userCurrentProfile ? (
+              <Badge
+                overlap="circular"
+                badgeContent={
+                  <IconButton sx={{ background: 'white', p: 0.5, borderRadius: '50%', minWidth: '0' }}>
+                    <input hidden accept="image/*" type="file" />
+                    <CloudDownloadOutlinedIcon />
+                  </IconButton>
+                }
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+              >
+                <Avatar
+                  src={userCurrentProfile.avatarURL}
+                  alt="Avatar"
+                  sx={{ width: 150, height: 150, border: 3, borderColor: 'common.white' }}
+                />
+              </Badge>
+            ) : (
+              <Skeleton variant="circular">
+                <Avatar sx={{ width: 150, height: 150 }} />
+              </Skeleton>
+            )}
             {idCurrentProfile === idAuthorizedUser && (
-              <Button variant="contained" startIcon={<CloudDownloadOutlinedIcon />}>
+              <Button
+                variant="contained"
+                startIcon={<CloudDownloadOutlinedIcon />}
+                disabled={Boolean(isError || isLoadingUserCurrentProfile)}
+                sx={{ textIndent: { xs: '-9999px', sm: '0' } }}
+              >
                 Edit Cover Photo
               </Button>
             )}
@@ -93,7 +105,7 @@ export default function ProfileHeader() {
         <Typography variant="h5">{userCurrentProfile && userCurrentProfile.name}</Typography>
 
         {idCurrentProfile === idAuthorizedUser ? (
-          <Button>Edit basic info</Button>
+          <Button disabled={Boolean(isError || isLoadingUserCurrentProfile)}>Edit basic info</Button>
         ) : (
           <Box>
             {(userCurrentProfile &&

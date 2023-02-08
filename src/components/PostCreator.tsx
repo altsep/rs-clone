@@ -20,7 +20,7 @@ export default function PostCreator() {
   const dispatch = useAppDispatch();
   const { valueCreatePost } = useAppSelector((state) => state.inputs);
 
-  const { user } = useUser(idCurrentProfile);
+  const { user, isLoading, isError } = useUser(idCurrentProfile);
   const { user: currentAuthorizedUser } = useUser(idAuthorizedUser);
   const { trigger: triggerAddPost } = useSWRMutation(`${API_BASE_URL}${ApiPath.posts}`, addPost);
   const { trigger: triggerUpdateUser } = useSWRMutation(
@@ -70,7 +70,7 @@ export default function PostCreator() {
         </CardContent>
       </Box>
       <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Button aria-label="Upload photo" sx={{ gap: 1 }}>
+        <Button aria-label="Upload photo" sx={{ gap: 1 }} disabled={Boolean(isLoading || isError)}>
           <AddPhotoAlternateOutlinedIcon />
           <Typography sx={{ display: { xs: 'none', md: 'block' } }}>Photo</Typography>
         </Button>
@@ -78,7 +78,7 @@ export default function PostCreator() {
           variant="contained"
           aria-label="Create post"
           onClick={handleClickCreatePost}
-          disabled={Boolean(!valueCreatePost)}
+          disabled={Boolean(!valueCreatePost || isError)}
           sx={{ gap: 1 }}
         >
           <Typography>Post</Typography>
