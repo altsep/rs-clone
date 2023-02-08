@@ -8,8 +8,8 @@ export default function ProfileInner() {
     <Stack
       sx={{
         borderRadius: 2,
-        boxShadow: 1,
-        p: 2,
+        boxShadow: { xs: 0, md: 1 },
+        p: { xs: 0, md: 2 },
         flexDirection: { xs: 'column', md: 'row' },
         justifyContent: 'space-between',
         gap: 3,
