@@ -18,8 +18,8 @@ root.render(
       <Provider store={store}>
         <SWRConfig
           value={{
-            onError: (error: Error, key) => {
-              console.error(error);
+            onError: (error: Error) => {
+              console.error(error.message);
             },
           }}
         >
