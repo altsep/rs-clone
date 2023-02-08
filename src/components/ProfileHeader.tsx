@@ -26,23 +26,20 @@ export default function ProfileHeader() {
 
   const handleClickAddFriend = async (): Promise<void> => {
     // FIX_ME Friends must be added after confirmation
-    try {
-      if (userCurrentProfile && currentAuthorizedUser) {
-        const argUpdateCurrentAuthorizedUser: UpdateUserArg = {
-          friendsIds: currentAuthorizedUser.friendsIds
-            ? [...currentAuthorizedUser.friendsIds, idCurrentProfile]
-            : [idCurrentProfile],
-        };
-        await triggerUpdateCurrentAuthorizedUser(argUpdateCurrentAuthorizedUser);
-        const argUpdateCurrentProfileUser: UpdateUserArg = {
-          friendsIds: userCurrentProfile.friendsIds
-            ? [...userCurrentProfile.friendsIds, idAuthorizedUser]
-            : [idAuthorizedUser],
-        };
-        await triggerUpdateCurrentProfileUser(argUpdateCurrentProfileUser);
-      }
-    } catch (err) {
-      console.error(err);
+
+    if (userCurrentProfile && currentAuthorizedUser) {
+      const argUpdateCurrentAuthorizedUser: UpdateUserArg = {
+        friendsIds: currentAuthorizedUser.friendsIds
+          ? [...currentAuthorizedUser.friendsIds, idCurrentProfile]
+          : [idCurrentProfile],
+      };
+      await triggerUpdateCurrentAuthorizedUser(argUpdateCurrentAuthorizedUser);
+      const argUpdateCurrentProfileUser: UpdateUserArg = {
+        friendsIds: userCurrentProfile.friendsIds
+          ? [...userCurrentProfile.friendsIds, idAuthorizedUser]
+          : [idAuthorizedUser],
+      };
+      await triggerUpdateCurrentProfileUser(argUpdateCurrentProfileUser);
     }
   };
 

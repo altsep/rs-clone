@@ -38,37 +38,29 @@ export default function Post({ postData }: IPostProps) {
   const { trigger: triggerUpdatePost } = useSWRMutation(`${API_BASE_URL}${ApiPath.posts}/${postData.id}`, updatePost);
 
   const handleClickLikeButton = async (): Promise<void> => {
-    try {
-      if (postData.likedUserIds && postData.likedUserIds.includes(idAuthorizedUser)) {
-        const argUpdatePost: UpdatePostArg = {
-          likes: postData.likes - 1,
-          likedUserIds: postData.likedUserIds.filter((likedUserId) => likedUserId !== idAuthorizedUser),
-        };
-        await triggerUpdatePost(argUpdatePost);
-      } else {
-        const argUpdatePost: UpdatePostArg = {
-          likes: postData.likes + 1,
-          likedUserIds: postData.likedUserIds ? [...postData.likedUserIds, idAuthorizedUser] : [idAuthorizedUser],
-        };
-        await triggerUpdatePost(argUpdatePost);
-      }
-      await mutate();
-    } catch (err) {
-      console.error(err);
+    if (postData.likedUserIds && postData.likedUserIds.includes(idAuthorizedUser)) {
+      const argUpdatePost: UpdatePostArg = {
+        likes: postData.likes - 1,
+        likedUserIds: postData.likedUserIds.filter((likedUserId) => likedUserId !== idAuthorizedUser),
+      };
+      await triggerUpdatePost(argUpdatePost);
+    } else {
+      const argUpdatePost: UpdatePostArg = {
+        likes: postData.likes + 1,
+        likedUserIds: postData.likedUserIds ? [...postData.likedUserIds, idAuthorizedUser] : [idAuthorizedUser],
+      };
+      await triggerUpdatePost(argUpdatePost);
     }
+    await mutate();
   };
 
   const handleClickSaveButton = async (): Promise<void> => {
-    try {
-      const argUpdatePost: UpdatePostArg = {
-        description: valueInputDescription,
-      };
-      await triggerUpdatePost(argUpdatePost);
-      await mutate();
-      setIsEdit(false);
-    } catch (err) {
-      console.error(err);
-    }
+    const argUpdatePost: UpdatePostArg = {
+      description: valueInputDescription,
+    };
+    await triggerUpdatePost(argUpdatePost);
+    await mutate();
+    setIsEdit(false);
   };
 
   const handleChangeInputDescription = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {

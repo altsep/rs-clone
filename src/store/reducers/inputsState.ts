@@ -6,7 +6,7 @@ const initialState: InputsState = {
   valueCreatePost: '',
 };
 
-const inputsSlice = createSlice({
+const inputsStateSlice = createSlice({
   name: ReducerNames.inputs,
   initialState,
   reducers: {
@@ -16,6 +16,6 @@ const inputsSlice = createSlice({
   },
 });
 
-export const { changeCreatePost } = inputsSlice.actions;
+export const { changeCreatePost } = inputsStateSlice.actions;
 
-export const inputsState = inputsSlice.reducer;
+export const inputsState = inputsStateSlice.reducer;

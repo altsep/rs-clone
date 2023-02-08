@@ -34,17 +34,15 @@ export default function PostCreator() {
       description: valueCreatePost,
       userId: idAuthorizedUser,
     };
-    try {
-      const responseData = await triggerAddPost(argAddPost);
-      if (isAddPostResponse(responseData) && user) {
-        const argUpdateUser: UpdateUserArg = {
-          postsIds: user.postsIds ? [...user.postsIds, responseData.id] : [responseData.id],
-        };
-        await triggerUpdateUser(argUpdateUser);
-      }
-    } catch (err) {
-      console.error(err);
+
+    const responseData = await triggerAddPost(argAddPost);
+    if (isAddPostResponse(responseData) && user) {
+      const argUpdateUser: UpdateUserArg = {
+        postsIds: user.postsIds ? [...user.postsIds, responseData.id] : [responseData.id],
+      };
+      await triggerUpdateUser(argUpdateUser);
     }
+
     dispatch(changeCreatePost(''));
   };
 
