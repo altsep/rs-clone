@@ -7,4 +7,10 @@ const enum ApiPath {
   auth = '/posts-auth',
 }
 
-export { API_BASE_URL, ApiPath };
+const datesFormat: { [key: string]: string } = {
+  en: 'MM/DD/YYYY',
+  ru: 'DD/MM/YYYY',
+  es: 'DD/MM/YYYY',
+};
+
+export { API_BASE_URL, ApiPath, datesFormat };

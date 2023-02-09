@@ -2,11 +2,11 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { CssBaseline } from '@mui/material';
 import reportWebVitals from '../src/reportWebVitals';
 import store from '../src/store';
 import App from '../src/App';
 import '../src/index.scss';
+import '../src/localization/i18n';
 
 const container = document.getElementById('root') as HTMLDivElement;
 
@@ -16,7 +16,6 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Provider store={store}>
-        <CssBaseline />
         <App />
       </Provider>
     </BrowserRouter>

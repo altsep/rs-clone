@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Box, Button, Grid, InputAdornment, IconButton } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
@@ -9,11 +10,12 @@ import { TLoginValues } from '../types/formValues';
 import FormInput from './FormInput';
 
 export default function LoginForm() {
+  const { t } = useTranslation();
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
 
   const schema: yup.SchemaOf<TLoginValues> = yup.object().shape({
-    email: yup.string().required('Email is required'),
-    password: yup.string().required('Password is required'),
+    email: yup.string().required('login.errors.email'),
+    password: yup.string().required('login.errors.password'),
   });
 
   const {
@@ -50,10 +52,11 @@ export default function LoginForm() {
       <Grid container rowSpacing={2} sx={{ mb: '20px' }}>
         <Grid item xs={12}>
           <FormInput
+            helperText={t('login.errors.email')}
             type="text"
             control={control}
             name="email"
-            label="Email"
+            label={t('login.email')}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -65,10 +68,10 @@ export default function LoginForm() {
         </Grid>
         <Grid item xs={12}>
           <FormInput
-            type={passwordVisible ? 'text' : 'password'}
+            helperText={t('login.errors.password')}
             control={control}
             name="password"
-            label="Password"
+            label={t('login.password')}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -82,7 +85,7 @@ export default function LoginForm() {
         </Grid>
       </Grid>
       <Button variant="contained" fullWidth disabled={isDirty && !isValid} type="submit">
-        Sign in
+        {t('login.signIn')}
       </Button>
     </Box>
   );

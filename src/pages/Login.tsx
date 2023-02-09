@@ -1,9 +1,11 @@
 import { Container, Grid, useTheme } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import LoginForm from '../components/LoginForm';
 import FormHeader from '../components/FormHeader';
 import FormFooter from '../components/FormFooter';
 
 export default function Login() {
+  const { t } = useTranslation();
   const { breakpoints } = useTheme();
   const { up } = breakpoints;
   return (
@@ -23,9 +25,11 @@ export default function Login() {
           [up('sm')]: { p: '20px', width: '450px', boxShadow: 3, borderRadius: 3, bgcolor: 'secondary.main' },
         }}
       >
-        <FormHeader>Sign In</FormHeader>
+        <FormHeader>{t('login.title')}</FormHeader>
         <LoginForm />
-        <FormFooter linkTo="/registration" linkTitle="Sign Up">{`Don't have an account yet?`}</FormFooter>
+        <FormFooter linkTo="/registration" linkTitle={t('login.signUp')}>
+          {t('login.footerText')}
+        </FormFooter>
       </Grid>
     </Container>
   );

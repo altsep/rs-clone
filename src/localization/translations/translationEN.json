@@ -1,0 +1,54 @@
+{
+  "login": {
+    "title": "Sign In",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "footerText": "Don't have an account yet?",
+    "errors": {
+      "email": "Email is required",
+      "password": "Password is required"
+    }
+  },
+  "registration": {
+    "title": "Sign Up",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "email": "Your Email",
+    "name": "Your Name",
+    "passwordCreate": "Create Password",
+    "passwordConfirm": "Confirm Password",
+    "country": "Country",
+    "birthDate": "Your Birthdate",
+    "footerText": "Already have an account?",
+    "successMessage": "To verify your account, follow the link sent to your email",
+    "errorMessage": "User with this email already exists",
+    "errors": {
+      "email": {
+        "required": "Email is required",
+        "validation": "yourmail@example.com"
+      },
+      "password": {
+        "required": "Password is required",
+        "validation": "Password must be 8-15 characters, include at least one lowercase letter, one uppercase letter, and a number"
+      },
+      "passwordConfirm": {
+        "required": "Password confirmation required",
+        "validation": "Passwords must match"
+      },
+      "name": {
+        "required": "Name is required",
+        "validation": "Es demasiado corto. El nombre debe tener al menos 5 caracteres"
+      },
+      "country": {
+        "required": "Country is required",
+        "validation": "It's too short. Country must be at least 3 characters long"
+      },
+      "birthDate": {
+        "required": "Birthdate is required",
+        "validation": "Invalid date. Age cannot be less than 14"
+      }
+    }
+  }
+}

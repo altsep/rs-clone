@@ -4,7 +4,7 @@ import { FieldValues, useController, UseControllerProps } from 'react-hook-form'
 
 export default function FormInput<T extends FieldValues>(props: UseControllerProps<T> & TextFieldProps) {
   const { field, fieldState } = useController<T>(props);
-  const { label, type, InputProps } = props;
+  const { label, type, InputProps, helperText } = props;
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => field.onChange(e.target.value);
   return (
     <TextField
@@ -19,7 +19,7 @@ export default function FormInput<T extends FieldValues>(props: UseControllerPro
       onChange={onChange}
       onBlur={field.onBlur}
       inputRef={field.ref}
-      helperText={fieldState.error?.message}
+      helperText={fieldState.error ? helperText : ''}
       InputProps={InputProps}
       autoComplete="on"
     />

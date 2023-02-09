@@ -1,17 +1,32 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { LocalizationProvider, DesktopDatePicker } from '@mui/x-date-pickers';
+import i18next from 'i18next';
 import moment from 'moment';
-import { Button, InputAdornment, IconButton, Box, TextField, TextFieldProps, Grid, Typography } from '@mui/material';
+import 'moment/dist/locale/ru';
+import 'moment/dist/locale/es';
+import {
+  Button,
+  InputAdornment,
+  IconButton,
+  Box,
+  TextField,
+  TextFieldProps,
+  Grid,
+  Typography,
+  FormHelperText,
+} from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
 import PublicIcon from '@mui/icons-material/Public';
+import { useTranslation } from 'react-i18next';
 import { IFormValues } from '../types/formValues';
 import FormInput from './FormInput';
+import { datesFormat } from '../constants';
 
 export default function RegistrationForm() {
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
@@ -19,33 +34,30 @@ export default function RegistrationForm() {
   const [loginError, setLoginError] = useState<string>('');
   const [loginSuccess, setLoginSuccess] = useState<string>('');
 
-  moment.locale('en');
+  const { t } = useTranslation();
+
+  i18next.on('languageChanged', (lng: string): void => {
+    moment.locale(lng);
+  });
 
   const schema: yup.SchemaOf<IFormValues> = yup.object().shape({
-    email: yup.string().required('Email is required').email('yourmail@example.com'),
+    email: yup.string().required().email(),
     password: yup
       .string()
-      .required('Password is required')
-      .matches(
-        /(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,15}/,
-        'Password must be 8-15 characters, include at least one lowercase letter, one uppercase letter, and a number'
-      ),
+      .required()
+      .matches(/(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,15}/),
     passwordConfirm: yup
       .string()
-      .required('Password confirmation required')
-      .oneOf([yup.ref('password'), null], 'Passwords must match'),
-    name: yup.string().required('Name is required').min(5, `It's too short. Name must be at least 5 characters long`),
-    country: yup
-      .string()
-      .required('Country is required')
-      .min(3, `It's too short. Country must be at least 3 characters long`),
+      .required()
+      .oneOf([yup.ref('password'), null]),
+    name: yup.string().required().min(5),
+    country: yup.string().required().min(3),
     birthDate: yup
       .string()
-      .required('Birthdate is required')
+      .required()
       .test(
         'birthDate',
-        'Invalid date. Age cannot be less than 14',
-        (date: string | undefined): boolean => moment().diff(moment(date, 'MM-DD-YYYY'), 'years') >= 14
+        (date: string | undefined): boolean => moment().diff(moment(date, datesFormat[moment.locale()]), 'years') >= 14
       ),
   });
 
@@ -108,10 +120,15 @@ export default function RegistrationForm() {
       <Grid container rowSpacing={2} columnSpacing={2} sx={{ mb: '20px' }}>
         <Grid item xs={12} md={6}>
           <FormInput
+            helperText={
+              errors.email?.type === 'required'
+                ? t('registration.errors.email.required')
+                : t('registration.errors.email.validation')
+            }
             type="text"
             control={control}
             name="email"
-            label="Email*"
+            label={`${t('registration.email')}*`}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -123,10 +140,15 @@ export default function RegistrationForm() {
         </Grid>
         <Grid item xs={12} md={6}>
           <FormInput
+            helperText={
+              errors.name?.type === 'required'
+                ? t('registration.errors.name.required')
+                : t('registration.errors.name.validation')
+            }
             type="text"
             control={control}
             name="name"
-            label="Your Name*"
+            label={`${t('registration.name')}*`}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -138,10 +160,15 @@ export default function RegistrationForm() {
         </Grid>
         <Grid item xs={12} md={6}>
           <FormInput
+            helperText={
+              errors.password?.type === 'required'
+                ? t('registration.errors.password.required')
+                : t('registration.errors.password.validation')
+            }
             type={passwordVisible ? 'text' : 'password'}
             control={control}
             name="password"
-            label="Create Password*"
+            label={`${t('registration.passwordCreate')}*`}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -159,10 +186,15 @@ export default function RegistrationForm() {
         </Grid>
         <Grid item xs={12} md={6}>
           <FormInput
+            helperText={
+              errors.passwordConfirm?.type === 'required'
+                ? t('registration.errors.passwordConfirm.required')
+                : t('registration.errors.passwordConfirm.validation')
+            }
             type={passwordVisible ? 'text' : 'password'}
             control={control}
             name="passwordConfirm"
-            label="Confirm Password*"
+            label={`${t('registration.passwordConfirm')}*`}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -180,10 +212,15 @@ export default function RegistrationForm() {
         </Grid>
         <Grid item xs={12} md={6}>
           <FormInput
+            helperText={
+              errors.country?.type === 'required'
+                ? t('registration.errors.country.required')
+                : t('registration.errors.country.validation')
+            }
             type="text"
             control={control}
             name="country"
-            label="Country*"
+            label={`${t('registration.country')}*`}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -201,25 +238,33 @@ export default function RegistrationForm() {
               }}
               value={birthdate}
               onChange={(val: string | null): void => setBirthdate(val)}
-              renderInput={(props: TextFieldProps): JSX.Element => (
-                <TextField
-                  type="date"
-                  {...props}
-                  {...register('birthDate')}
-                  label="Your Birthdate*"
-                  size="medium"
-                  variant="outlined"
-                  error={!!errors.birthDate}
-                  helperText={errors.birthDate?.message}
-                  fullWidth
-                />
-              )}
+              renderInput={(props: TextFieldProps): JSX.Element => {
+                return (
+                  <TextField
+                    type="date"
+                    {...props}
+                    {...register('birthDate')}
+                    label={`${t('registration.birthDate')}*`}
+                    size="medium"
+                    variant="outlined"
+                    error={!!errors.birthDate}
+                    fullWidth
+                  />
+                );
+              }}
             />
+            {errors.birthDate ? (
+              <FormHelperText error>
+                {errors.birthDate.type === 'required'
+                  ? t('registration.errors.birthDate.required')
+                  : t('registration.errors.birthDate.validation')}
+              </FormHelperText>
+            ) : null}
           </LocalizationProvider>
         </Grid>
       </Grid>
       <Button variant="contained" fullWidth type="submit" sx={{ mb: '10px' }}>
-        Sign up
+        {t('registration.signUp')}
       </Button>
       <Box sx={{ height: '1.5rem', mb: '5px' }}>
         {loginError && <Typography sx={{ color: 'red' }}>{loginError}</Typography>}

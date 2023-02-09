@@ -6,7 +6,7 @@ import LanguageIcon from '@mui/icons-material/Language';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import { useAppDispatch, useAppSelector } from '../hooks/hooks';
 import { changeTheme } from '../store/reducers/themeSlice';
-import { changeLanguage } from '../store/reducers/langSlice';
+import { switchLanguage } from '../store/reducers/langSlice';
 
 export default function Header() {
   const dispatch = useAppDispatch();
@@ -17,8 +17,8 @@ export default function Header() {
   const selectThemeHandler = (e: SelectChangeEvent<unknown>): { payload: string; type: 'theme/changeTheme' } =>
     dispatch(changeTheme(e.target.value as string));
 
-  const selectLanguageHandler = (e: SelectChangeEvent<unknown>): { payload: string; type: 'language/changeLanguage' } =>
-    dispatch(changeLanguage(e.target.value as string));
+  const selectLanguageHandler = (e: SelectChangeEvent<unknown>): { payload: string; type: 'language/switchLanguage' } =>
+    dispatch(switchLanguage(e.target.value as string));
 
   const SelectWrapper = styled(Select)({
     fontSize: '0.9rem',
@@ -61,13 +61,13 @@ export default function Header() {
           defaultValue={language}
           onChange={selectLanguageHandler}
         >
-          <MenuItem value="EN" sx={{ fontSize: '0.9rem' }}>
+          <MenuItem value="en" sx={{ fontSize: '0.9rem' }}>
             EN
           </MenuItem>
-          <MenuItem value="RU" sx={{ fontSize: '0.9rem' }}>
+          <MenuItem value="ru" sx={{ fontSize: '0.9rem' }}>
             RU
           </MenuItem>
-          <MenuItem value="ES" sx={{ fontSize: '0.9rem' }}>
+          <MenuItem value="es" sx={{ fontSize: '0.9rem' }}>
             ES
           </MenuItem>
         </SelectWrapper>
