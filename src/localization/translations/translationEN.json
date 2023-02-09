@@ -9,6 +9,10 @@
     "errors": {
       "email": "Email is required",
       "password": "Password is required"
+    },
+    "loginErrors": {
+      "email": "User with this email is not registered",
+      "password": "Incorrect password"
     }
   },
   "registration": {

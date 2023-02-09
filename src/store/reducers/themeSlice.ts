@@ -1,11 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-type TThemeState = {
-  mode: string;
-};
+import { LSKeys, KEY_LOCAL_STORAGE } from '../../constants';
+import { TThemeState } from '../../types/state';
 
 const initialState: TThemeState = {
-  mode: localStorage.getItem('theme_wZpH9g') || 'Light',
+  mode: localStorage.getItem(`${LSKeys.theme}_${KEY_LOCAL_STORAGE}`) || 'light',
 };
 
 const themeSlice = createSlice({
@@ -14,7 +12,7 @@ const themeSlice = createSlice({
   reducers: {
     changeTheme(state, action: PayloadAction<string>) {
       state.mode = action.payload;
-      localStorage.setItem('theme_wZpH9g', action.payload);
+      localStorage.setItem(`${LSKeys.theme}_${KEY_LOCAL_STORAGE}`, action.payload);
     },
   },
 });

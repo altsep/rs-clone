@@ -9,6 +9,10 @@
     "errors": {
       "email": "Correo electronico es requerido",
       "password": "Se requiere contraseña"
+    },
+    "loginErrors": {
+      "email": "El usuario con este correo no está registrado",
+      "password": "Contraseña incorrecta"
     }
   },
   "registration": {

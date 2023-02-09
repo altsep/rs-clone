@@ -26,7 +26,7 @@ import PublicIcon from '@mui/icons-material/Public';
 import { useTranslation } from 'react-i18next';
 import { IFormValues } from '../types/formValues';
 import FormInput from './FormInput';
-import { datesFormat } from '../constants';
+import { locales } from '../constants';
 
 export default function RegistrationForm() {
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
@@ -57,7 +57,7 @@ export default function RegistrationForm() {
       .required()
       .test(
         'birthDate',
-        (date: string | undefined): boolean => moment().diff(moment(date, datesFormat[moment.locale()]), 'years') >= 14
+        (date: string | undefined): boolean => moment().diff(moment(date, locales[moment.locale()]), 'years') >= 14
       ),
   });
 

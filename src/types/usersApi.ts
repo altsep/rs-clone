@@ -1,4 +1,5 @@
 import { IUser } from './data';
+import { TLoginValues } from './formValues';
 
 type AddUserArg = Pick<IUser, 'name' | 'email' | 'password' | 'country' | 'birthDate' | 'createdAt' | 'alias'>;
 
@@ -23,4 +24,8 @@ interface IHideUserProps {
   arg: HideUserArg;
 }
 
-export type { AddUserArg, UpdateUserArg, HideUserArg, IAddUserProps, IUpdateUserProps, IHideUserProps };
+interface ILoginUser {
+  arg: TLoginValues;
+}
+
+export type { AddUserArg, UpdateUserArg, HideUserArg, IAddUserProps, IUpdateUserProps, IHideUserProps, ILoginUser };

@@ -4,13 +4,13 @@ import { styled } from '@mui/material/styles';
 import { yellow, purple } from '@mui/material/colors';
 import LanguageIcon from '@mui/icons-material/Language';
 import LightModeIcon from '@mui/icons-material/LightMode';
-import { useAppDispatch, useAppSelector } from '../hooks/hooks';
+import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { changeTheme } from '../store/reducers/themeSlice';
 import { switchLanguage } from '../store/reducers/langSlice';
+import { locales, themes } from '../constants';
 
 export default function Header() {
   const dispatch = useAppDispatch();
-
   const theme: string = useAppSelector((state) => state.theme.mode);
   const language: string = useAppSelector((state) => state.language.lang);
 
@@ -43,33 +43,28 @@ export default function Header() {
         <SelectWrapper
           startAdornment={
             <LightModeIcon
-              sx={{ mr: '5px', fontSize: 'medium', color: theme === 'Light' ? yellow.A700 : purple[600] }}
+              sx={{ mr: '5px', fontSize: 'medium', color: theme === 'light' ? yellow.A700 : purple[600] }}
             />
           }
           defaultValue={theme}
           onChange={selectThemeHandler}
         >
-          <MenuItem value="Light" sx={{ fontSize: '0.9rem' }}>
-            Light
-          </MenuItem>
-          <MenuItem value="Dark" sx={{ fontSize: '0.9rem' }}>
-            Dark
-          </MenuItem>
+          {themes.map((mode: string) => (
+            <MenuItem value={mode} sx={{ fontSize: '0.9rem' }} key={mode}>
+              {mode.toUpperCase()}
+            </MenuItem>
+          ))}
         </SelectWrapper>
         <SelectWrapper
           startAdornment={<LanguageIcon sx={{ mr: '5px', fontSize: 'medium' }} />}
           defaultValue={language}
           onChange={selectLanguageHandler}
         >
-          <MenuItem value="en" sx={{ fontSize: '0.9rem' }}>
-            EN
-          </MenuItem>
-          <MenuItem value="ru" sx={{ fontSize: '0.9rem' }}>
-            RU
-          </MenuItem>
-          <MenuItem value="es" sx={{ fontSize: '0.9rem' }}>
-            ES
-          </MenuItem>
+          {Object.keys(locales).map((lang: string) => (
+            <MenuItem value={lang} sx={{ fontSize: '0.9rem' }} key={lang}>
+              {lang.toUpperCase()}
+            </MenuItem>
+          ))}
         </SelectWrapper>
       </Container>
     </Box>

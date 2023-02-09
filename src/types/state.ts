@@ -2,4 +2,8 @@ type InputsState = {
   valueCreatePost: string;
 };
 
-export type { InputsState };
+type TThemeState = {
+  mode: string;
+};
+
+export type { InputsState, TThemeState };

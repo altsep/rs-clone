@@ -7,13 +7,8 @@ const enum ApiPath {
   users = '/users',
   comments = 'comments',
   auth = '/posts-auth',
+  login = '/login',
 }
-
-const datesFormat: { [key: string]: string } = {
-  en: 'MM/DD/YYYY',
-  ru: 'DD/MM/YYYY',
-  es: 'DD/MM/YYYY',
-};
 
 const enum ReducerNames {
   inputs = 'inputs',
@@ -30,4 +25,17 @@ const enum VariantsMoreMenu {
   withoutEdit = 'withoutEdit',
 }
 
-export { API_BASE_URL, KEY_LOCAL_STORAGE, ApiPath, ReducerNames, Locales, VariantsMoreMenu, datesFormat };
+const enum LSKeys {
+  theme = 'theme',
+  token = 'token',
+}
+
+const locales: { [key: string]: string } = {
+  en: 'MM/DD/YYYY',
+  ru: 'DD.MM.YYYY',
+  es: 'DD/MM/YYYY',
+};
+
+const themes = ['light', 'dark'];
+
+export { API_BASE_URL, KEY_LOCAL_STORAGE, ApiPath, ReducerNames, Locales, VariantsMoreMenu, locales, themes, LSKeys };
