@@ -50,7 +50,7 @@ export default function ProfileHeader() {
         component="img"
         src={temporary}
         alt="Background image"
-        sx={{ width: '100%', maxHeight: '300px', objectFit: 'cover', borderRadius: 2 }}
+        sx={{ width: '100%', height: '300px', objectFit: 'cover', borderRadius: 2 }}
       />
       <Box sx={{ px: 2 }}>
         <Box sx={{ position: 'relative' }}>

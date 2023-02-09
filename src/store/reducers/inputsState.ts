@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ReducerNames } from '../../constants';
-import { InputsState } from '../../types/state';
+import { IInputsState } from '../../types/state';
 
-const initialState: InputsState = {
+const initialState: IInputsState = {
   valueCreatePost: '',
 };
 

@@ -16,7 +16,7 @@ export default function ProfileInner() {
         minHeight: '500px',
       }}
     >
-      <Stack sx={{ flex: '0 0 20%' }}>
+      <Stack sx={{ flexGrow: '1' }}>
         <ProfileIntro />
       </Stack>
       <ProfileFeed />
