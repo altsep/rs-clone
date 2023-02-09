@@ -1,13 +1,16 @@
 import { IAddPostProps, IUpdatePostProps, IRemovePostProps } from '../types/postsApi';
 
-const addPost = async (url: string, { arg }: IAddPostProps): Promise<void> => {
-  await fetch(url, {
+const addPost = async (url: string, { arg }: IAddPostProps): Promise<unknown> => {
+  const response = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(arg),
   });
+  const responseData: unknown = await response.json();
+
+  return responseData;
 };
 
 const updatePost = async (url: string, { arg }: IUpdatePostProps): Promise<void> => {

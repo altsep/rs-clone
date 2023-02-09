@@ -6,6 +6,7 @@ import { useAppSelector } from './hooks/hooks';
 import Login from './pages/Login';
 import Registration from './pages/Registration';
 import Header from './components/Header';
+import Profile from './pages/Profile';
 
 function App() {
   const theme: string = useAppSelector((state) => state.theme.mode);
@@ -17,6 +18,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/registration" element={<Registration />} />
+          <Route path="/:id" element={<Profile />} />
         </Routes>
       </main>
       <footer />
