@@ -1,4 +1,5 @@
 import React from 'react';
+import { SWRConfig } from 'swr';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -15,7 +16,15 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Provider store={store}>
-        <App />
+        <SWRConfig
+          value={{
+            onError: (error: Error) => {
+              console.error(error.message);
+            },
+          }}
+        >
+          <App />
+        </SWRConfig>
       </Provider>
     </BrowserRouter>
   </React.StrictMode>

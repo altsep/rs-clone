@@ -1,10 +1,11 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import reducers, { DefaultState } from './reducers';
+import { inputsState } from './reducers/inputsState';
+import { ReducerNames } from '../constants';
 
-const combinedReducers = combineReducers({ reducers });
+const combinedReducers = combineReducers({ [ReducerNames.inputs]: inputsState });
 
-const store = configureStore<{ reducers: DefaultState }>({
-  reducer: (state, action) => combinedReducers(state, action),
+const store = configureStore({
+  reducer: combinedReducers,
 });
 
 export type RootState = ReturnType<typeof store.getState>;
