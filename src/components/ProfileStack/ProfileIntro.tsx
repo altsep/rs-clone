@@ -1,14 +1,11 @@
 import { Box, Card, CardContent, CardHeader, Typography } from '@mui/material';
 import CakeOutlinedIcon from '@mui/icons-material/CakeOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
-import useUser from '../hooks/useUser';
-import { currentLocales } from '../mock-data/data';
-import useParamsIdCurrentProfile from '../hooks/useParamsIdCurrentProfile';
+import { currentLocales } from '../../mock-data/data';
+import { useAppSelector } from '../../hooks/redux';
 
 export default function ProfileIntro() {
-  const { idCurrentProfile } = useParamsIdCurrentProfile();
-
-  const { user } = useUser(idCurrentProfile);
+  const { currentProfile } = useAppSelector((state) => state.users);
 
   return (
     <Card>
@@ -24,7 +21,7 @@ export default function ProfileIntro() {
           }}
         >
           <LocationOnOutlinedIcon />
-          <Typography sx={{ textTransform: 'capitalize' }}>{user && user.country}</Typography>
+          <Typography sx={{ textTransform: 'capitalize' }}>{currentProfile && currentProfile.country}</Typography>
         </Box>
         <Box
           sx={{
@@ -37,8 +34,8 @@ export default function ProfileIntro() {
         >
           <CakeOutlinedIcon />
           <Typography>
-            {user &&
-              new Date(user.birthDate).toLocaleString(currentLocales, {
+            {currentProfile &&
+              new Date(currentProfile.birthDate).toLocaleString(currentLocales, {
                 day: 'numeric',
                 month: 'short',
                 year: 'numeric',

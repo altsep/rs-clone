@@ -5,18 +5,18 @@ import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
 import Diversity3OutlinedIcon from '@mui/icons-material/Diversity3Outlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
-import { TSideBarButtonsInfo } from '../types/sideBar';
-import { idAuthorizedUser } from '../mock-data/data';
-import { RoutePath } from '../constants';
-import { useAppDispatch, useAppSelector } from '../hooks/redux';
-import { closeLeftSideBar } from '../store/reducers/leftSideBarState';
+import { TSideBarButtonsInfo } from '../../types/sideBar';
+import { RoutePath } from '../../constants';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { closeLeftSideBar } from '../../store/reducers/leftSideBarState';
 
 export default function LeftSideBar() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { isOpen } = useAppSelector((state) => state.leftSideBar);
   const dispatch = useAppDispatch();
+  const { isOpen } = useAppSelector((state) => state.leftSideBar);
+  const { idAuthorizedUser, authorizedUser } = useAppSelector((state) => state.users);
 
   const sideBarButtonsInfo: TSideBarButtonsInfo = [
     {
@@ -24,7 +24,11 @@ export default function LeftSideBar() {
       icon: <AccountBoxOutlinedIcon />,
       to: `/${idAuthorizedUser}`,
       handleClick: (): void => {
-        navigate(`/${idAuthorizedUser}`);
+        if (authorizedUser?.alias) {
+          navigate(`/${authorizedUser.alias}`);
+        } else {
+          navigate(`/id${idAuthorizedUser}`);
+        }
       },
     },
     {

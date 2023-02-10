@@ -1,19 +1,20 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ReducerNames } from '../../constants';
-import { TUserState } from '../../types/state';
+import { TUsersState } from '../../types/state';
 import { IUser } from '../../types/data';
 import { authorizedUser as authorizedUserMock, idAuthorizedUser as idAuthorizedUserMock } from '../../mock-data/data';
 
-const initialState: TUserState = {
+const initialState: TUsersState = {
   users: [],
   currentProfile: null,
   idCurrentProfile: 0,
   authorizedUser: authorizedUserMock,
   idAuthorizedUser: idAuthorizedUserMock,
+  defineUserCompleted: false,
 };
 
-const userStateSlice = createSlice({
-  name: ReducerNames.inputs,
+const usersStateSlice = createSlice({
+  name: ReducerNames.users,
   initialState,
   reducers: {
     usersLoadingSuccess: (state, action: PayloadAction<IUser[]>) => {
@@ -26,18 +27,33 @@ const userStateSlice = createSlice({
         if (foundUser) {
           state.currentProfile = foundUser;
           state.idCurrentProfile = possibleId;
+          state.defineUserCompleted = true;
         }
       } else {
         const foundUser = state.users.find((user) => user.alias === action.payload);
         if (foundUser) {
           state.currentProfile = foundUser;
           state.idCurrentProfile = foundUser.id;
+          state.defineUserCompleted = true;
+        } else {
+          state.currentProfile = null;
+          state.idCurrentProfile = 0;
+          state.defineUserCompleted = true;
         }
+      }
+    },
+    updateUserInState: (state, action: PayloadAction<IUser>) => {
+      state.users = state.users.map((user) => (user.id === action.payload.id ? action.payload : user));
+      if (action.payload.id === state.idCurrentProfile) {
+        state.authorizedUser = action.payload;
+      }
+      if (action.payload.id === state.idCurrentProfile) {
+        state.currentProfile = action.payload;
       }
     },
   },
 });
 
-export const { usersLoadingSuccess, defineProfile } = userStateSlice.actions;
+export const { usersLoadingSuccess, defineProfile, updateUserInState } = usersStateSlice.actions;
 
-export const userState = userStateSlice.reducer;
+export const usersState = usersStateSlice.reducer;

@@ -1,8 +1,8 @@
 import { Avatar } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import useParamsIdCurrentProfile from '../hooks/useParamsIdCurrentProfile';
-import { IUser } from '../types/data';
-import { getFirstLetter } from '../utils/common';
+import { useAppSelector } from '../../hooks/redux';
+import { IUser } from '../../types/data';
+import { getFirstLetter } from '../../utils/common';
 
 interface IClickableAvatarProps {
   user: IUser;
@@ -10,11 +10,12 @@ interface IClickableAvatarProps {
 
 export default function ClickableAvatar({ user }: IClickableAvatarProps) {
   const navigate = useNavigate();
-  const { idCurrentProfile } = useParamsIdCurrentProfile();
+
+  const { idCurrentProfile } = useAppSelector((state) => state.users);
 
   const handleClickAvatar = (id: number): void => {
     if (idCurrentProfile !== id) {
-      navigate(`/id/${id}`);
+      navigate(`/id${id}`);
     }
   };
 

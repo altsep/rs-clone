@@ -1,5 +1,6 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { userState } from './reducers/userState';
+import { postsState } from './reducers/postsState';
+import { usersState } from './reducers/usersState';
 import { leftSideBarState } from './reducers/leftSideBarState';
 import { inputsState } from './reducers/inputsState';
 import { ReducerNames } from '../constants';
@@ -7,7 +8,8 @@ import { ReducerNames } from '../constants';
 const combinedReducers = combineReducers({
   [ReducerNames.inputs]: inputsState,
   [ReducerNames.leftSideBar]: leftSideBarState,
-  [ReducerNames.user]: userState,
+  [ReducerNames.users]: usersState,
+  [ReducerNames.posts]: postsState,
 });
 
 const store = configureStore({

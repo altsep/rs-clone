@@ -1,19 +1,17 @@
 import useSWRMutation from 'swr/mutation';
 import { Box, Button, Typography, Badge, Avatar, IconButton, Skeleton } from '@mui/material';
 import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined';
-import useUser from '../hooks/useUser';
-import { idAuthorizedUser } from '../mock-data/data';
-import { ApiPath, API_BASE_URL } from '../constants';
-import { updateUser } from '../api/usersApi';
-import { UpdateUserArg } from '../types/usersApi';
-import useParamsIdCurrentProfile from '../hooks/useParamsIdCurrentProfile';
-import temporary from '../assets/temporary-2.webp';
+import { ApiPath, API_BASE_URL } from '../../constants';
+import { updateUser } from '../../api/usersApi';
+import { UpdateUserArg } from '../../types/usersApi';
+import temporary from '../../assets/temporary-2.webp';
+import { useAppSelector } from '../../hooks/redux';
 
 export default function ProfileHeader() {
-  const { idCurrentProfile } = useParamsIdCurrentProfile();
+  const { idCurrentProfile, idAuthorizedUser, currentProfile, authorizedUser, defineUserCompleted } = useAppSelector(
+    (state) => state.users
+  );
 
-  const { user: userCurrentProfile, isLoading: isLoadingUserCurrentProfile, isError } = useUser(idCurrentProfile);
-  const { user: currentAuthorizedUser } = useUser(idAuthorizedUser);
   const { trigger: triggerUpdateCurrentAuthorizedUser } = useSWRMutation(
     `${API_BASE_URL}${ApiPath.users}/${idAuthorizedUser}`,
     updateUser
@@ -28,17 +26,13 @@ export default function ProfileHeader() {
   const handleClickAddFriend = async (): Promise<void> => {
     // FIX_ME Friends must be added after confirmation
 
-    if (userCurrentProfile && currentAuthorizedUser) {
+    if (currentProfile && authorizedUser) {
       const argUpdateCurrentAuthorizedUser: UpdateUserArg = {
-        friendsIds: currentAuthorizedUser.friendsIds
-          ? [...currentAuthorizedUser.friendsIds, idCurrentProfile]
-          : [idCurrentProfile],
+        friendsIds: authorizedUser.friendsIds ? [...authorizedUser.friendsIds, idCurrentProfile] : [idCurrentProfile],
       };
       await triggerUpdateCurrentAuthorizedUser(argUpdateCurrentAuthorizedUser);
       const argUpdateCurrentProfileUser: UpdateUserArg = {
-        friendsIds: userCurrentProfile.friendsIds
-          ? [...userCurrentProfile.friendsIds, idAuthorizedUser]
-          : [idAuthorizedUser],
+        friendsIds: authorizedUser.friendsIds ? [...authorizedUser.friendsIds, idAuthorizedUser] : [idAuthorizedUser],
       };
       await triggerUpdateCurrentProfileUser(argUpdateCurrentProfileUser);
     }
@@ -66,7 +60,7 @@ export default function ProfileHeader() {
               gap: 1,
             }}
           >
-            {userCurrentProfile ? (
+            {currentProfile ? (
               <Badge
                 overlap="circular"
                 badgeContent={
@@ -78,7 +72,7 @@ export default function ProfileHeader() {
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
               >
                 <Avatar
-                  src={userCurrentProfile.avatarURL}
+                  src={currentProfile.avatarURL}
                   alt="Avatar"
                   sx={{ width: 150, height: 150, border: 3, borderColor: 'common.white' }}
                 />
@@ -89,13 +83,8 @@ export default function ProfileHeader() {
               </Skeleton>
             )}
             {idCurrentProfile === idAuthorizedUser && (
-              <Button
-                variant="contained"
-                startIcon={<CloudDownloadOutlinedIcon />}
-                disabled={Boolean(isError || isLoadingUserCurrentProfile)}
-                sx={{ textIndent: { xs: '-9999px', sm: '0' } }}
-              >
-                Edit Cover Photo
+              <Button variant="contained" startIcon={<CloudDownloadOutlinedIcon />}>
+                <Box sx={{ display: { xs: 'none', sm: 'block' } }}>Edit Cover</Box>
               </Button>
             )}
           </Box>
@@ -103,18 +92,16 @@ export default function ProfileHeader() {
       </Box>
 
       <Box sx={{ display: 'flex', justifyContent: 'space-between', px: 2, pb: 3, pt: 5, minHeight: '36.5px' }}>
-        <Typography variant="h5">{userCurrentProfile && userCurrentProfile.name}</Typography>
+        <Typography variant="h5">{currentProfile && currentProfile.name}</Typography>
 
         {idCurrentProfile === idAuthorizedUser ? (
-          <Button disabled={Boolean(isError || isLoadingUserCurrentProfile)}>Edit basic info</Button>
+          <Button disabled={!defineUserCompleted}>Edit basic info</Button>
         ) : (
           <Box>
-            {(userCurrentProfile &&
-              userCurrentProfile.friendsIds &&
-              userCurrentProfile.friendsIds.includes(idAuthorizedUser) && (
-                <Button onClick={handleClickRemoveFriend}>Remove friend</Button>
-              )) ||
-              (!isLoadingUserCurrentProfile ? <Button onClick={handleClickAddFriend}>Add friend</Button> : <Button />)}
+            {(currentProfile && currentProfile.friendsIds && currentProfile.friendsIds.includes(idAuthorizedUser) && (
+              <Button onClick={handleClickRemoveFriend}>Remove friend</Button>
+            )) ||
+              (defineUserCompleted ? <Button onClick={handleClickAddFriend}>Add friend</Button> : <Button />)}
           </Box>
         )}
       </Box>

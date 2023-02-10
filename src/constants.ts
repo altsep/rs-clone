@@ -19,7 +19,8 @@ const enum RoutePath {
 const enum ReducerNames {
   inputs = 'inputs',
   leftSideBar = 'leftSideBar',
-  user = 'user',
+  users = 'users',
+  posts = 'posts',
 }
 
 const enum Locales {

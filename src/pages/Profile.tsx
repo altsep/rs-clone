@@ -1,32 +1,50 @@
-import { Stack, Container } from '@mui/material';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { Stack, Container, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import LeftSideBar from '../components/LeftSideBar';
-import ProfileHeader from '../components/ProfileHeader';
-import ProfileInner from '../components/ProfileInner';
+import ProfileStack from '../components/ProfileStack';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
-import { defineProfile } from '../store/reducers/userState';
+import { defineCurrentProfilePosts } from '../store/reducers/postsState';
+import { defineProfile } from '../store/reducers/usersState';
 
 export default function Profile() {
   const { id } = useParams();
 
   const dispatch = useAppDispatch();
-  const { users } = useAppSelector((state) => state.user);
+  const { users, idAuthorizedUser, currentProfile, defineUserCompleted } = useAppSelector((state) => state.users);
+  const { posts } = useAppSelector((state) => state.posts);
 
   useEffect(() => {
-    if (id && users.length > 0) {
+    if (id && users.length > 0 && idAuthorizedUser) {
       dispatch(defineProfile(id));
+      if (currentProfile?.postsIds) {
+        dispatch(defineCurrentProfilePosts(currentProfile.postsIds));
+      }
     }
-  }, [id, dispatch, users]);
+  }, [id, dispatch, users, idAuthorizedUser, currentProfile, posts]);
+
+  if (currentProfile === null && defineUserCompleted) {
+    return (
+      <Container>
+        <Stack direction="row" sx={{ gap: 2 }}>
+          <LeftSideBar />
+          <Typography
+            variant="h2"
+            sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100vh' }}
+          >
+            {' '}
+            User not found
+          </Typography>
+        </Stack>
+      </Container>
+    );
+  }
 
   return (
     <Container>
       <Stack direction="row" sx={{ gap: 2 }}>
         <LeftSideBar />
-        <Stack sx={{ direction: 'column', gap: 2, flexGrow: '1' }}>
-          <ProfileHeader />
-          <ProfileInner />
-        </Stack>
+        <ProfileStack />
       </Stack>
     </Container>
   );

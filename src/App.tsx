@@ -11,17 +11,23 @@ import Settings from './pages/Settings';
 import TemporaryHeader from './components/TemporaryHeader';
 import useUsers from './hooks/useUsers';
 import { useAppDispatch } from './hooks/redux';
-import { usersLoadingSuccess } from './store/reducers/userState';
+import { usersLoadingSuccess } from './store/reducers/usersState';
+import usePosts from './hooks/usePosts';
+import { postsLoadingSuccess } from './store/reducers/postsState';
+import NotFound from './pages/NotFound';
 
 function App() {
   const dispatch = useAppDispatch();
-  const { users, isLoading } = useUsers();
+
+  const { users, isLoading: isLoadingUsers, isValidating: isValidatingUser } = useUsers();
+  const { posts, isLoading: isLoadingPosts, isValidating: isValidatingPost } = usePosts();
 
   useEffect(() => {
-    if (!isLoading && users) {
+    if (users && posts && !isLoadingPosts && !isLoadingUsers && !isValidatingPost && !isValidatingUser) {
       dispatch(usersLoadingSuccess(users));
+      dispatch(postsLoadingSuccess(posts));
     }
-  }, [isLoading, users, dispatch]);
+  }, [isLoadingUsers, users, isLoadingPosts, posts, isValidatingUser, isValidatingPost, dispatch]);
 
   return (
     <>
@@ -35,6 +41,7 @@ function App() {
           <Route path={RoutePath.messages} element={<Messages />} />
           <Route path={RoutePath.friends} element={<Friends />} />
           <Route path={RoutePath.settings} element={<Settings />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
       <footer />

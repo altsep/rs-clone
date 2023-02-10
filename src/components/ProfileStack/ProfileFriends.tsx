@@ -1,17 +1,11 @@
 import { Box, Card, CardContent, CardHeader, Grid, Typography } from '@mui/material';
-
-import useParamsIdCurrentProfile from '../hooks/useParamsIdCurrentProfile';
-import useUser from '../hooks/useUser';
-import useUsers from '../hooks/useUsers';
-import ClickableAvatar from './ClickableAvatar';
+import { useAppSelector } from '../../hooks/redux';
+import ClickableAvatar from '../ClickableAvatar';
 
 export default function ProfileFriends() {
-  const { idCurrentProfile } = useParamsIdCurrentProfile();
+  const { currentProfile, users } = useAppSelector((state) => state.users);
 
-  const { user, isLoading, isError } = useUser(idCurrentProfile);
-  const { users, isLoading: isLoadingUsers, isError: isErrorUsers } = useUsers();
-
-  if (isLoading || isLoadingUsers || isError || isErrorUsers) {
+  if (!currentProfile || currentProfile.friendsIds?.length === 0) {
     return (
       <Card sx={{ minHeight: { xs: '200px', sm: '150px', md: '200px' } }}>
         <CardHeader title="Friends" sx={{ textAlign: 'center' }} />
@@ -20,13 +14,13 @@ export default function ProfileFriends() {
     );
   }
 
-  if (user && user.friendsIds && user.friendsIds.length > 0) {
+  if (currentProfile && currentProfile.friendsIds && currentProfile.friendsIds.length > 0) {
     return (
       <Card sx={{ minHeight: { xs: '150px', md: '200px' } }}>
         <CardHeader title="Friends" sx={{ textAlign: 'center' }} />
         <CardContent>
           <Grid container rowSpacing={2}>
-            {user.friendsIds.slice(0, 6).map((friendId) => {
+            {currentProfile.friendsIds.slice(0, 6).map((friendId) => {
               const friend = users && users.find((oneUser) => oneUser.id === friendId);
               return (
                 <Grid item key={friendId} xs={12 / 3} sm={12 / 6} md={12 / 3}>
