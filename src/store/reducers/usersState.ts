@@ -27,20 +27,18 @@ const usersStateSlice = createSlice({
         if (foundUser) {
           state.currentProfile = foundUser;
           state.idCurrentProfile = possibleId;
-          state.defineUserCompleted = true;
         }
       } else {
         const foundUser = state.users.find((user) => user.alias === action.payload);
         if (foundUser) {
           state.currentProfile = foundUser;
           state.idCurrentProfile = foundUser.id;
-          state.defineUserCompleted = true;
         } else {
           state.currentProfile = null;
           state.idCurrentProfile = 0;
-          state.defineUserCompleted = true;
         }
       }
+      state.defineUserCompleted = true;
     },
     updateUserInState: (state, action: PayloadAction<IUser>) => {
       state.users = state.users.map((user) => (user.id === action.payload.id ? action.payload : user));
