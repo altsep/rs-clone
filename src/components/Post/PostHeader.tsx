@@ -38,9 +38,9 @@ export default function PostHeader({ postData, setIsEdit }: IPostHeaderProps) {
 
   const handleClickDeletePost = async (): Promise<void> => {
     // LOOK_AGAIN the delete functionality has not yet been fixed on the backend
-    dispatch(removePostInState(postData.id));
     setAnchorEl(null);
     await triggerRemovePost();
+    dispatch(removePostInState(postData.id));
   };
 
   const handleClickEditPost = (): void => {

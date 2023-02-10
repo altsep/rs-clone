@@ -1,3 +1,4 @@
+import React from 'react';
 import { Avatar, Box, Button, Card, CardActions, CardContent, Skeleton, TextField, Typography } from '@mui/material';
 import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
 import useSWRMutation from 'swr/mutation';
@@ -46,6 +47,12 @@ export default function PostCreator() {
     dispatch(changeCreatePost(''));
   };
 
+  const handleKeyDownCreatePost = async (e: React.KeyboardEvent<HTMLDivElement>): Promise<void> => {
+    if (e.key === 'Enter' && valueCreatePost) {
+      await handleClickCreatePost();
+    }
+  };
+
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
     dispatch(changeCreatePost(e.target.value));
   };
@@ -63,6 +70,7 @@ export default function PostCreator() {
           )}
           <TextField
             onChange={handleChangeInput}
+            onKeyDown={handleKeyDownCreatePost}
             label="What's happening?"
             value={valueCreatePost}
             sx={{ flexGrow: '1' }}

@@ -15,6 +15,34 @@ const authorizedUser = {
   postsIds: [1],
 };
 
+// const idAuthorizedUser = 2;
+
+// const authorizedUser = {
+//   id: 2,
+//   email: '2@example.com',
+//   name: 'tttty',
+//   password: '',
+//   alias: '',
+//   hidden: false,
+//   country: '',
+//   birthDate: '',
+//   createdAt: '',
+// };
+
+// const idAuthorizedUser = 3;
+
+// const authorizedUser = {
+//   id: 3,
+//   email: 'hu@example.com',
+//   name: 'h1dd3nUs3r99',
+//   password: '1',
+//   alias: '',
+//   hidden: true,
+//   country: '',
+//   birthDate: '',
+//   createdAt: '',
+// };
+
 const currentLocales = Locales.en;
 
 export { idAuthorizedUser, currentLocales, authorizedUser };

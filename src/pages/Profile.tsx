@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Stack, Container, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import LeftSideBar from '../components/LeftSideBar';
@@ -12,16 +12,16 @@ export default function Profile() {
 
   const dispatch = useAppDispatch();
   const { users, idAuthorizedUser, currentProfile, defineUserCompleted } = useAppSelector((state) => state.users);
-  const { posts } = useAppSelector((state) => state.posts);
+  const { posts, currentProfilePosts } = useAppSelector((state) => state.posts);
 
   useEffect(() => {
-    if (id && users.length > 0 && idAuthorizedUser) {
+    if (id && users.length > 0 && idAuthorizedUser && !currentProfile) {
       dispatch(defineProfile(id));
-      if (currentProfile?.postsIds) {
-        dispatch(defineCurrentProfilePosts(currentProfile.postsIds));
-      }
     }
-  }, [id, dispatch, users, idAuthorizedUser, currentProfile, posts]);
+    if (currentProfile?.postsIds && !currentProfilePosts) {
+      dispatch(defineCurrentProfilePosts(currentProfile.postsIds));
+    }
+  }, [id, dispatch, users, idAuthorizedUser, currentProfile, posts, currentProfilePosts]);
 
   if (currentProfile === null && defineUserCompleted) {
     return (
@@ -29,10 +29,9 @@ export default function Profile() {
         <Stack direction="row" sx={{ gap: 2 }}>
           <LeftSideBar />
           <Typography
-            variant="h2"
+            variant="h3"
             sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100vh' }}
           >
-            {' '}
             User not found
           </Typography>
         </Stack>

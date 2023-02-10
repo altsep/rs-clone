@@ -23,7 +23,7 @@ import ClickableAvatar from '../ClickableAvatar';
 import PostHeader from './PostHeader';
 import temporary from '../../assets/temporary-1.jpg';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { addLike, editPost, removeLike } from '../../store/reducers/postsState';
+import { editPost } from '../../store/reducers/postsState';
 
 interface IPostProps {
   postData: IPost;
@@ -47,15 +47,19 @@ export default function Post({ postData }: IPostProps) {
         likes: postData.likes - 1,
         likedUserIds: postData.likedUserIds.filter((likedUserId) => likedUserId !== idAuthorizedUser),
       };
-      dispatch(removeLike({ idAuthorizedUser, idPost: postData.id }));
-      await triggerUpdatePost(argUpdatePost);
+      const dataResponse = await triggerUpdatePost(argUpdatePost);
+      if (dataResponse) {
+        dispatch(editPost(dataResponse));
+      }
     } else {
       const argUpdatePost: UpdatePostArg = {
         likes: postData.likes + 1,
         likedUserIds: postData.likedUserIds ? [...postData.likedUserIds, idAuthorizedUser] : [idAuthorizedUser],
       };
-      dispatch(addLike({ idAuthorizedUser, idPost: postData.id }));
-      await triggerUpdatePost(argUpdatePost);
+      const dataResponse = await triggerUpdatePost(argUpdatePost);
+      if (dataResponse) {
+        dispatch(editPost(dataResponse));
+      }
     }
   };
 
@@ -63,8 +67,10 @@ export default function Post({ postData }: IPostProps) {
     const argUpdatePost: UpdatePostArg = {
       description: valueInputDescription,
     };
-    dispatch(editPost({ id: postData.id, description: valueInputDescription }));
-    await triggerUpdatePost(argUpdatePost);
+    const dataResponse = await triggerUpdatePost(argUpdatePost);
+    if (dataResponse) {
+      dispatch(editPost(dataResponse));
+    }
 
     setIsEdit(false);
   };

@@ -42,7 +42,7 @@ const usersStateSlice = createSlice({
     },
     updateUserInState: (state, action: PayloadAction<IUser>) => {
       state.users = state.users.map((user) => (user.id === action.payload.id ? action.payload : user));
-      if (action.payload.id === state.idCurrentProfile) {
+      if (action.payload.id === state.idAuthorizedUser) {
         state.authorizedUser = action.payload;
       }
       if (action.payload.id === state.idCurrentProfile) {

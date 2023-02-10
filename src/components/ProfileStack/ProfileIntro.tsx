@@ -21,7 +21,9 @@ export default function ProfileIntro() {
           }}
         >
           <LocationOnOutlinedIcon />
-          <Typography sx={{ textTransform: 'capitalize' }}>{currentProfile && currentProfile.country}</Typography>
+          <Typography sx={{ textTransform: 'capitalize', wordBreak: 'break-all' }}>
+            {currentProfile && currentProfile.country}
+          </Typography>
         </Box>
         <Box
           sx={{

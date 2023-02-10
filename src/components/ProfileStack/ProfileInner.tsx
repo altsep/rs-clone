@@ -12,7 +12,7 @@ export default function ProfileInner() {
         p: { xs: 0, md: 2 },
         flexDirection: { xs: 'column', md: 'row' },
         justifyContent: 'space-between',
-        gap: 3,
+        gap: 2,
         minHeight: '500px',
       }}
     >

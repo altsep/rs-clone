@@ -19,14 +19,7 @@ type TUsersState = {
 
 type TPostsState = {
   posts: IPost[];
-  currentProfilePosts: IPost[];
+  currentProfilePosts: IPost[] | null;
 };
 
-type TPostLikes = {
-  idPost: number;
-  idAuthorizedUser: number;
-};
-
-type TEditPost = Pick<IPost, 'id' | 'description'>;
-
-export type { IInputsState, ILeftSideBarState, TUsersState, TPostsState, TPostLikes, TEditPost };
+export type { IInputsState, ILeftSideBarState, TUsersState, TPostsState };
