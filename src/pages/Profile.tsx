@@ -12,16 +12,16 @@ export default function Profile() {
 
   const dispatch = useAppDispatch();
   const { users, idAuthorizedUser, currentProfile, defineUserCompleted } = useAppSelector((state) => state.users);
-  const { posts, currentProfilePosts } = useAppSelector((state) => state.posts);
+  const { posts } = useAppSelector((state) => state.posts);
 
   useEffect(() => {
-    if (id && users.length > 0 && idAuthorizedUser && !currentProfile) {
+    if (id && users.length > 0 && idAuthorizedUser) {
       dispatch(defineProfile(id));
     }
-    if (currentProfile?.postsIds && !currentProfilePosts) {
+    if (currentProfile?.postsIds) {
       dispatch(defineCurrentProfilePosts(currentProfile.postsIds));
     }
-  }, [id, dispatch, users, idAuthorizedUser, currentProfile, posts, currentProfilePosts]);
+  }, [id, dispatch, users, idAuthorizedUser, posts, currentProfile]);
 
   if (currentProfile === null && defineUserCompleted) {
     return (
