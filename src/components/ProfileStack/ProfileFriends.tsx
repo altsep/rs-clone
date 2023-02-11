@@ -42,7 +42,7 @@ export default function ProfileFriends() {
     <Card sx={{ minHeight: { xs: '150px', md: '200px' } }}>
       <CardHeader title="Friends" sx={{ textAlign: 'center' }} />
       <CardContent>
-        <Typography>Empty. First add someone as a friend</Typography>
+        <Typography sx={{ textAlign: 'center' }}>Empty. First add someone as a friend</Typography>
       </CardContent>
     </Card>
   );
