@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Stack, Container, Typography } from '@mui/material';
+import { Stack, Container, Typography, CircularProgress, Box } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import LeftSideBar from '../components/LeftSideBar';
 import ProfileStack from '../components/ProfileStack';
@@ -33,6 +33,24 @@ export default function Profile() {
             sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100vh' }}
           >
             User not found
+          </Typography>
+        </Stack>
+      </Container>
+    );
+  }
+
+  if (!defineUserCompleted) {
+    return (
+      <Container>
+        <Stack direction="row" sx={{ gap: 2 }}>
+          <LeftSideBar />
+          <Typography
+            variant="h3"
+            sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100vh' }}
+          >
+            <Box sx={{ display: 'flex' }}>
+              <CircularProgress />
+            </Box>
           </Typography>
         </Stack>
       </Container>
