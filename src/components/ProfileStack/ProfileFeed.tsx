@@ -1,6 +1,6 @@
 import { Stack } from '@mui/material';
 import Post from '../Post';
-import PostCreator from '../Post/PostCreator';
+import PostCreator from './PostCreator';
 import { useAppSelector } from '../../hooks/redux';
 
 export default function ProfileFeed() {
