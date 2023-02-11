@@ -1,8 +1,8 @@
 import { Container, Grid, useTheme } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import LoginForm from '../components/LoginForm';
-import FormHeader from '../components/FormHeader';
-import FormFooter from '../components/FormFooter';
+import LoginForm from '../components/Forms/LoginForm/LoginForm';
+import FormHeader from '../components/Forms/FormElements/FormHeader';
+import FormFooter from '../components/Forms/FormElements/FormFooter';
 
 export default function Login() {
   const { t } = useTranslation();

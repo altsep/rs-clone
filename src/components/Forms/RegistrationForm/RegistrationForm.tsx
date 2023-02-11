@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import useSWRMutation from 'swr/mutation';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { LocalizationProvider, DesktopDatePicker } from '@mui/x-date-pickers';
 import i18next from 'i18next';
@@ -16,7 +17,6 @@ import {
   TextField,
   TextFieldProps,
   Grid,
-  Typography,
   FormHelperText,
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
@@ -24,15 +24,22 @@ import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
 import PublicIcon from '@mui/icons-material/Public';
 import { useTranslation } from 'react-i18next';
-import { IFormValues } from '../types/formValues';
-import FormInput from './FormInput';
-import { locales } from '../constants';
+import { IFormValues } from '../../../types/formValues';
+import FormInput from '../FormElements/FormInput';
+import { ApiPath, API_BASE_URL, locales } from '../../../constants';
+import { registerUser } from '../../../api/usersApi';
+import { setToken } from '../../../utils/common';
+import { ILogin } from '../../../types/data';
+import { useAppDispatch } from '../../../hooks/redux';
+import { setAuth } from '../../../store/reducers/authSlice';
+import { setUser } from '../../../store/reducers/userSlice';
 
 export default function RegistrationForm() {
+  const dispatch = useAppDispatch();
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
   const [birthdate, setBirthdate] = useState<string | null>('');
-  const [loginError, setLoginError] = useState<string>('');
-  const [loginSuccess, setLoginSuccess] = useState<string>('');
+  const [registrationError, setRegistrationError] = useState<string>('');
+  const [registrationSuccess, setRegistrationSuccess] = useState<boolean>(false);
 
   const { t } = useTranslation();
 
@@ -79,36 +86,23 @@ export default function RegistrationForm() {
     resolver: yupResolver(schema),
   });
 
-  const registerUser = async (url: string, arg: Omit<IFormValues, 'passwordConfirm'>): Promise<Response> => {
-    const res: Response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(arg),
-    });
-    return res;
-  };
+  const { trigger } = useSWRMutation(`${API_BASE_URL}${ApiPath.registration}`, registerUser);
 
-  const onSubmit: SubmitHandler<IFormValues> = (data: IFormValues): void => {
-    setLoginError('');
-    setLoginSuccess('');
+  const onSubmit: SubmitHandler<IFormValues> = async (data: IFormValues): Promise<void> => {
     const { email, password, name, country, birthDate } = data;
-    registerUser('http://localhost:3000/api/users', {
-      email,
-      password,
-      name,
-      country,
-      birthDate: new Date(birthDate).toISOString(),
-    })
-      .then((res: Response): void => {
-        if (res.status === 500) {
-          setLoginError('User with this email already exists');
-        } else {
-          setLoginSuccess('To verify your account, follow the link sent to your email');
-        }
-      })
-      .catch((err: Error): Error => err);
+    const res: Response | undefined = await trigger({ email, password, name, country, birthDate });
+    if (res?.status === 500) {
+      setRegistrationSuccess(false);
+      setRegistrationError(email);
+    } else if (res?.status === 201) {
+      setRegistrationError('');
+      setRegistrationSuccess(true);
+      const resData = (await res?.json()) as ILogin;
+      const { accessToken, user } = resData;
+      setToken(accessToken);
+      dispatch(setAuth(true));
+      dispatch(setUser(user));
+    }
   };
 
   return (
@@ -249,6 +243,7 @@ export default function RegistrationForm() {
                     variant="outlined"
                     error={!!errors.birthDate}
                     fullWidth
+                    autoComplete="off"
                   />
                 );
               }}
@@ -266,10 +261,16 @@ export default function RegistrationForm() {
       <Button variant="contained" fullWidth type="submit" sx={{ mb: '10px' }}>
         {t('registration.signUp')}
       </Button>
-      <Box sx={{ height: '1.5rem', mb: '5px' }}>
-        {loginError && <Typography sx={{ color: 'red' }}>{loginError}</Typography>}
-        {loginSuccess && <Typography sx={{ color: 'green' }}>{loginSuccess}</Typography>}
-      </Box>
+      {registrationError && (
+        <FormHelperText error sx={{ fontSize: '14px', textAlign: 'center' }}>
+          {t('registration.registrationErrors.email', { email: registrationError })}
+        </FormHelperText>
+      )}
+      {registrationSuccess && (
+        <FormHelperText sx={{ fontSize: '14px', textAlign: 'center', color: 'green' }}>
+          {t('registration.registrationSuccess')}
+        </FormHelperText>
+      )}
     </Box>
   );
 }

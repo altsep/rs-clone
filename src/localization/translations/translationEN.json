@@ -53,6 +53,10 @@
         "required": "Birthdate is required",
         "validation": "Invalid date. Age cannot be less than 14"
       }
-    }
+    },
+    "registrationErrors": {
+      "email": "User with email {{ email }} already exist"
+    },
+    "registrationSuccess": "To complete registration, follow the link sent to your email"
   }
 }

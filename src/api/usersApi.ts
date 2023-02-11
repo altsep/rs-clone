@@ -1,5 +1,4 @@
-import { IAddUserProps, IUpdateUserProps, IHideUserProps, ILoginUser } from '../types/usersApi';
-import { ILogin } from '../types/data';
+import { IAddUserProps, IUpdateUserProps, IHideUserProps, ILoginUser, IRegistrationUser } from '../types/usersApi';
 
 const addUser = async (url: string, { arg }: IAddUserProps): Promise<void> => {
   await fetch(url, {
@@ -42,4 +41,15 @@ const loginUser = async (url: string, { arg }: ILoginUser): Promise<Response> =>
   return res;
 };
 
-export { addUser, updateUser, hideUser, loginUser };
+const registerUser = async (url: string, { arg }: IRegistrationUser): Promise<Response> => {
+  const res: Response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(arg),
+  });
+  return res;
+};
+
+export { addUser, updateUser, hideUser, loginUser, registerUser };

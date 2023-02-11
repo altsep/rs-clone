@@ -4,10 +4,10 @@ import { styled } from '@mui/material/styles';
 import { yellow, purple } from '@mui/material/colors';
 import LanguageIcon from '@mui/icons-material/Language';
 import LightModeIcon from '@mui/icons-material/LightMode';
-import { useAppDispatch, useAppSelector } from '../hooks/redux';
-import { changeTheme } from '../store/reducers/themeSlice';
-import { switchLanguage } from '../store/reducers/langSlice';
-import { locales, themes } from '../constants';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { changeTheme } from '../../store/reducers/themeSlice';
+import { switchLanguage } from '../../store/reducers/langSlice';
+import { locales, themes } from '../../constants';
 
 export default function Header() {
   const dispatch = useAppDispatch();

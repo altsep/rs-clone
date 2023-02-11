@@ -6,4 +6,13 @@ type TThemeState = {
   mode: string;
 };
 
-export type { InputsState, TThemeState };
+type TAuthState = {
+  auth: boolean;
+};
+
+type TLoginFormState = {
+  passwordVisible: boolean;
+  loginError: string;
+};
+
+export type { InputsState, TThemeState, TAuthState, TLoginFormState };

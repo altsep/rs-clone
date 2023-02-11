@@ -8,6 +8,7 @@ const enum ApiPath {
   comments = 'comments',
   auth = '/posts-auth',
   login = '/login',
+  registration = '/registration',
 }
 
 const enum ReducerNames {

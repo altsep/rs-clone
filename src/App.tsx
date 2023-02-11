@@ -5,7 +5,7 @@ import { lightTheme } from './themes/lightTheme';
 import { useAppSelector } from './hooks/redux';
 import Login from './pages/Login';
 import Registration from './pages/Registration';
-import Header from './components/Header';
+import Header from './components/Header/Header';
 import Profile from './pages/Profile';
 
 function App() {

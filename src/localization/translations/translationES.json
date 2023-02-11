@@ -53,6 +53,10 @@
         "required": "Se requiere la fecha de nacimiento",
         "validation": "Fecha no válida. La edad no puede ser inferior a 14"
       }
-    }
+    },
+    "registrationErrors": {
+      "email": "Usuario con correo electrónico {{ email }} ya existe"
+    },
+    "registrationSuccess": "Para completar el registro, siga el enlace enviado a su correo electrónico"
   }
 }

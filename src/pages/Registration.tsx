@@ -1,8 +1,8 @@
 import { Container, Grid, useTheme } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import FormFooter from '../components/FormFooter';
-import FormHeader from '../components/FormHeader';
-import RegistrationForm from '../components/RegistrationForm';
+import FormFooter from '../components/Forms/FormElements/FormFooter';
+import FormHeader from '../components/Forms/FormElements/FormHeader';
+import RegistrationForm from '../components/Forms/RegistrationForm/RegistrationForm';
 
 export default function Registration() {
   const { t } = useTranslation();
