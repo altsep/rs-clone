@@ -22,9 +22,13 @@ export default function LeftSideBar() {
     {
       text: 'Profile',
       icon: <AccountBoxOutlinedIcon />,
-      to: `${authorizedUser?.alias ? `/${authorizedUser.alias}` : `/id${idAuthorizedUser}`}`,
+      to: `${
+        authorizedUser?.alias && location.pathname !== `/id${idAuthorizedUser}`
+          ? `/${authorizedUser.alias}`
+          : `/id${idAuthorizedUser}`
+      }`,
       handleClick: (): void => {
-        if (authorizedUser?.alias) {
+        if (authorizedUser?.alias && location.pathname !== `/id${idAuthorizedUser}`) {
           navigate(`/${authorizedUser.alias}`);
         } else {
           navigate(`/id${idAuthorizedUser}`);

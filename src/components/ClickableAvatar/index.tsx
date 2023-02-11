@@ -15,7 +15,11 @@ export default function ClickableAvatar({ user }: IClickableAvatarProps) {
 
   const handleClickAvatar = (id: number): void => {
     if (idCurrentProfile !== id) {
-      navigate(`/id${id}`);
+      if (user?.alias) {
+        navigate(`/${user.alias}`);
+      } else {
+        navigate(`/id${id}`);
+      }
     }
   };
 
