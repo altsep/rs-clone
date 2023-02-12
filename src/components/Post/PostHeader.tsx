@@ -2,14 +2,15 @@ import useSWRMutation from 'swr/mutation';
 import React, { useState } from 'react';
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import { CardHeader, IconButton } from '@mui/material';
-import ClickableAvatar from './ClickableAvatar';
-import { IPost } from '../types/data';
-import { currentLocales, idAuthorizedUser } from '../mock-data/data';
+import ClickableAvatar from '../ClickableAvatar';
+import { IPost } from '../../types/data';
+import { currentLocales, idAuthorizedUser } from '../../mock-data/data';
 import MoreMenu from './MoreMenu';
-import useUser from '../hooks/useUser';
-import { VariantsMoreMenu, ApiPath, API_BASE_URL } from '../constants';
-import { removePost } from '../api/postsApi';
-import useParamsIdCurrentProfile from '../hooks/useParamsIdCurrentProfile';
+
+import { VariantsMoreMenu, ApiPath, API_BASE_URL } from '../../constants';
+import { removePost } from '../../api/postsApi';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { removePostInState } from '../../store/reducers/postsState';
 
 interface IPostHeaderProps {
   postData: IPost;
@@ -17,12 +18,14 @@ interface IPostHeaderProps {
 }
 
 export default function PostHeader({ postData, setIsEdit }: IPostHeaderProps) {
-  const { idCurrentProfile } = useParamsIdCurrentProfile();
-
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const open = Boolean(anchorEl);
 
-  const { user } = useUser(postData.userId);
+  const dispatch = useAppDispatch();
+  const { idCurrentProfile, users } = useAppSelector((state) => state.users);
+
+  const open = Boolean(anchorEl);
+  const currentUser = users.find((user) => user.id === postData.userId);
+
   const { trigger: triggerRemovePost } = useSWRMutation(`${API_BASE_URL}${ApiPath.posts}/${postData.id}`, removePost);
 
   const handleMoreButtonClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
@@ -34,9 +37,9 @@ export default function PostHeader({ postData, setIsEdit }: IPostHeaderProps) {
   };
 
   const handleClickDeletePost = async (): Promise<void> => {
-    // LOOK_AGAIN the delete functionality has not yet been fixed on the backend
     setAnchorEl(null);
     await triggerRemovePost();
+    dispatch(removePostInState(postData.id));
   };
 
   const handleClickEditPost = (): void => {
@@ -44,15 +47,15 @@ export default function PostHeader({ postData, setIsEdit }: IPostHeaderProps) {
     setIsEdit(true);
   };
 
-  if (!user) {
+  if (!currentUser) {
     return <CardHeader>User not found</CardHeader>;
   }
 
   return (
     <>
       <CardHeader
-        avatar={<ClickableAvatar user={user} />}
-        title={user.name}
+        avatar={<ClickableAvatar user={currentUser} />}
+        title={currentUser.name}
         subheader={new Date(postData.createdAt).toLocaleString(currentLocales, {
           day: 'numeric',
           month: 'short',

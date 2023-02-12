@@ -5,15 +5,22 @@ const KEY_LOCAL_STORAGE = 'rs-clone-krevetka87-altsep-metalknock';
 const enum ApiPath {
   posts = '/posts',
   users = '/users',
-  comments = 'comments',
+  comments = '/comments',
   auth = '/posts-auth',
-  login = '/login',
+}
+
+const enum RoutePath {
   registration = '/registration',
-  refresh = '/refresh',
+  messages = '/messages',
+  friends = '/friends',
+  settings = '/settings',
 }
 
 const enum ReducerNames {
   inputs = 'inputs',
+  leftSideBar = 'leftSideBar',
+  users = 'users',
+  posts = 'posts',
 }
 
 const enum Locales {

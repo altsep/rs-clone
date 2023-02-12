@@ -9,12 +9,15 @@ import Login from './pages/Login';
 import Registration from './pages/Registration';
 import Header from './components/Header/Header';
 import Profile from './pages/Profile';
-import { ApiPath, API_BASE_URL, KEY_LOCAL_STORAGE, LSKeys } from './constants';
+import { ApiPath, API_BASE_URL, KEY_LOCAL_STORAGE, LSKeys, RoutePath } from './constants';
 import { refreshToken } from './api/usersApi';
 import { ILogin } from './types/data';
 import { setToken } from './utils/common';
 import { setAuth } from './store/reducers/authSlice';
 import { setUser } from './store/reducers/userSlice';
+import Messages from './pages/Messages';
+import Friends from './pages/Friends';
+import NotFound from './pages/NotFound';
 import Settings from './pages/Settings';
 
 function App() {
@@ -48,9 +51,13 @@ function App() {
       <Box component="main" sx={{ flex: 1, display: 'flex' }}>
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/registration" element={<Registration />} />
+          <Route path={RoutePath.registration} element={<Registration />} />
           <Route path="/:id" element={<Profile />} />
           <Route path="/settings/*" element={<Settings />} />
+          <Route path={RoutePath.messages} element={<Messages />} />
+          <Route path={RoutePath.friends} element={<Friends />} />
+          <Route path={RoutePath.settings} element={<Settings />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Box>
       <footer />

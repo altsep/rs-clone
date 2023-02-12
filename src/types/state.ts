@@ -1,5 +1,20 @@
-type InputsState = {
+import { IPost, IUser } from './data';
+
+interface IInputsState {
   valueCreatePost: string;
+}
+
+interface ILeftSideBarState {
+  isOpen: boolean;
+}
+
+type TUsersState = {
+  users: IUser[];
+  currentProfile: IUser | null;
+  idCurrentProfile: number;
+  authorizedUser: IUser | null;
+  idAuthorizedUser: number;
+  defineUserCompleted: boolean;
 };
 
 type TThemeState = {
@@ -15,4 +30,9 @@ type TLoginFormState = {
   loginError: string;
 };
 
-export type { InputsState, TThemeState, TAuthState, TLoginFormState };
+type TPostsState = {
+  posts: IPost[];
+  currentProfilePosts: IPost[] | null;
+};
+
+export type { IInputsState, ILeftSideBarState, TUsersState, TPostsState, TThemeState, TAuthState, TLoginFormState };
