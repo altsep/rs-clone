@@ -6,8 +6,6 @@ type UpdatePostArg = Partial<Pick<IPost, 'description' | 'likes' | 'commentsIds'
 
 type RemovePostArg = Pick<IUser, 'password'>;
 
-type AddPostResponse = Pick<IPost, 'id' | 'userId' | 'description' | 'createdAt' | 'likes'>;
-
 interface IAddPostProps {
   arg: AddPostArg;
 }
@@ -20,12 +18,4 @@ interface IRemovePostProps {
   arg: RemovePostArg;
 }
 
-export type {
-  IAddPostProps,
-  IUpdatePostProps,
-  IRemovePostProps,
-  AddPostResponse,
-  AddPostArg,
-  UpdatePostArg,
-  RemovePostArg,
-};
+export type { IAddPostProps, IUpdatePostProps, IRemovePostProps, AddPostArg, UpdatePostArg, RemovePostArg };
