@@ -10,6 +10,9 @@ import { VariantsMoreMenu, ApiPath, API_BASE_URL } from '../../constants';
 import { removePost } from '../../api/postsApi';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { removePostInState } from '../../store/reducers/postsState';
+import { updateUser } from '../../api/usersApi';
+import { UpdateUserArg } from '../../types/usersApi';
+import { updateUserInState } from '../../store/reducers/usersState';
 
 interface IPostHeaderProps {
   postData: IPost;
@@ -26,6 +29,10 @@ export default function PostHeader({ postData, setIsEdit }: IPostHeaderProps) {
   const currentUser = users.find((user) => user.id === postData.userId);
 
   const { trigger: triggerRemovePost } = useSWRMutation(`${API_BASE_URL}${ApiPath.posts}/${postData.id}`, removePost);
+  const { trigger: triggerUpdateUser } = useSWRMutation(
+    `${API_BASE_URL}${ApiPath.users}/${postData.userId}`,
+    updateUser
+  );
 
   const handleMoreButtonClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
     setAnchorEl(e.currentTarget);
@@ -36,9 +43,15 @@ export default function PostHeader({ postData, setIsEdit }: IPostHeaderProps) {
   };
 
   const handleClickDeletePost = async (): Promise<void> => {
-    setAnchorEl(null);
-    await triggerRemovePost();
-    dispatch(removePostInState(postData.id));
+    if (currentUser) {
+      setAnchorEl(null);
+      await triggerRemovePost();
+      const argUpdateUser: UpdateUserArg = {
+        postsIds: currentUser.postsIds ? currentUser.postsIds.filter((postId) => postId !== postData.id) : [],
+      };
+      await triggerUpdateUser(argUpdateUser);
+      dispatch(removePostInState(postData.id));
+    }
   };
 
   const handleClickEditPost = (): void => {

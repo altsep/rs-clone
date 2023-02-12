@@ -1,5 +1,16 @@
 import React from 'react';
-import { Avatar, Box, Button, Card, CardActions, CardContent, Skeleton, TextField, Typography } from '@mui/material';
+import {
+  Autocomplete,
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Skeleton,
+  TextField,
+  Typography,
+} from '@mui/material';
 import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
 import useSWRMutation from 'swr/mutation';
 import { API_BASE_URL, ApiPath } from '../../constants';
@@ -46,12 +57,6 @@ export default function PostCreator() {
     dispatch(changeCreatePost(''));
   };
 
-  const handleKeyDownCreatePost = async (e: React.KeyboardEvent<HTMLDivElement>): Promise<void> => {
-    if (e.key === 'Enter' && valueCreatePost) {
-      await handleClickCreatePost();
-    }
-  };
-
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
     dispatch(changeCreatePost(e.target.value));
   };
@@ -59,23 +64,28 @@ export default function PostCreator() {
   return (
     <Card>
       <Box>
-        <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+        <CardContent sx={{ display: 'flex', gap: 2 }}>
           {authorizedUser ? (
-            <ClickableAvatar user={authorizedUser} />
+            <Box sx={{ mt: '8px' }}>
+              <ClickableAvatar user={authorizedUser} />
+            </Box>
           ) : (
             <Skeleton variant="circular">
               <Avatar />
             </Skeleton>
           )}
           <TextField
+            multiline
             onChange={handleChangeInput}
-            onKeyDown={handleKeyDownCreatePost}
             label="What's happening?"
             value={valueCreatePost}
-            sx={{ flexGrow: '1' }}
+            sx={{
+              flexGrow: '1',
+            }}
           />
         </CardContent>
       </Box>
+
       <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Button aria-label="Upload photo" sx={{ gap: 1 }}>
           <AddPhotoAlternateOutlinedIcon />

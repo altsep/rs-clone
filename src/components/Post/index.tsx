@@ -11,6 +11,8 @@ import {
   AvatarGroup,
   TextField,
   Divider,
+  List,
+  Collapse,
 } from '@mui/material';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
@@ -25,7 +27,7 @@ import ClickableAvatar from '../ClickableAvatar';
 import PostHeader from './PostHeader';
 import temporary from '../../assets/temporary-1.jpg';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { editPost } from '../../store/reducers/postsState';
+import { updatePostInState } from '../../store/reducers/postsState';
 import Comment from '../Comment';
 import CommentCreator from './CommentCreator';
 
@@ -35,7 +37,8 @@ interface IPostProps {
 
 export default function Post({ postData }: IPostProps) {
   const [isEdit, setIsEdit] = useState(false);
-  const [isWaiting, setIsWaiting] = useState(false);
+  const [isOpenComments, setIsOpenComments] = useState(false);
+
   const [valueInputDescription, setValueInputDescription] = useState(postData.description);
 
   const dispatch = useAppDispatch();
@@ -48,7 +51,6 @@ export default function Post({ postData }: IPostProps) {
   );
 
   const handleClickLikeButton = async (): Promise<void> => {
-    setIsWaiting(true);
     if (postData.likedUserIds && postData.likedUserIds.includes(idAuthorizedUser)) {
       const argUpdatePost: UpdatePostArg = {
         likes: postData.likes - 1,
@@ -56,7 +58,7 @@ export default function Post({ postData }: IPostProps) {
       };
       const dataResponse = await triggerUpdatePost(argUpdatePost);
       if (dataResponse) {
-        dispatch(editPost(dataResponse));
+        dispatch(updatePostInState(dataResponse));
       }
     } else {
       const argUpdatePost: UpdatePostArg = {
@@ -65,10 +67,9 @@ export default function Post({ postData }: IPostProps) {
       };
       const dataResponse = await triggerUpdatePost(argUpdatePost);
       if (dataResponse) {
-        dispatch(editPost(dataResponse));
+        dispatch(updatePostInState(dataResponse));
       }
     }
-    setIsWaiting(false);
   };
 
   const handleClickSaveButton = async (): Promise<void> => {
@@ -77,7 +78,7 @@ export default function Post({ postData }: IPostProps) {
     };
     const dataResponse = await triggerUpdatePost(argUpdatePost);
     if (dataResponse) {
-      dispatch(editPost(dataResponse));
+      dispatch(updatePostInState(dataResponse));
     }
 
     setIsEdit(false);
@@ -89,23 +90,31 @@ export default function Post({ postData }: IPostProps) {
     }
   };
 
+  const handleClickComments = (): void => {
+    setIsOpenComments(!isOpenComments);
+  };
+
   return (
     <Card>
       <PostHeader postData={postData} setIsEdit={setIsEdit} />
       <CardContent>
         {!isEdit ? (
-          <Typography variant="body1" sx={{ wordBreak: 'break-all' }}>
-            {postData.description}
+          <Typography variant="body1" component="span">
+            <pre style={{ fontFamily: 'inherit', whiteSpace: 'pre-wrap', wordBreak: 'break-all', margin: 0 }}>
+              {postData.description}
+            </pre>
           </Typography>
         ) : (
-          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
             <TextField
               multiline
               value={valueInputDescription}
               onChange={handleChangeInputDescription}
-              sx={{ flexGrow: 1 }}
+              sx={{ flexGrow: 1, width: '100%' }}
             />
-            <Button onClick={handleClickSaveButton}>Save</Button>
+            <Button onClick={handleClickSaveButton} sx={{ ml: 'auto' }}>
+              Save
+            </Button>
           </Box>
         )}
       </CardContent>
@@ -121,7 +130,9 @@ export default function Post({ postData }: IPostProps) {
               .map((likedUserId) => {
                 if (users) {
                   const currentUser = users.find((val) => val.id === likedUserId);
-                  return currentUser && <ClickableAvatar key={likedUserId} user={currentUser} />;
+                  return (
+                    currentUser && <ClickableAvatar key={likedUserId} user={currentUser} width="20px" height="20px" />
+                  );
                 }
                 return '';
               })}
@@ -137,7 +148,6 @@ export default function Post({ postData }: IPostProps) {
           aria-label="Like"
           sx={{ display: 'flex', alignItems: 'center', gap: 1, p: { xs: 0, sm: '6px' } }}
           onClick={handleClickLikeButton}
-          disabled={isWaiting}
         >
           {postData.likedUserIds && postData.likedUserIds.includes(idAuthorizedUser) ? (
             <FavoriteOutlinedIcon />
@@ -147,7 +157,7 @@ export default function Post({ postData }: IPostProps) {
 
           <Typography sx={{ display: { xs: 'none', md: 'block' } }}>Like</Typography>
         </Button>
-        <Button aria-label="Comments" sx={{ gap: 1, p: { xs: 0, sm: '6px' } }}>
+        <Button aria-label="Comments" onClick={handleClickComments} sx={{ gap: 1, p: { xs: 0, sm: '6px' } }}>
           <CommentOutlinedIcon />
           <Typography sx={{ display: { xs: 'none', md: 'block' } }}>Comments</Typography>
         </Button>
@@ -157,13 +167,14 @@ export default function Post({ postData }: IPostProps) {
         </Button>
       </CardActions>
       <Divider sx={{ width: '94%', mx: 'auto' }} />
-      <Box>
-        {comments.map(
-          (comment) => comment.postId === postData.id && <Comment key={comment.id} commentData={comment} />
-        )}
-      </Box>
-
-      <CommentCreator postData={postData} />
+      <Collapse in={isOpenComments} timeout="auto" unmountOnExit>
+        <List>
+          {comments.map(
+            (comment) => comment.postId === postData.id && <Comment key={comment.id} commentData={comment} />
+          )}
+        </List>
+      </Collapse>
+      <CommentCreator postData={postData} setIsOpenComments={setIsOpenComments} />
     </Card>
   );
 }

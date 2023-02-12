@@ -20,13 +20,13 @@ const commentsStateSlice = createSlice({
     removeCommentInState: (state, action: PayloadAction<number>) => {
       state.comments = state.comments.filter((comment) => comment.id !== action.payload);
     },
-    editComment: (state, action: PayloadAction<IComment>) => {
+    updateCommentInState: (state, action: PayloadAction<IComment>) => {
       state.comments = state.comments.map((comment) => (comment.id === action.payload.id ? action.payload : comment));
     },
   },
 });
 
-export const { commentsLoadingSuccess, addCommentInState, removeCommentInState, editComment } =
+export const { commentsLoadingSuccess, addCommentInState, removeCommentInState, updateCommentInState } =
   commentsStateSlice.actions;
 
 export const commentsState = commentsStateSlice.reducer;
