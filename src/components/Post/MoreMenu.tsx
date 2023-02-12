@@ -1,5 +1,5 @@
 import { Menu, MenuItem } from '@mui/material';
-import { VariantsMoreMenu } from '../constants';
+import { VariantsMoreMenu } from '../../constants';
 
 interface IMoreMenuProps {
   anchorEl: HTMLElement | null;

@@ -4,12 +4,16 @@ import { IUser } from '../types/data';
 import { fetcher } from '../utils/fetcher';
 
 export default function useUsers() {
-  const { data, isLoading, error, mutate } = useSWR<IUser[], Error>(`${API_BASE_URL}${ApiPath.users}`, fetcher);
+  const { data, isLoading, error, mutate, isValidating } = useSWR<IUser[], Error>(
+    `${API_BASE_URL}${ApiPath.users}`,
+    fetcher
+  );
 
   return {
     users: data,
     isLoading,
     isError: error,
     mutate,
+    isValidating,
   };
 }

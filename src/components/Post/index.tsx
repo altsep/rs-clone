@@ -15,16 +15,15 @@ import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlin
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
 import ReplyOutlinedIcon from '@mui/icons-material/ReplyOutlined';
-import { IPost } from '../types/data';
-import usePosts from '../hooks/usePosts';
-import { API_BASE_URL, ApiPath } from '../constants';
-import { UpdatePostArg } from '../types/postsApi';
-import { updatePost } from '../api/postsApi';
-import ClickableAvatar from './ClickableAvatar';
-import { idAuthorizedUser } from '../mock-data/data';
-import useUsers from '../hooks/useUsers';
+import { IPost } from '../../types/data';
+import { API_BASE_URL, ApiPath } from '../../constants';
+import { UpdatePostArg } from '../../types/postsApi';
+import { updatePost } from '../../api/postsApi';
+import ClickableAvatar from '../ClickableAvatar';
 import PostHeader from './PostHeader';
-import temporary from '../assets/temporary-1.jpg';
+import temporary from '../../assets/temporary-1.jpg';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { editPost } from '../../store/reducers/postsState';
 
 interface IPostProps {
   postData: IPost;
@@ -34,9 +33,13 @@ export default function Post({ postData }: IPostProps) {
   const [isEdit, setIsEdit] = useState(false);
   const [valueInputDescription, setValueInputDescription] = useState(postData.description);
 
-  const { users } = useUsers();
-  const { mutate } = usePosts();
-  const { trigger: triggerUpdatePost } = useSWRMutation(`${API_BASE_URL}${ApiPath.posts}/${postData.id}`, updatePost);
+  const dispatch = useAppDispatch();
+  const { users, idAuthorizedUser } = useAppSelector((state) => state.users);
+
+  const { trigger: triggerUpdatePost } = useSWRMutation<IPost, Error>(
+    `${API_BASE_URL}${ApiPath.posts}/${postData.id}`,
+    updatePost
+  );
 
   const handleClickLikeButton = async (): Promise<void> => {
     if (postData.likedUserIds && postData.likedUserIds.includes(idAuthorizedUser)) {
@@ -44,23 +47,31 @@ export default function Post({ postData }: IPostProps) {
         likes: postData.likes - 1,
         likedUserIds: postData.likedUserIds.filter((likedUserId) => likedUserId !== idAuthorizedUser),
       };
-      await triggerUpdatePost(argUpdatePost);
+      const dataResponse = await triggerUpdatePost(argUpdatePost);
+      if (dataResponse) {
+        dispatch(editPost(dataResponse));
+      }
     } else {
       const argUpdatePost: UpdatePostArg = {
         likes: postData.likes + 1,
         likedUserIds: postData.likedUserIds ? [...postData.likedUserIds, idAuthorizedUser] : [idAuthorizedUser],
       };
-      await triggerUpdatePost(argUpdatePost);
+      const dataResponse = await triggerUpdatePost(argUpdatePost);
+      if (dataResponse) {
+        dispatch(editPost(dataResponse));
+      }
     }
-    await mutate();
   };
 
   const handleClickSaveButton = async (): Promise<void> => {
     const argUpdatePost: UpdatePostArg = {
       description: valueInputDescription,
     };
-    await triggerUpdatePost(argUpdatePost);
-    await mutate();
+    const dataResponse = await triggerUpdatePost(argUpdatePost);
+    if (dataResponse) {
+      dispatch(editPost(dataResponse));
+    }
+
     setIsEdit(false);
   };
 
