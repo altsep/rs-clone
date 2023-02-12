@@ -18,7 +18,6 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": ["vite/client"]
   },
   "include": ["."],
   "exclude": ["node_modules", "*.cjs", "*.config.js"]
