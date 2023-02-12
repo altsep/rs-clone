@@ -7,6 +7,9 @@ const enum ApiPath {
   users = '/users',
   comments = '/comments',
   auth = '/posts-auth',
+  refresh = '/refresh',
+  login = '/login',
+  registration = '/registration',
 }
 
 const enum RoutePath {
@@ -47,4 +50,15 @@ const locales: { [key: string]: string } = {
 
 const themes = ['light', 'dark'];
 
-export { API_BASE_URL, KEY_LOCAL_STORAGE, ApiPath, ReducerNames, Locales, VariantsMoreMenu, locales, themes, LSKeys };
+export {
+  API_BASE_URL,
+  KEY_LOCAL_STORAGE,
+  ApiPath,
+  ReducerNames,
+  Locales,
+  VariantsMoreMenu,
+  locales,
+  themes,
+  LSKeys,
+  RoutePath,
+};
