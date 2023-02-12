@@ -10,10 +10,7 @@
       "email": "Correo electronico es requerido",
       "password": "Se requiere contraseña"
     },
-    "loginErrors": {
-      "email": "El usuario con este correo no está registrado",
-      "password": "Contraseña incorrecta"
-    }
+    "loginError": "Contraseña o dirección de correo electrónico incorrecta"
   },
   "registration": {
     "title": "Registro",
@@ -58,5 +55,28 @@
       "email": "Usuario con correo electrónico {{ email }} ya existe"
     },
     "registrationSuccess": "Para completar el registro, siga el enlace enviado a su correo electrónico"
+  },
+  "settings": {
+    "menu": {
+      "language": "Idioma",
+      "theme": "Tema",
+      "editProfile": "Editar perfil"
+    },
+    "language": {
+      "title": "Idioma",
+      "subtitle": "Cambiar el idioma de RSSpace"
+    },
+    "theme": {
+      "title": "Tema",
+      "subtitle": "Cambiar el tema de color de RSSpace",
+      "selectItems": {
+        "light": "Luz",
+        "dark": "Oscuro"
+      }
+    },
+    "buttons": {
+      "save": "Guardar",
+      "cancel": "Cancelar"
+    }
   }
 }

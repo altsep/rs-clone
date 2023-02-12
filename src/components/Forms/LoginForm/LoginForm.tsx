@@ -21,7 +21,7 @@ import { setUser } from '../../../store/reducers/userSlice';
 export default function LoginForm() {
   const { t } = useTranslation();
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
-  const [loginError, setLoginError] = useState<string>('');
+  const [loginError, setLoginError] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -47,19 +47,17 @@ export default function LoginForm() {
 
   const onSubmit = async (data: TLoginValues): Promise<void> => {
     const res: Response | undefined = await trigger(data);
-    if (res?.status === 400) {
-      setLoginError('email');
-    } else if (res?.status === 401) {
-      setLoginError('password');
-    } else {
-      setLoginError('');
+    if (res?.ok) {
+      setLoginError(false);
       const resData = (await res?.json()) as ILogin;
       const { accessToken, user } = resData;
       const { id } = user;
       setToken(accessToken);
       dispatch(setAuth(true));
       dispatch(setUser(user));
-      navigate(`/${id}`);
+      // navigate(`/${id}`);
+    } else {
+      setLoginError(true);
     }
   };
 
@@ -117,7 +115,7 @@ export default function LoginForm() {
       </Button>
       {loginError && (
         <FormHelperText error sx={{ fontSize: '14px', textAlign: 'center' }}>
-          {loginError === 'email' ? t('login.loginErrors.email') : t('login.loginErrors.password')}
+          {t('login.loginError')}
         </FormHelperText>
       )}
     </Box>

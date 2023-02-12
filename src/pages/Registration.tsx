@@ -13,7 +13,7 @@ export default function Registration() {
       sx={{
         display: 'flex',
         justifyContent: 'center',
-        marginTop: '10vh',
+        marginTop: '5vh',
       }}
     >
       <Grid

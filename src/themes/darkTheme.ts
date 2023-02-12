@@ -66,6 +66,20 @@ const darkTheme: Theme = createTheme({
         },
       },
     },
+    MuiDivider: {
+      styleOverrides: {
+        root: {
+          background: grey[600],
+        },
+      },
+    },
+    MuiListItem: {
+      styleOverrides: {
+        root: {
+          borderColor: grey[600],
+        },
+      },
+    },
   },
 });
 

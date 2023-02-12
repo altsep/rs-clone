@@ -46,7 +46,7 @@ export default function Header() {
               sx={{ mr: '5px', fontSize: 'medium', color: theme === 'light' ? yellow.A700 : purple[600] }}
             />
           }
-          defaultValue={theme}
+          value={theme}
           onChange={selectThemeHandler}
         >
           {themes.map((mode: string) => (
@@ -57,7 +57,7 @@ export default function Header() {
         </SelectWrapper>
         <SelectWrapper
           startAdornment={<LanguageIcon sx={{ mr: '5px', fontSize: 'medium' }} />}
-          defaultValue={language}
+          value={language}
           onChange={selectLanguageHandler}
         >
           {Object.keys(locales).map((lang: string) => (

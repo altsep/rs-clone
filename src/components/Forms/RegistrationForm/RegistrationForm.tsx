@@ -88,9 +88,15 @@ export default function RegistrationForm() {
 
   const { trigger } = useSWRMutation(`${API_BASE_URL}${ApiPath.registration}`, registerUser);
 
-  const onSubmit: SubmitHandler<IFormValues> = async (data: IFormValues): Promise<void> => {
+  const login: SubmitHandler<IFormValues> = async (data: IFormValues): Promise<void> => {
     const { email, password, name, country, birthDate } = data;
-    const res: Response | undefined = await trigger({ email, password, name, country, birthDate });
+    const res: Response | undefined = await trigger({
+      email,
+      password,
+      name,
+      country,
+      birthDate: new Date(birthDate).toISOString(),
+    });
     if (res?.status === 500) {
       setRegistrationSuccess(false);
       setRegistrationError(email);
@@ -109,7 +115,7 @@ export default function RegistrationForm() {
     <Box
       component="form"
       sx={{ mb: '30px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(login)}
     >
       <Grid container rowSpacing={2} columnSpacing={2} sx={{ mb: '20px' }}>
         <Grid item xs={12} md={6}>

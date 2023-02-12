@@ -13,7 +13,7 @@ export default function Login() {
       sx={{
         display: 'flex',
         justifyContent: 'center',
-        marginTop: '10vh',
+        marginTop: '5vh',
       }}
     >
       <Grid

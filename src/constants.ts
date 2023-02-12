@@ -9,6 +9,7 @@ const enum ApiPath {
   auth = '/posts-auth',
   login = '/login',
   registration = '/registration',
+  refresh = '/refresh',
 }
 
 const enum ReducerNames {

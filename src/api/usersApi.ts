@@ -1,4 +1,5 @@
 import { IAddUserProps, IUpdateUserProps, IHideUserProps, ILoginUser, IRegistrationUser } from '../types/usersApi';
+import { LSKeys, KEY_LOCAL_STORAGE } from '../constants';
 
 const addUser = async (url: string, { arg }: IAddUserProps): Promise<void> => {
   await fetch(url, {
@@ -52,4 +53,11 @@ const registerUser = async (url: string, { arg }: IRegistrationUser): Promise<Re
   return res;
 };
 
-export { addUser, updateUser, hideUser, loginUser, registerUser };
+const refreshToken = async (url: string): Promise<Response> => {
+  const res: Response = await fetch(url, {
+    method: 'POST',
+  });
+  return res;
+};
+
+export { addUser, updateUser, hideUser, loginUser, registerUser, refreshToken };

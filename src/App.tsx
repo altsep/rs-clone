@@ -1,26 +1,58 @@
 import { Routes, Route } from 'react-router-dom';
-import { CssBaseline, ThemeProvider } from '@mui/material';
+import { Box, CssBaseline, ThemeProvider } from '@mui/material';
+import useSWRMutation from 'swr/mutation';
+import { useEffect } from 'react';
 import { darkTheme } from './themes/darkTheme';
 import { lightTheme } from './themes/lightTheme';
-import { useAppSelector } from './hooks/redux';
+import { useAppDispatch, useAppSelector } from './hooks/redux';
 import Login from './pages/Login';
 import Registration from './pages/Registration';
 import Header from './components/Header/Header';
 import Profile from './pages/Profile';
+import { ApiPath, API_BASE_URL, KEY_LOCAL_STORAGE, LSKeys } from './constants';
+import { refreshToken } from './api/usersApi';
+import { ILogin } from './types/data';
+import { setToken } from './utils/common';
+import { setAuth } from './store/reducers/authSlice';
+import { setUser } from './store/reducers/userSlice';
+import Settings from './pages/Settings';
 
 function App() {
   const theme: string = useAppSelector((state) => state.theme.mode);
+
+  const dispatch = useAppDispatch();
+  const isAuth = useAppSelector((state) => state.auth.isAuth);
+  const { trigger } = useSWRMutation(`${API_BASE_URL}${ApiPath.refresh}`, refreshToken);
+
+  const checkAuth = async (): Promise<void> => {
+    const res: Response | undefined = await trigger();
+    if (res?.ok) {
+      const resData = (await res?.json()) as ILogin;
+      const { accessToken, user } = resData;
+      setToken(accessToken);
+      dispatch(setAuth(true));
+      dispatch(setUser(user));
+    }
+  };
+
+  useEffect(() => {
+    if (localStorage.getItem(`${LSKeys.token}_${KEY_LOCAL_STORAGE}`)) {
+      checkAuth().catch((err: Error): Error => err);
+    }
+  }, []);
+
   return (
     <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
       <CssBaseline />
       <Header />
-      <main>
+      <Box component="main" sx={{ flex: 1, display: 'flex' }}>
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/registration" element={<Registration />} />
           <Route path="/:id" element={<Profile />} />
+          <Route path="/settings/*" element={<Settings />} />
         </Routes>
-      </main>
+      </Box>
       <footer />
     </ThemeProvider>
   );

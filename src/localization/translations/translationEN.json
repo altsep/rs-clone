@@ -10,10 +10,7 @@
       "email": "Email is required",
       "password": "Password is required"
     },
-    "loginErrors": {
-      "email": "User with this email is not registered",
-      "password": "Incorrect password"
-    }
+    "loginError": "Wrong password or email address"
   },
   "registration": {
     "title": "Sign Up",
@@ -58,5 +55,28 @@
       "email": "User with email {{ email }} already exist"
     },
     "registrationSuccess": "To complete registration, follow the link sent to your email"
+  },
+  "settings": {
+    "menu": {
+      "language": "Language",
+      "theme": "Theme",
+      "editProfile": "Edit Profile"
+    },
+    "language": {
+      "title": "Language",
+      "subtitle": "Change RSSpace language"
+    },
+    "theme": {
+      "title": "Theme",
+      "subtitle": "Change RSSpace color theme",
+      "selectItems": {
+        "light": "Light",
+        "dark": "Dark"
+      }
+    },
+    "buttons": {
+      "save": "Save",
+      "cancel": "Cancel"
+    }
   }
 }

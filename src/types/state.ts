@@ -7,7 +7,7 @@ type TThemeState = {
 };
 
 type TAuthState = {
-  auth: boolean;
+  isAuth: boolean;
 };
 
 type TLoginFormState = {
