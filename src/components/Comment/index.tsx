@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import useSWRMutation from 'swr/mutation';
-import { Box, Button, CardContent, Divider, IconButton, ListItem, Stack, TextField, Typography } from '@mui/material';
+import { Box, Button, Divider, IconButton, ListItem, Stack, TextField, Typography } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
 import EditIcon from '@mui/icons-material/Edit';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
@@ -26,7 +26,7 @@ export default function Comment({ commentData }: ICommentProps) {
   const [valueInputDescription, setValueInputDescription] = useState(commentData.description);
 
   const dispatch = useAppDispatch();
-  const { authorizedUser, idAuthorizedUser, users } = useAppSelector((state) => state.users);
+  const { idAuthorizedUser, users } = useAppSelector((state) => state.users);
   const { currentProfilePosts } = useAppSelector((state) => state.posts);
 
   const currentUser = users.find((user) => user.id === commentData.userId);
