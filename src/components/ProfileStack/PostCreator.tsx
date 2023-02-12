@@ -27,7 +27,6 @@ export default function PostCreator() {
 
   const handleClickCreatePost = async (): Promise<void> => {
     const argAddPost: AddPostArg = {
-      createdAt: new Date(Date.now()).toISOString(),
       description: valueCreatePost,
       userId: idAuthorizedUser,
     };

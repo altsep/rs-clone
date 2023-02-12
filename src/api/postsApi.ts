@@ -1,5 +1,5 @@
 import { IPost } from '../types/data';
-import { IAddPostProps, IUpdatePostProps, IRemovePostProps } from '../types/postsApi';
+import { IAddPostProps, IUpdatePostProps } from '../types/postsApi';
 
 const addPost = async (url: string, { arg }: IAddPostProps): Promise<IPost> => {
   const response = await fetch(url, {
@@ -23,13 +23,9 @@ const updatePost = async (url: string, { arg }: IUpdatePostProps): Promise<IPost
   return (await response.json()) as IPost;
 };
 
-const removePost = async (url: string, { arg }: IRemovePostProps): Promise<void> => {
+const removePost = async (url: string): Promise<void> => {
   await fetch(url, {
     method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(arg),
   });
 };
 

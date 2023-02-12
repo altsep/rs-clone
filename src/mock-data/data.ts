@@ -42,6 +42,23 @@ const authorizedUser = {
 //   birthDate: '',
 //   createdAt: '',
 // };
+// const idAuthorizedUser = 1;
+
+// const authorizedUser = {
+//   id: 1,
+//   email: 'qweqwe@example.com',
+//   password: '$2b$05$.vdmlSFFUePlDMmeFKxKIO7gB1okkF2YV9femQ6GjmBWSYriYgvs6',
+//   name: 'Mr QWE',
+//   alias: 'qweshka',
+//   country: 'Iceland',
+//   birthDate: '2013-02-09T03:46:18.057Z',
+//   hidden: true,
+//   createdAt: '2023-02-09T03:46:18.057Z',
+//   postsIds: [],
+//   friendsIds: [2, 3, 7, 8, 9],
+//   // activationLink: '956bb135-ed5a-494b-8d0f-a8dcabad4bb3',
+//   // isActivated: false,
+// };
 
 const currentLocales = Locales.en;
 

@@ -1,4 +1,4 @@
-import { IPost, IUser } from './data';
+import { IComment, IPost, IUser } from './data';
 
 interface IInputsState {
   valueCreatePost: string;
@@ -22,4 +22,8 @@ type TPostsState = {
   currentProfilePosts: IPost[] | null;
 };
 
-export type { IInputsState, ILeftSideBarState, TUsersState, TPostsState };
+type TCommentsState = {
+  comments: IComment[];
+};
+
+export type { IInputsState, ILeftSideBarState, TUsersState, TPostsState, TCommentsState };

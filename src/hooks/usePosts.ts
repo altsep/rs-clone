@@ -11,9 +11,9 @@ export default function usePosts() {
 
   return {
     posts: data,
-    isLoading,
-    isError: error,
+    isLoadingPosts: isLoading,
+    isErrorPosts: error,
     mutate,
-    isValidating,
+    isValidatingPosts: isValidating,
   };
 }

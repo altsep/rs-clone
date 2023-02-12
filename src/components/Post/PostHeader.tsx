@@ -6,7 +6,6 @@ import ClickableAvatar from '../ClickableAvatar';
 import { IPost } from '../../types/data';
 import { currentLocales, idAuthorizedUser } from '../../mock-data/data';
 import MoreMenu from './MoreMenu';
-
 import { VariantsMoreMenu, ApiPath, API_BASE_URL } from '../../constants';
 import { removePost } from '../../api/postsApi';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';

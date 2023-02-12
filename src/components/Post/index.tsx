@@ -10,11 +10,13 @@ import {
   Typography,
   AvatarGroup,
   TextField,
+  Divider,
 } from '@mui/material';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
 import ReplyOutlinedIcon from '@mui/icons-material/ReplyOutlined';
+
 import { IPost } from '../../types/data';
 import { API_BASE_URL, ApiPath } from '../../constants';
 import { UpdatePostArg } from '../../types/postsApi';
@@ -24,6 +26,8 @@ import PostHeader from './PostHeader';
 import temporary from '../../assets/temporary-1.jpg';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { editPost } from '../../store/reducers/postsState';
+import Comment from '../Comment';
+import CommentCreator from './CommentCreator';
 
 interface IPostProps {
   postData: IPost;
@@ -31,10 +35,12 @@ interface IPostProps {
 
 export default function Post({ postData }: IPostProps) {
   const [isEdit, setIsEdit] = useState(false);
+  const [isWaiting, setIsWaiting] = useState(false);
   const [valueInputDescription, setValueInputDescription] = useState(postData.description);
 
   const dispatch = useAppDispatch();
   const { users, idAuthorizedUser } = useAppSelector((state) => state.users);
+  const { comments } = useAppSelector((state) => state.comments);
 
   const { trigger: triggerUpdatePost } = useSWRMutation<IPost, Error>(
     `${API_BASE_URL}${ApiPath.posts}/${postData.id}`,
@@ -42,6 +48,7 @@ export default function Post({ postData }: IPostProps) {
   );
 
   const handleClickLikeButton = async (): Promise<void> => {
+    setIsWaiting(true);
     if (postData.likedUserIds && postData.likedUserIds.includes(idAuthorizedUser)) {
       const argUpdatePost: UpdatePostArg = {
         likes: postData.likes - 1,
@@ -61,6 +68,7 @@ export default function Post({ postData }: IPostProps) {
         dispatch(editPost(dataResponse));
       }
     }
+    setIsWaiting(false);
   };
 
   const handleClickSaveButton = async (): Promise<void> => {
@@ -123,12 +131,13 @@ export default function Post({ postData }: IPostProps) {
           postData.commentsIds ? postData.commentsIds.length : 0
         } Comments`}</Typography>
       </Box>
-
+      <Divider sx={{ width: '94%', mx: 'auto' }} />
       <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Button
           aria-label="Like"
           sx={{ display: 'flex', alignItems: 'center', gap: 1, p: { xs: 0, sm: '6px' } }}
           onClick={handleClickLikeButton}
+          disabled={isWaiting}
         >
           {postData.likedUserIds && postData.likedUserIds.includes(idAuthorizedUser) ? (
             <FavoriteOutlinedIcon />
@@ -147,6 +156,14 @@ export default function Post({ postData }: IPostProps) {
           <Typography sx={{ display: { xs: 'none', md: 'block' } }}>Share</Typography>
         </Button>
       </CardActions>
+      <Divider sx={{ width: '94%', mx: 'auto' }} />
+      <Box>
+        {comments.map(
+          (comment) => comment.postId === postData.id && <Comment key={comment.id} commentData={comment} />
+        )}
+      </Box>
+
+      <CommentCreator postData={postData} />
     </Card>
   );
 }

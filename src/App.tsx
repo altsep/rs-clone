@@ -15,19 +15,44 @@ import { usersLoadingSuccess } from './store/reducers/usersState';
 import usePosts from './hooks/usePosts';
 import { postsLoadingSuccess } from './store/reducers/postsState';
 import NotFound from './pages/NotFound';
+import useComments from './hooks/useComments';
+import { commentsLoadingSuccess } from './store/reducers/commentsState';
 
 function App() {
   const dispatch = useAppDispatch();
 
-  const { users, isLoading: isLoadingUsers, isValidating: isValidatingUser } = useUsers();
-  const { posts, isLoading: isLoadingPosts, isValidating: isValidatingPost } = usePosts();
+  const { users, isLoadingUsers, isValidatingUsers } = useUsers();
+  const { posts, isLoadingPosts, isValidatingPosts } = usePosts();
+  const { comments, isLoadingComments, isValidatingComments } = useComments();
 
   useEffect(() => {
-    if (users && posts && !isLoadingPosts && !isLoadingUsers && !isValidatingPost && !isValidatingUser) {
+    if (
+      users &&
+      posts &&
+      comments &&
+      !isLoadingUsers &&
+      !isLoadingPosts &&
+      !isLoadingComments &&
+      !isValidatingUsers &&
+      !isValidatingPosts &&
+      !isValidatingComments
+    ) {
       dispatch(usersLoadingSuccess(users));
       dispatch(postsLoadingSuccess(posts));
+      dispatch(commentsLoadingSuccess(comments));
     }
-  }, [isLoadingUsers, users, isLoadingPosts, posts, isValidatingUser, isValidatingPost, dispatch]);
+  }, [
+    users,
+    posts,
+    comments,
+    isLoadingUsers,
+    isLoadingPosts,
+    isLoadingComments,
+    isValidatingUsers,
+    isValidatingPosts,
+    isValidatingComments,
+    dispatch,
+  ]);
 
   return (
     <>
