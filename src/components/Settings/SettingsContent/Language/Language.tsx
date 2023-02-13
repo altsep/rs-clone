@@ -1,8 +1,8 @@
 import { Box, Button, MenuItem, Select, SelectChangeEvent, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { switchLanguage } from '../../store/reducers/langSlice';
+import { useAppDispatch, useAppSelector } from '../../../../hooks/redux';
+import { switchLanguage } from '../../../../store/reducers/langSlice';
 
 export default function Language() {
   const { t } = useTranslation();
@@ -16,7 +16,7 @@ export default function Language() {
 
   return (
     <Box>
-      <Typography variant="h5" sx={{ mb: '20px' }}>
+      <Typography variant="h6" sx={{ mb: '20px' }}>
         {t('settings.language.title')}
       </Typography>
       <Typography variant="body2" sx={{ mb: '20px' }}>

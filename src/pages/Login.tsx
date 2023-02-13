@@ -12,7 +12,8 @@ export default function Login() {
     <Container
       sx={{
         display: 'flex',
-        justifyContent: 'center',
+        flexDirection: 'column',
+        alignItems: 'center',
         marginTop: '5vh',
       }}
     >

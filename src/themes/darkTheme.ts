@@ -73,7 +73,7 @@ const darkTheme: Theme = createTheme({
         },
       },
     },
-    MuiListItem: {
+    MuiListItemButton: {
       styleOverrides: {
         root: {
           borderColor: grey[600],

@@ -49,6 +49,9 @@
       "birthDate": {
         "required": "Se requiere la fecha de nacimiento",
         "validation": "Fecha no válida. La edad no puede ser inferior a 14"
+      },
+      "alias": {
+        "validation": "Es demasiado corto. El alias debe tener al menos 3 caracteres"
       }
     },
     "registrationErrors": {
@@ -72,6 +75,17 @@
       "selectItems": {
         "light": "Luz",
         "dark": "Oscuro"
+      }
+    },
+    "editProfile": {
+      "title": "Editar perfil",
+      "form": {
+        "name": "Nombre completo",
+        "email": "Correo electrónico",
+        "alias": "Alias",
+        "country": "País",
+        "birthDate": "Fecha de nacimiento",
+        "password": "Contraseña"
       }
     },
     "buttons": {

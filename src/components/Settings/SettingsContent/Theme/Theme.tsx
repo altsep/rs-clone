@@ -1,8 +1,8 @@
 import { Box, MenuItem, Select, SelectChangeEvent, Typography, Button } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { changeTheme } from '../../store/reducers/themeSlice';
+import { useAppDispatch, useAppSelector } from '../../../../hooks/redux';
+import { changeTheme } from '../../../../store/reducers/themeSlice';
 
 export default function Theme() {
   const { t } = useTranslation();
@@ -16,7 +16,7 @@ export default function Theme() {
 
   return (
     <Box>
-      <Typography variant="h5" sx={{ mb: '20px' }}>
+      <Typography variant="h6" sx={{ mb: '20px' }}>
         {t('settings.theme.title')}
       </Typography>
       <Typography variant="body2" sx={{ mb: '20px' }}>

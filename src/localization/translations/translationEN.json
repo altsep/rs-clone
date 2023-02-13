@@ -40,7 +40,7 @@
       },
       "name": {
         "required": "Name is required",
-        "validation": "Es demasiado corto. El nombre debe tener al menos 5 caracteres"
+        "validation": "It's too short. The name must have at least 5 characters"
       },
       "country": {
         "required": "Country is required",
@@ -49,6 +49,9 @@
       "birthDate": {
         "required": "Birthdate is required",
         "validation": "Invalid date. Age cannot be less than 14"
+      },
+      "alias": {
+        "validation": "It's too short. Alias must be at least 3 characters long"
       }
     },
     "registrationErrors": {
@@ -72,6 +75,17 @@
       "selectItems": {
         "light": "Light",
         "dark": "Dark"
+      }
+    },
+    "editProfile": {
+      "title": "Edit Profile",
+      "form": {
+        "name": "Full Name",
+        "email": "Email",
+        "alias": "Alias",
+        "country": "Country",
+        "birthDate": "Birthdate",
+        "password": "Password"
       }
     },
     "buttons": {
