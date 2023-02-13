@@ -7,14 +7,12 @@ import { usersState } from './reducers/usersState';
 import { leftSideBarState } from './reducers/leftSideBarState';
 import { inputsState } from './reducers/inputsState';
 import { ReducerNames } from '../constants';
-import { userState } from './reducers/userSlice';
 
 const combinedReducers = combineReducers({
   [ReducerNames.inputs]: inputsState,
-  theme: themeState,
-  language: langState,
-  auth: authState,
-  user: userState,
+  [ReducerNames.theme]: themeState,
+  [ReducerNames.language]: langState,
+  [ReducerNames.auth]: authState,
   [ReducerNames.leftSideBar]: leftSideBarState,
   [ReducerNames.users]: usersState,
   [ReducerNames.posts]: postsState,

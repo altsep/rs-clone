@@ -14,6 +14,7 @@ const addUser = async (url: string, { arg }: IAddUserProps): Promise<void> => {
 const updateUser = async (url: string, { arg }: IUpdateUserProps): Promise<IUser> => {
   const response = await fetch(url, {
     method: 'PATCH',
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
     },
@@ -44,6 +45,17 @@ const loginUser = async (url: string, { arg }: ILoginUser): Promise<Response> =>
   return res;
 };
 
+const logoutUser = async (url: string): Promise<Response> => {
+  const res = await fetch(url, {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  return res;
+};
+
 const registerUser = async (url: string, { arg }: IRegistrationUser): Promise<Response> => {
   const res: Response = await fetch(url, {
     method: 'POST',
@@ -64,4 +76,4 @@ const refreshToken = async (url: string): Promise<Response> => {
   return res;
 };
 
-export { addUser, updateUser, hideUser, loginUser, registerUser, refreshToken };
+export { addUser, updateUser, hideUser, loginUser, registerUser, refreshToken, logoutUser };

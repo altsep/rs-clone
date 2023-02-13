@@ -16,7 +16,7 @@ import { ILogin } from '../../../types/data';
 import { setAuth } from '../../../store/reducers/authSlice';
 import { useAppDispatch } from '../../../hooks/redux';
 import { setToken } from '../../../utils/common';
-import { setUser } from '../../../store/reducers/userSlice';
+import { setUser } from '../../../store/reducers/usersState';
 
 export default function LoginForm() {
   const { t } = useTranslation();
@@ -55,7 +55,7 @@ export default function LoginForm() {
       setToken(accessToken);
       dispatch(setAuth(true));
       dispatch(setUser(user));
-      // navigate(`/${id}`);
+      navigate(`/id${id}`);
     } else {
       setLoginError(true);
     }

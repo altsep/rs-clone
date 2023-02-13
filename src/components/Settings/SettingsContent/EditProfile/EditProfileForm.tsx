@@ -3,17 +3,24 @@ import moment from 'moment';
 import { Box, Button, Grid, InputLabel, TextField, TextFieldProps } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import useSWRMutation from 'swr/mutation';
 import { useTranslation } from 'react-i18next';
 import { DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { useState } from 'react';
 import i18next from 'i18next';
-import { locales } from '../../../../constants';
+import { ApiPath, API_BASE_URL, locales } from '../../../../constants';
 import EditProfileInput from './EditProfileInput';
 import { IUser } from '../../../../types/data';
+import { useAppDispatch, useAppSelector } from '../../../../hooks/redux';
+import { updateUser } from '../../../../api/usersApi';
+import { setUser } from '../../../../store/reducers/usersState';
 
 export default function EditProfileForm() {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+  const userId = useAppSelector((state) => state.users.idAuthorizedUser);
+  const authUser = useAppSelector((state) => state.users.authorizedUser);
   const [birthdate, setBirthdate] = useState<string | null>('');
 
   i18next.on('languageChanged', (lng: string): void => {
@@ -51,28 +58,44 @@ export default function EditProfileForm() {
       .min(5),
   });
 
-  const update = (data: Partial<IUser>) => {
-    const filteredData = Object.fromEntries(Object.entries(data).filter((el) => el[1]));
-    console.log(filteredData);
+  const defaultValues = {
+    email: authUser?.email,
+    name: authUser?.name,
+    password: '',
+    country: authUser?.country,
+    birthDate: '',
+    alias: authUser?.alias || '',
   };
 
   const {
     handleSubmit,
     control,
     register,
+    reset,
     formState: { errors },
   } = useForm<Partial<IUser>>({
-    defaultValues: {
-      email: '',
-      name: '',
-      password: '',
-      country: '',
-      birthDate: '',
-      alias: '',
-    },
+    defaultValues,
     mode: 'onBlur',
     resolver: yupResolver(schema),
   });
+
+  const { trigger } = useSWRMutation(`${API_BASE_URL}${ApiPath.users}/${userId}`, updateUser);
+
+  const update = async (data: Partial<IUser>): Promise<void> => {
+    const filteredData: Partial<IUser> = Object.fromEntries(Object.entries(data).filter((el) => el[1]));
+
+    if (filteredData.birthDate) {
+      filteredData.birthDate = new Date(filteredData.birthDate).toISOString();
+    }
+
+    const user = await trigger(filteredData);
+    if (user) {
+      dispatch(setUser(user));
+    }
+  };
+
+  const resetForm = () => reset(defaultValues);
+
   return (
     <Box component="form" sx={{ display: 'flex', flexDirection: 'column' }} onSubmit={handleSubmit(update)}>
       <Grid container rowSpacing={2} columnSpacing={3} sx={{ mb: '30px' }}>
@@ -154,7 +177,9 @@ export default function EditProfileForm() {
         </Grid>
       </Grid>
       <Box sx={{ alignSelf: 'flex-end' }}>
-        <Button sx={{ mr: '10px', color: 'text.secondary' }}>{t('settings.buttons.cancel')}</Button>
+        <Button sx={{ mr: '10px', color: 'text.secondary' }} type="button" onClick={resetForm}>
+          {t('settings.buttons.cancel')}
+        </Button>
         <Button variant="contained" sx={{ borderRadius: '8px' }} type="submit">
           {t('settings.buttons.save')}
         </Button>

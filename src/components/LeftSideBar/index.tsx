@@ -6,9 +6,10 @@ import Diversity3OutlinedIcon from '@mui/icons-material/Diversity3Outlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import { TSideBarButtonsInfo } from '../../types/sideBar';
-import { RoutePath } from '../../constants';
+import { ApiPath, API_BASE_URL, RoutePath } from '../../constants';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { closeLeftSideBar } from '../../store/reducers/leftSideBarState';
+import { logoutUser } from '../../api/usersApi';
 
 export default function LeftSideBar() {
   const location = useLocation();
@@ -17,6 +18,14 @@ export default function LeftSideBar() {
   const dispatch = useAppDispatch();
   const { isOpen } = useAppSelector((state) => state.leftSideBar);
   const { idAuthorizedUser, authorizedUser } = useAppSelector((state) => state.users);
+
+  const logout = async (): Promise<void> => {
+    const res = await logoutUser(`${API_BASE_URL}${ApiPath.logout}`);
+    if (res.ok) {
+      localStorage.clear();
+      navigate('/');
+    }
+  };
 
   const sideBarButtonsInfo: TSideBarButtonsInfo = [
     {
@@ -63,8 +72,8 @@ export default function LeftSideBar() {
       text: 'Logout',
       icon: <LogoutOutlinedIcon />,
       to: '/',
-      handleClick: (): void => {
-        navigate('/');
+      handleClick: () => {
+        logout().catch((err: Error): Error => err);
       },
     },
   ];

@@ -32,7 +32,7 @@ import { setToken } from '../../../utils/common';
 import { ILogin } from '../../../types/data';
 import { useAppDispatch } from '../../../hooks/redux';
 import { setAuth } from '../../../store/reducers/authSlice';
-import { setUser } from '../../../store/reducers/userSlice';
+import { setUser } from '../../../store/reducers/usersState';
 
 export default function RegistrationForm() {
   const dispatch = useAppDispatch();
@@ -97,10 +97,8 @@ export default function RegistrationForm() {
       country,
       birthDate: new Date(birthDate).toISOString(),
     });
-    if (res?.status === 500) {
-      setRegistrationSuccess(false);
-      setRegistrationError(email);
-    } else if (res?.status === 201) {
+
+    if (res?.ok) {
       setRegistrationError('');
       setRegistrationSuccess(true);
       const resData = (await res?.json()) as ILogin;
@@ -108,6 +106,9 @@ export default function RegistrationForm() {
       setToken(accessToken);
       dispatch(setAuth(true));
       dispatch(setUser(user));
+    } else {
+      setRegistrationSuccess(false);
+      setRegistrationError(email);
     }
   };
 

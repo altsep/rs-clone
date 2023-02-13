@@ -23,6 +23,7 @@ type TThemeState = {
 
 type TAuthState = {
   isAuth: boolean;
+  isLoading: boolean;
 };
 
 type TLoginFormState = {
