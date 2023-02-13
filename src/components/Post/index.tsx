@@ -157,7 +157,12 @@ export default function Post({ postData }: IPostProps) {
 
           <Typography sx={{ display: { xs: 'none', md: 'block' } }}>Like</Typography>
         </Button>
-        <Button aria-label="Comments" onClick={handleClickComments} sx={{ gap: 1, p: { xs: 0, sm: '6px' } }}>
+        <Button
+          aria-label="Comments"
+          onClick={handleClickComments}
+          disabled={!postData.commentsIds || (postData.commentsIds && postData.commentsIds.length === 0)}
+          sx={{ gap: 1, p: { xs: 0, sm: '6px' } }}
+        >
           <CommentOutlinedIcon />
           <Typography sx={{ display: { xs: 'none', md: 'block' } }}>Comments</Typography>
         </Button>
