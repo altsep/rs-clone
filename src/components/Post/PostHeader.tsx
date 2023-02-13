@@ -11,7 +11,7 @@ import { removePost } from '../../api/postsApi';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { removePostInState } from '../../store/reducers/postsState';
 import { updateUser } from '../../api/usersApi';
-import { UpdateUserArg } from '../../types/usersApi';
+import { TUpdateUserArg } from '../../types/usersApi';
 import { filterCommentsByPostId } from '../../store/reducers/commentsState';
 
 interface IPostHeaderProps {
@@ -46,7 +46,7 @@ export default function PostHeader({ postData, setIsEdit }: IPostHeaderProps) {
     if (currentUser) {
       setAnchorEl(null);
       await triggerRemovePost();
-      const argUpdateUser: UpdateUserArg = {
+      const argUpdateUser: TUpdateUserArg = {
         postsIds: currentUser.postsIds ? currentUser.postsIds.filter((postId) => postId !== postData.id) : [],
       };
       await triggerUpdateUser(argUpdateUser);

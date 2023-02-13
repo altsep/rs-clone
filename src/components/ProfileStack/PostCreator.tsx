@@ -15,11 +15,11 @@ import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternate
 import useSWRMutation from 'swr/mutation';
 import { API_BASE_URL, ApiPath } from '../../constants';
 import { addPost } from '../../api/postsApi';
-import { AddPostArg } from '../../types/postsApi';
+import { TAddPostArg } from '../../types/postsApi';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { changeCreatePost } from '../../store/reducers/inputsState';
 import { updateUser } from '../../api/usersApi';
-import { UpdateUserArg } from '../../types/usersApi';
+import { TUpdateUserArg } from '../../types/usersApi';
 import { idAuthorizedUser } from '../../mock-data/data';
 import ClickableAvatar from '../ClickableAvatar';
 import { addPostInState } from '../../store/reducers/postsState';
@@ -37,13 +37,13 @@ export default function PostCreator() {
   );
 
   const handleClickCreatePost = async (): Promise<void> => {
-    const argAddPost: AddPostArg = {
+    const argAddPost: TAddPostArg = {
       description: valueCreatePost,
       userId: idAuthorizedUser,
     };
     const responseDataAppPost = await triggerAddPost(argAddPost);
     if (responseDataAppPost && currentProfile) {
-      const argUpdateUser: UpdateUserArg = {
+      const argUpdateUser: TUpdateUserArg = {
         postsIds: currentProfile.postsIds
           ? [...currentProfile.postsIds, responseDataAppPost.id]
           : [responseDataAppPost.id],

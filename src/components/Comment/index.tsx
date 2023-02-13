@@ -12,9 +12,9 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { ApiPath, API_BASE_URL } from '../../constants';
 import { removeComment, updateComment } from '../../api/commentsApi';
 import { updateCommentInState, removeCommentInState } from '../../store/reducers/commentsState';
-import { UpdateCommentArg } from '../../types/commentsApi';
+import { TUpdateCommentArg } from '../../types/commentsApi';
 import { updatePost } from '../../api/postsApi';
-import { UpdatePostArg } from '../../types/postsApi';
+import { TUpdatePostArg } from '../../types/postsApi';
 import { updatePostInState } from '../../store/reducers/postsState';
 
 interface ICommentProps {
@@ -46,7 +46,7 @@ export default function Comment({ commentData }: ICommentProps) {
 
   const handleClickLikeButton = async (): Promise<void> => {
     if (commentData.likedUserIds?.includes(idAuthorizedUser)) {
-      const argUpdateComment: UpdateCommentArg = {
+      const argUpdateComment: TUpdateCommentArg = {
         likes: commentData.likes - 1,
         likedUserIds: commentData.likedUserIds.filter((likedCommentId) => likedCommentId !== idAuthorizedUser),
       };
@@ -55,7 +55,7 @@ export default function Comment({ commentData }: ICommentProps) {
         dispatch(updateCommentInState(dataResponse));
       }
     } else {
-      const argUpdateComment: UpdateCommentArg = {
+      const argUpdateComment: TUpdateCommentArg = {
         likes: commentData.likes + 1,
         likedUserIds: commentData.likedUserIds ? [...commentData.likedUserIds, idAuthorizedUser] : [idAuthorizedUser],
       };
@@ -69,7 +69,7 @@ export default function Comment({ commentData }: ICommentProps) {
   const handleClickRemoveComment = async (): Promise<void> => {
     await triggerRemoveComment();
     const currentPost = currentProfilePosts?.find((post) => post.id === commentData.postId);
-    const argUpdatePost: UpdatePostArg = {
+    const argUpdatePost: TUpdatePostArg = {
       commentsIds: currentPost ? currentPost.commentsIds?.filter((commentId) => commentId !== commentData.id) : [],
     };
     const dataResponseUpdatePost = await triggerUpdatePost(argUpdatePost);
@@ -90,7 +90,7 @@ export default function Comment({ commentData }: ICommentProps) {
   };
 
   const handleClickSaveButton = async (): Promise<void> => {
-    const argUpdateComment: UpdateCommentArg = {
+    const argUpdateComment: TUpdateCommentArg = {
       description: valueInputDescription,
     };
     const dataResponse = await triggerUpdateComment(argUpdateComment);

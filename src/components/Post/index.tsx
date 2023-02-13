@@ -21,7 +21,7 @@ import ReplyOutlinedIcon from '@mui/icons-material/ReplyOutlined';
 
 import { IPost } from '../../types/data';
 import { API_BASE_URL, ApiPath } from '../../constants';
-import { UpdatePostArg } from '../../types/postsApi';
+import { TUpdatePostArg } from '../../types/postsApi';
 import { updatePost } from '../../api/postsApi';
 import ClickableAvatar from '../ClickableAvatar';
 import PostHeader from './PostHeader';
@@ -52,7 +52,7 @@ export default function Post({ postData }: IPostProps) {
 
   const handleClickLikeButton = async (): Promise<void> => {
     if (postData.likedUserIds && postData.likedUserIds.includes(idAuthorizedUser)) {
-      const argUpdatePost: UpdatePostArg = {
+      const argUpdatePost: TUpdatePostArg = {
         likes: postData.likes - 1,
         likedUserIds: postData.likedUserIds.filter((likedUserId) => likedUserId !== idAuthorizedUser),
       };
@@ -61,7 +61,7 @@ export default function Post({ postData }: IPostProps) {
         dispatch(updatePostInState(dataResponse));
       }
     } else {
-      const argUpdatePost: UpdatePostArg = {
+      const argUpdatePost: TUpdatePostArg = {
         likes: postData.likes + 1,
         likedUserIds: postData.likedUserIds ? [...postData.likedUserIds, idAuthorizedUser] : [idAuthorizedUser],
       };
@@ -73,7 +73,7 @@ export default function Post({ postData }: IPostProps) {
   };
 
   const handleClickSaveButton = async (): Promise<void> => {
-    const argUpdatePost: UpdatePostArg = {
+    const argUpdatePost: TUpdatePostArg = {
       description: valueInputDescription,
     };
     const dataResponse = await triggerUpdatePost(argUpdatePost);

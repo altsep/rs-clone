@@ -6,11 +6,11 @@ import ClickableAvatar from '../ClickableAvatar';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { ApiPath, API_BASE_URL } from '../../constants';
 import { addComment } from '../../api/commentsApi';
-import { AddCommentArg } from '../../types/commentsApi';
+import { TAddCommentArg } from '../../types/commentsApi';
 import { IPost } from '../../types/data';
 import { addCommentInState } from '../../store/reducers/commentsState';
 import { updatePost } from '../../api/postsApi';
-import { UpdatePostArg } from '../../types/postsApi';
+import { TUpdatePostArg } from '../../types/postsApi';
 import { updatePostInState } from '../../store/reducers/postsState';
 
 interface ICommentCreatorProps {
@@ -36,14 +36,14 @@ export default function CommentCreator({ postData, setIsOpenComments }: IComment
   };
 
   const handleClickSendButton = async (): Promise<void> => {
-    const argAddComment: AddCommentArg = {
+    const argAddComment: TAddCommentArg = {
       userId: idAuthorizedUser,
       postId: postData.id,
       description: valueInputComment,
     };
     const responseDataAddComment = await triggerAddComment(argAddComment);
     if (responseDataAddComment) {
-      const argUpdatePost: UpdatePostArg = {
+      const argUpdatePost: TUpdatePostArg = {
         commentsIds: postData.commentsIds
           ? [...postData.commentsIds, responseDataAddComment.id]
           : [responseDataAddComment.id],

@@ -1,26 +1,26 @@
 import { IUser } from './data';
 
-type AddUserArg = Pick<IUser, 'name' | 'email' | 'password' | 'country' | 'birthDate' | 'createdAt' | 'alias'>;
+type TAddUserArg = Pick<IUser, 'name' | 'email' | 'password' | 'country' | 'birthDate' | 'createdAt' | 'alias'>;
 
-type UpdateUserArg = Partial<
+type TUpdateUserArg = Partial<
   Pick<
     IUser,
     'name' | 'email' | 'password' | 'country' | 'birthDate' | 'alias' | 'avatarURL' | 'postsIds' | 'friendsIds'
   >
 >;
 
-type HideUserArg = Pick<IUser, 'password'>;
+type THideUserArg = Pick<IUser, 'password'>;
 
 interface IAddUserProps {
-  arg: AddUserArg;
+  arg: TAddUserArg;
 }
 
 interface IUpdateUserProps {
-  arg: UpdateUserArg;
+  arg: TUpdateUserArg;
 }
 
 interface IHideUserProps {
-  arg: HideUserArg;
+  arg: THideUserArg;
 }
 
-export type { AddUserArg, UpdateUserArg, HideUserArg, IAddUserProps, IUpdateUserProps, IHideUserProps };
+export type { TAddUserArg, TUpdateUserArg, THideUserArg, IAddUserProps, IUpdateUserProps, IHideUserProps };

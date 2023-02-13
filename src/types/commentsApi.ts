@@ -1,15 +1,15 @@
 import { IComment } from './data';
 
-type AddCommentArg = Pick<IComment, 'userId' | 'postId' | 'description'>;
+type TAddCommentArg = Pick<IComment, 'userId' | 'postId' | 'description'>;
 
-type UpdateCommentArg = Partial<Pick<IComment, 'description' | 'likes' | 'likedUserIds'>>;
+type TUpdateCommentArg = Partial<Pick<IComment, 'description' | 'likes' | 'likedUserIds'>>;
 
 interface IAddCommentProps {
-  arg: AddCommentArg;
+  arg: TAddCommentArg;
 }
 
 interface IUpdateCommentProps {
-  arg: UpdateCommentArg;
+  arg: TUpdateCommentArg;
 }
 
-export type { IAddCommentProps, IUpdateCommentProps, AddCommentArg, UpdateCommentArg };
+export type { IAddCommentProps, IUpdateCommentProps, TAddCommentArg, TUpdateCommentArg };

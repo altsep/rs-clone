@@ -3,7 +3,7 @@ import { Box, Button, Typography, Badge, Avatar, IconButton, Skeleton } from '@m
 import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined';
 import { ApiPath, API_BASE_URL } from '../../constants';
 import { updateUser } from '../../api/usersApi';
-import { UpdateUserArg } from '../../types/usersApi';
+import { TUpdateUserArg } from '../../types/usersApi';
 import temporary from '../../assets/temporary-2.webp';
 import { useAppSelector } from '../../hooks/redux';
 
@@ -27,11 +27,11 @@ export default function ProfileHeader() {
     // FIX_ME Friends must be added after confirmation
 
     if (currentProfile && authorizedUser) {
-      const argUpdateCurrentAuthorizedUser: UpdateUserArg = {
+      const argUpdateCurrentAuthorizedUser: TUpdateUserArg = {
         friendsIds: authorizedUser.friendsIds ? [...authorizedUser.friendsIds, idCurrentProfile] : [idCurrentProfile],
       };
       await triggerUpdateCurrentAuthorizedUser(argUpdateCurrentAuthorizedUser);
-      const argUpdateCurrentProfileUser: UpdateUserArg = {
+      const argUpdateCurrentProfileUser: TUpdateUserArg = {
         friendsIds: authorizedUser.friendsIds ? [...authorizedUser.friendsIds, idAuthorizedUser] : [idAuthorizedUser],
       };
       await triggerUpdateCurrentProfileUser(argUpdateCurrentProfileUser);

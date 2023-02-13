@@ -1,15 +1,15 @@
 import { IPost } from './data';
 
-type AddPostArg = Pick<IPost, 'userId' | 'description'>;
+type TAddPostArg = Pick<IPost, 'userId' | 'description'>;
 
-type UpdatePostArg = Partial<Pick<IPost, 'description' | 'likes' | 'commentsIds' | 'likedUserIds'>>;
+type TUpdatePostArg = Partial<Pick<IPost, 'description' | 'likes' | 'commentsIds' | 'likedUserIds'>>;
 
 interface IAddPostProps {
-  arg: AddPostArg;
+  arg: TAddPostArg;
 }
 
 interface IUpdatePostProps {
-  arg: UpdatePostArg;
+  arg: TUpdatePostArg;
 }
 
-export type { IAddPostProps, IUpdatePostProps, AddPostArg, UpdatePostArg };
+export type { IAddPostProps, IUpdatePostProps, TAddPostArg, TUpdatePostArg };
