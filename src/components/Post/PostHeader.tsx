@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { removePostInState } from '../../store/reducers/postsState';
 import { updateUser } from '../../api/usersApi';
 import { UpdateUserArg } from '../../types/usersApi';
+import { filterCommentsByPostId } from '../../store/reducers/commentsState';
 
 interface IPostHeaderProps {
   postData: IPost;
@@ -50,6 +51,7 @@ export default function PostHeader({ postData, setIsEdit }: IPostHeaderProps) {
       };
       await triggerUpdateUser(argUpdateUser);
       dispatch(removePostInState(postData.id));
+      dispatch(filterCommentsByPostId(postData.id));
     }
   };
 

@@ -23,10 +23,18 @@ const commentsStateSlice = createSlice({
     updateCommentInState: (state, action: PayloadAction<IComment>) => {
       state.comments = state.comments.map((comment) => (comment.id === action.payload.id ? action.payload : comment));
     },
+    filterCommentsByPostId: (state, action: PayloadAction<number>) => {
+      state.comments = state.comments.filter((comment) => comment.postId !== action.payload);
+    },
   },
 });
 
-export const { commentsLoadingSuccess, addCommentInState, removeCommentInState, updateCommentInState } =
-  commentsStateSlice.actions;
+export const {
+  commentsLoadingSuccess,
+  addCommentInState,
+  removeCommentInState,
+  updateCommentInState,
+  filterCommentsByPostId,
+} = commentsStateSlice.actions;
 
 export const commentsState = commentsStateSlice.reducer;
