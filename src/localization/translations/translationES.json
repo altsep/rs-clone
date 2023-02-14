@@ -10,7 +10,8 @@
       "email": "Correo electronico es requerido",
       "password": "Se requiere contraseña"
     },
-    "loginError": "Contraseña o dirección de correo electrónico incorrecta"
+    "loginError": "Contraseña o dirección de correo electrónico incorrecta",
+    "authError": "Error de autorizacion se requiere volver a iniciar sesión"
   },
   "registration": {
     "title": "Registro",

@@ -10,7 +10,8 @@
       "email": "Email is required",
       "password": "Password is required"
     },
-    "loginError": "Wrong password or email address"
+    "loginError": "Wrong password or email address",
+    "authError": "Authorisation error. Re-login required"
   },
   "registration": {
     "title": "Sign Up",

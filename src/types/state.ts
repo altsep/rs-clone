@@ -24,6 +24,7 @@ type TThemeState = {
 type TAuthState = {
   isAuth: boolean;
   isLoading: boolean;
+  authError: boolean;
 };
 
 type TLoginFormState = {

@@ -13,8 +13,8 @@ import FormInput from '../FormElements/FormInput';
 import { ApiPath, API_BASE_URL } from '../../../constants';
 import { loginUser } from '../../../api/usersApi';
 import { ILogin } from '../../../types/data';
-import { setAuth } from '../../../store/reducers/authSlice';
-import { useAppDispatch } from '../../../hooks/redux';
+import { setAuth, setAuthError } from '../../../store/reducers/authSlice';
+import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
 import { setToken } from '../../../utils/common';
 import { setUser } from '../../../store/reducers/usersState';
 
@@ -22,6 +22,7 @@ export default function LoginForm() {
   const { t } = useTranslation();
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
   const [loginError, setLoginError] = useState<boolean>(false);
+  const authError = useAppSelector((state) => state.auth.authError);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -46,6 +47,7 @@ export default function LoginForm() {
   const { trigger } = useSWRMutation(`${API_BASE_URL}${ApiPath.login}`, loginUser);
 
   const onSubmit = async (data: TLoginValues): Promise<void> => {
+    dispatch(setAuthError(false));
     const res: Response | undefined = await trigger(data);
     if (res?.ok) {
       setLoginError(false);
@@ -116,6 +118,11 @@ export default function LoginForm() {
       {loginError && (
         <FormHelperText error sx={{ fontSize: '14px', textAlign: 'center' }}>
           {t('login.loginError')}
+        </FormHelperText>
+      )}
+      {authError && (
+        <FormHelperText error sx={{ fontSize: '14px', textAlign: 'center' }}>
+          {t('login.authError')}
         </FormHelperText>
       )}
     </Box>

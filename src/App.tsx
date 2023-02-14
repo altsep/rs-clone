@@ -13,7 +13,7 @@ import { ApiPath, API_BASE_URL, KEY_LOCAL_STORAGE, LSKeys, RoutePath } from './c
 import { refreshToken } from './api/usersApi';
 import { ILogin } from './types/data';
 import { setToken } from './utils/common';
-import { setAuth, setLoading } from './store/reducers/authSlice';
+import { setAuth, setAuthError, setLoading } from './store/reducers/authSlice';
 import { setUser, usersLoadingSuccess } from './store/reducers/usersState';
 import Messages from './pages/Messages';
 import Friends from './pages/Friends';
@@ -38,13 +38,20 @@ function App() {
   const checkAuth = async (): Promise<void> => {
     dispatch(setAuth(false));
     dispatch(setLoading(true));
-    const res: Response | undefined = await trigger();
-    if (res?.ok) {
-      const resData = (await res?.json()) as ILogin;
-      const { accessToken, user } = resData;
-      dispatch(setAuth(true));
-      setToken(accessToken);
-      dispatch(setUser(user));
+    try {
+      const res: Response | undefined = await trigger();
+      if (res?.ok) {
+        const resData = (await res?.json()) as ILogin;
+        const { accessToken, user } = resData;
+        dispatch(setAuth(true));
+        setToken(accessToken);
+        dispatch(setUser(user));
+      } else {
+        throw new Error('Authorisation error. Re-login required');
+      }
+    } catch {
+      dispatch(setAuthError(true));
+    } finally {
       dispatch(setLoading(false));
     }
   };

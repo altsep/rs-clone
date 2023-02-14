@@ -31,7 +31,7 @@ import { registerUser } from '../../../api/usersApi';
 import { setToken } from '../../../utils/common';
 import { ILogin } from '../../../types/data';
 import { useAppDispatch } from '../../../hooks/redux';
-import { setAuth } from '../../../store/reducers/authSlice';
+import { setAuth, setAuthError } from '../../../store/reducers/authSlice';
 import { setUser } from '../../../store/reducers/usersState';
 
 export default function RegistrationForm() {
@@ -97,7 +97,7 @@ export default function RegistrationForm() {
       country,
       birthDate: new Date(birthDate).toISOString(),
     });
-
+    dispatch(setAuthError(false));
     if (res?.ok) {
       setRegistrationError('');
       setRegistrationSuccess(true);
