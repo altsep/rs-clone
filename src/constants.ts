@@ -45,6 +45,7 @@ const enum VariantsMoreMenu {
 const enum LSKeys {
   theme = 'theme',
   token = 'token',
+  path = 'path',
 }
 
 const locales: { [key: string]: string } = {
