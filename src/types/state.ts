@@ -15,6 +15,8 @@ type TUsersState = {
   authorizedUser: IUser | null;
   idAuthorizedUser: number;
   defineUserCompleted: boolean;
+  authorizedUserFriends: IUser[];
+  authorizedUserPendingFriends: IUser[];
 };
 
 type TPostsState = {

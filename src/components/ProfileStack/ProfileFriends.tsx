@@ -5,15 +5,6 @@ import ClickableAvatar from '../ClickableAvatar';
 export default function ProfileFriends() {
   const { currentProfile, users } = useAppSelector((state) => state.users);
 
-  if (!currentProfile || currentProfile.friendsIds?.length === 0) {
-    return (
-      <Card sx={{ minHeight: { xs: '200px', sm: '150px', md: '200px' } }}>
-        <CardHeader title="Friends" sx={{ textAlign: 'center' }} />
-        <CardContent>{}</CardContent>
-      </Card>
-    );
-  }
-
   if (currentProfile && currentProfile.friendsIds && currentProfile.friendsIds.length > 0) {
     return (
       <Card sx={{ minHeight: { xs: '150px', md: '200px' } }}>

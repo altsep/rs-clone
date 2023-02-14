@@ -2,15 +2,17 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ReducerNames } from '../../constants';
 import { TUsersState } from '../../types/state';
 import { IUser } from '../../types/data';
-import { authorizedUser as authorizedUserMock, idAuthorizedUser as idAuthorizedUserMock } from '../../mock-data/data';
+import { idAuthorizedUser as idAuthorizedUserMock } from '../../mock-data/data';
 
 const initialState: TUsersState = {
   users: [],
   currentProfile: null,
   idCurrentProfile: 0,
-  authorizedUser: authorizedUserMock,
+  authorizedUser: null,
   idAuthorizedUser: idAuthorizedUserMock,
   defineUserCompleted: false,
+  authorizedUserFriends: [],
+  authorizedUserPendingFriends: [],
 };
 
 const usersStateSlice = createSlice({
@@ -19,6 +21,11 @@ const usersStateSlice = createSlice({
   reducers: {
     usersLoadingSuccess: (state, action: PayloadAction<IUser[]>) => {
       state.users = action.payload;
+      // FIX_ME Delete after adding logic authorization
+      const findAuthorized = state.users.find((user) => user.id === state.idAuthorizedUser);
+      if (findAuthorized) {
+        state.authorizedUser = findAuthorized;
+      }
     },
     defineProfile: (state, action: PayloadAction<string>) => {
       if (action.payload.slice(0, 2) === 'id') {
@@ -49,9 +56,16 @@ const usersStateSlice = createSlice({
         state.currentProfile = action.payload;
       }
     },
+    definePendingFriends: (state, action: PayloadAction<number[]>) => {
+      state.authorizedUserPendingFriends = state.users.filter((user) => action.payload.includes(user.id));
+    },
+    defineFriends: (state, action: PayloadAction<number[]>) => {
+      state.authorizedUserFriends = state.users.filter((user) => action.payload.includes(user.id));
+    },
   },
 });
 
-export const { usersLoadingSuccess, defineProfile, updateUserInState } = usersStateSlice.actions;
+export const { usersLoadingSuccess, defineProfile, updateUserInState, definePendingFriends, defineFriends } =
+  usersStateSlice.actions;
 
 export const usersState = usersStateSlice.reducer;

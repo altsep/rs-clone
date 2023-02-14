@@ -70,7 +70,9 @@ export default function LeftSideBar() {
   ];
 
   const handleClickCloseMenu = () => {
-    dispatch(closeLeftSideBar());
+    if (isOpen) {
+      dispatch(closeLeftSideBar());
+    }
   };
 
   const drawer = (

@@ -5,14 +5,14 @@ import { ApiPath, API_BASE_URL } from '../../constants';
 import { updateUser } from '../../api/usersApi';
 import { TUpdateUserArg } from '../../types/usersApi';
 import temporary from '../../assets/temporary-2.webp';
-import { useAppSelector } from '../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { updateUserInState } from '../../store/reducers/usersState';
 
 export default function ProfileHeader() {
-  const { idCurrentProfile, idAuthorizedUser, currentProfile, authorizedUser, defineUserCompleted } = useAppSelector(
-    (state) => state.users
-  );
+  const dispatch = useAppDispatch();
+  const { idCurrentProfile, idAuthorizedUser, currentProfile, authorizedUser } = useAppSelector((state) => state.users);
 
-  const { trigger: triggerUpdateCurrentAuthorizedUser } = useSWRMutation(
+  const { trigger: triggerUpdateAuthorizedUser } = useSWRMutation(
     `${API_BASE_URL}${ApiPath.users}/${idAuthorizedUser}`,
     updateUser
   );
@@ -21,20 +21,40 @@ export default function ProfileHeader() {
     updateUser
   );
 
-  const handleClickRemoveFriend = async (): Promise<void> => {};
+  const handleClickRemoveFriend = async (): Promise<void> => {
+    if (currentProfile && authorizedUser) {
+      const argUpdateCurrentProfileUser: TUpdateUserArg = {
+        friendsIds: currentProfile.friendsIds
+          ? currentProfile.friendsIds.filter((friendId) => friendId !== idAuthorizedUser)
+          : [],
+      };
+      const dataResponseCurrentProfile = await triggerUpdateCurrentProfileUser(argUpdateCurrentProfileUser);
+      if (dataResponseCurrentProfile) {
+        dispatch(updateUserInState(dataResponseCurrentProfile));
+      }
+      const argUpdateAuthorizedUser: TUpdateUserArg = {
+        friendsIds: authorizedUser.friendsIds
+          ? authorizedUser.friendsIds.filter((friendId) => friendId !== idCurrentProfile)
+          : [],
+      };
+      const dataResponseAuthorized = await triggerUpdateAuthorizedUser(argUpdateAuthorizedUser);
+      if (dataResponseAuthorized) {
+        dispatch(updateUserInState(dataResponseAuthorized));
+      }
+    }
+  };
 
   const handleClickAddFriend = async (): Promise<void> => {
-    // FIX_ME Friends must be added after confirmation
-
-    if (currentProfile && authorizedUser) {
-      const argUpdateCurrentAuthorizedUser: TUpdateUserArg = {
-        friendsIds: authorizedUser.friendsIds ? [...authorizedUser.friendsIds, idCurrentProfile] : [idCurrentProfile],
-      };
-      await triggerUpdateCurrentAuthorizedUser(argUpdateCurrentAuthorizedUser);
+    if (currentProfile) {
       const argUpdateCurrentProfileUser: TUpdateUserArg = {
-        friendsIds: authorizedUser.friendsIds ? [...authorizedUser.friendsIds, idAuthorizedUser] : [idAuthorizedUser],
+        pendingFriendsIds: currentProfile.pendingFriendsIds
+          ? [...currentProfile.pendingFriendsIds, idAuthorizedUser]
+          : [idAuthorizedUser],
       };
-      await triggerUpdateCurrentProfileUser(argUpdateCurrentProfileUser);
+      const dataResponse = await triggerUpdateCurrentProfileUser(argUpdateCurrentProfileUser);
+      if (dataResponse) {
+        dispatch(updateUserInState(dataResponse));
+      }
     }
   };
 
@@ -95,13 +115,19 @@ export default function ProfileHeader() {
         <Typography variant="h5">{currentProfile && currentProfile.name}</Typography>
 
         {idCurrentProfile === idAuthorizedUser ? (
-          <Button disabled={!defineUserCompleted}>Edit basic info</Button>
+          <Button>Edit basic info</Button>
         ) : (
           <Box>
             {(currentProfile && currentProfile.friendsIds && currentProfile.friendsIds.includes(idAuthorizedUser) && (
               <Button onClick={handleClickRemoveFriend}>Remove friend</Button>
-            )) ||
-              (defineUserCompleted ? <Button onClick={handleClickAddFriend}>Add friend</Button> : <Button />)}
+            )) || (
+              <Button
+                onClick={handleClickAddFriend}
+                disabled={currentProfile?.pendingFriendsIds?.includes(idAuthorizedUser)}
+              >
+                Add friend
+              </Button>
+            )}
           </Box>
         )}
       </Box>

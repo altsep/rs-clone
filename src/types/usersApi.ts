@@ -5,7 +5,16 @@ type TAddUserArg = Pick<IUser, 'name' | 'email' | 'password' | 'country' | 'birt
 type TUpdateUserArg = Partial<
   Pick<
     IUser,
-    'name' | 'email' | 'password' | 'country' | 'birthDate' | 'alias' | 'avatarURL' | 'postsIds' | 'friendsIds'
+    | 'name'
+    | 'email'
+    | 'password'
+    | 'country'
+    | 'birthDate'
+    | 'alias'
+    | 'avatarURL'
+    | 'postsIds'
+    | 'friendsIds'
+    | 'pendingFriendsIds'
   >
 >;
 
