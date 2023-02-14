@@ -58,6 +58,26 @@ export default function ProfileHeader() {
     }
   };
 
+  const handleClickFollow = async () => {
+    if (authorizedUser) {
+      const argUpdateAuthorizedUser: TUpdateUserArg = {
+        friendsIds: authorizedUser.friendsIds ? [...authorizedUser.friendsIds, idCurrentProfile] : [idCurrentProfile],
+        pendingFriendsIds: authorizedUser.pendingFriendsIds
+          ? authorizedUser.pendingFriendsIds.filter((pendingFriendId) => pendingFriendId !== idCurrentProfile)
+          : [],
+      };
+      const dataResponseAuthorized = await triggerUpdateAuthorizedUser(argUpdateAuthorizedUser);
+      const argUpdateCurrentProfileUser: TUpdateUserArg = {
+        friendsIds: currentProfile?.friendsIds ? [...currentProfile.friendsIds, idAuthorizedUser] : [idAuthorizedUser],
+      };
+      const dataResponseCurrentProfile = await triggerUpdateCurrentProfileUser(argUpdateCurrentProfileUser);
+      if (dataResponseAuthorized && dataResponseCurrentProfile) {
+        dispatch(updateUserInState(dataResponseAuthorized));
+        dispatch(updateUserInState(dataResponseCurrentProfile));
+      }
+    }
+  };
+
   return (
     <Box sx={{ borderRadius: 2, boxShadow: 1 }}>
       <Box
@@ -114,20 +134,18 @@ export default function ProfileHeader() {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', px: 2, pb: 3, pt: 5, minHeight: '36.5px' }}>
         <Typography variant="h5">{currentProfile && currentProfile.name}</Typography>
 
-        {idCurrentProfile === idAuthorizedUser ? (
-          <Button>Edit basic info</Button>
-        ) : (
+        {idCurrentProfile === idAuthorizedUser && <Button>Edit basic info</Button>}
+        {idCurrentProfile !== idAuthorizedUser && (
           <Box>
-            {(currentProfile && currentProfile.friendsIds && currentProfile.friendsIds.includes(idAuthorizedUser) && (
-              <Button onClick={handleClickRemoveFriend}>Remove friend</Button>
-            )) || (
-              <Button
-                onClick={handleClickAddFriend}
-                disabled={currentProfile?.pendingFriendsIds?.includes(idAuthorizedUser)}
-              >
-                Add friend
-              </Button>
-            )}
+            {(authorizedUser?.pendingFriendsIds?.includes(idCurrentProfile) && (
+              <Button onClick={handleClickFollow}>Accept friend request</Button>
+            )) ||
+              (currentProfile?.friendsIds?.includes(idAuthorizedUser) && (
+                <Button onClick={handleClickRemoveFriend}>Remove friend</Button>
+              )) ||
+              (currentProfile?.pendingFriendsIds?.includes(idAuthorizedUser) && <Button disabled>Pending</Button>) || (
+                <Button onClick={handleClickAddFriend}>Add friend</Button>
+              )}
           </Box>
         )}
       </Box>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Container, Grid, Stack, Tab, Tabs, Typography } from '@mui/material';
+import { useTheme } from '@emotion/react';
+import { Box, Container, Grid, Stack, Tab, Tabs, Typography, useMediaQuery } from '@mui/material';
 import FriendCard from '../components/FriendCard';
 import LeftSideBar from '../components/LeftSideBar';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
@@ -26,11 +27,11 @@ export default function Friends() {
   }, [dispatch, authorizedUser, users]);
 
   return (
-    <Container>
-      <Stack direction="row" sx={{ gap: 2 }}>
+    <Container sx={{ mt: '5vh', mb: '5vh', display: 'flex' }}>
+      <Stack direction="row" sx={{ gap: 2, minWidth: '100%' }}>
         <LeftSideBar />
-        <Stack sx={{ width: '100%' }}>
-          <Tabs value={value} onChange={handleChangeTabs} aria-label="basic tabs example">
+        <Box sx={{ borderRadius: 4, boxShadow: 4, bgcolor: 'secondary.main', width: '100%' }}>
+          <Tabs variant="fullWidth" value={value} onChange={handleChangeTabs} aria-label="basic tabs example">
             <Tab label="Friends" id="simple-tab-0" aria-controls="simple-tabpanel-0" />
             <Tab label="Friend requests" id="simple-tab-1" aria-controls="simple-tabpanel-1" />
           </Tabs>
@@ -48,7 +49,7 @@ export default function Friends() {
               ))}
             </Grid>
           </TabPanel>
-        </Stack>
+        </Box>
       </Stack>
     </Container>
   );
