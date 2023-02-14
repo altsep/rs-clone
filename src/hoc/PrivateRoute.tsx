@@ -1,3 +1,4 @@
+import { CircularProgress } from '@mui/material';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAppSelector } from '../hooks/redux';
 
@@ -10,9 +11,9 @@ export default function PrivateRoute({ children }: TRequire) {
   const isAuth = useAppSelector((state) => state.auth.isAuth);
   const isLoading = useAppSelector((state) => state.auth.isLoading);
 
-  if (!isAuth && !isLoading) {
-    return <Navigate to="/" state={{ from: location }} />;
+  if (!isAuth || isLoading) {
+    return <CircularProgress sx={{ alignSelf: 'center' }} />;
   }
 
-  return children;
+  return isAuth ? children : <Navigate to="/" state={{ from: location }} />;
 }

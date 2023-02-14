@@ -63,7 +63,7 @@ function App() {
     <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
       <CssBaseline />
       <Header />
-      <Box component="main" sx={{ flex: 1, display: 'flex' }}>
+      <Box component="main" sx={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path={RoutePath.registration} element={<Registration />} />
