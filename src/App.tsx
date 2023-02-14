@@ -24,6 +24,7 @@ import usePosts from './hooks/usePosts';
 import useUsers from './hooks/useUsers';
 import { postsLoadingSuccess } from './store/reducers/postsState';
 import NotAuthRoute from './hoc/NotAuthRoute';
+import TemporaryHeader from './components/TemporaryHeader';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -65,6 +66,7 @@ function App() {
   return (
     <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
       <CssBaseline />
+      {/* <TemporaryHeader /> */}
       <Header />
       <Box component="main" sx={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
         <Routes>
