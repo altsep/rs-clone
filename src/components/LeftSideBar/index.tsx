@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { closeLeftSideBar } from '../../store/reducers/leftSideBarState';
 import { logoutUser } from '../../api/usersApi';
 import { setAuth, setLoading } from '../../store/reducers/authSlice';
+import { removeToken } from '../../utils/common';
 
 export default function LeftSideBar() {
   const location = useLocation();
@@ -24,7 +25,7 @@ export default function LeftSideBar() {
     dispatch(setLoading(true));
     const res = await logoutUser(`${API_BASE_URL}${ApiPath.logout}`);
     if (res.ok) {
-      localStorage.clear();
+      removeToken();
       dispatch(setAuth(false));
       dispatch(setLoading(false));
       navigate('/');
