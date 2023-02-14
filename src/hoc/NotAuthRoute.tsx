@@ -22,7 +22,11 @@ export default function NotAuthRoute({ children }: TNotAuth) {
 
   return isAuth ? (
     <Navigate
-      to={localStoragePath && localStoragePath !== '/' ? localStoragePath : userPath}
+      to={
+        localStoragePath && localStoragePath !== '/registration' && localStoragePath !== '/'
+          ? localStoragePath
+          : userPath
+      }
       state={{ from: location }}
       replace
     />
