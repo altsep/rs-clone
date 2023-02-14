@@ -1,16 +1,5 @@
 import React from 'react';
-import {
-  Autocomplete,
-  Avatar,
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Skeleton,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Avatar, Box, Button, Card, CardActions, CardContent, Skeleton, TextField, Typography } from '@mui/material';
 import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
 import useSWRMutation from 'swr/mutation';
 import { API_BASE_URL, ApiPath } from '../../constants';
@@ -62,7 +51,7 @@ export default function PostCreator() {
   };
 
   return (
-    <Card>
+    <Card sx={{ borderRadius: 4, boxShadow: { xs: 4, md: 0 } }}>
       <Box>
         <CardContent sx={{ display: 'flex', gap: 2 }}>
           {authorizedUser ? (

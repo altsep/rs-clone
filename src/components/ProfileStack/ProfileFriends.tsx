@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, CardHeader, Grid, Typography } from '@mui/material';
+import { Box, Card, CardContent, CardHeader, Divider, Grid, Typography } from '@mui/material';
 import { useAppSelector } from '../../hooks/redux';
 import ClickableAvatar from '../ClickableAvatar';
 
@@ -7,8 +7,9 @@ export default function ProfileFriends() {
 
   if (currentProfile && currentProfile.friendsIds && currentProfile.friendsIds.length > 0) {
     return (
-      <Card sx={{ minHeight: { xs: '150px', md: '200px' } }}>
+      <Card sx={{ borderRadius: 4, boxShadow: { xs: 4, md: 0 } }}>
         <CardHeader title="Friends" sx={{ textAlign: 'center' }} />
+        <Divider />
         <CardContent>
           <Grid container rowSpacing={2}>
             {currentProfile.friendsIds.slice(0, 6).map((friendId) => {
@@ -30,10 +31,11 @@ export default function ProfileFriends() {
   }
 
   return (
-    <Card sx={{ minHeight: { xs: '150px', md: '200px' } }}>
+    <Card sx={{ borderRadius: 4, boxShadow: { xs: 4, md: 0 } }}>
       <CardHeader title="Friends" sx={{ textAlign: 'center' }} />
+      <Divider />
       <CardContent>
-        <Typography sx={{ textAlign: 'center' }}>Empty. First add someone as a friend</Typography>
+        <Typography sx={{ textAlign: 'center' }}>Empty. First add someone as a friend.</Typography>
       </CardContent>
     </Card>
   );

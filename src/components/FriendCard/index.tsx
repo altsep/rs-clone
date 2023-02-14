@@ -123,9 +123,14 @@ export default function FriendCard({ user, isRequest }: IFriendCardProps) {
               </Button>
             </>
           ) : (
-            <Button variant="contained" onClick={handleClickRemoveFriend} sx={{ flexGrow: 1 }}>
-              Remove friend
-            </Button>
+            <>
+              <Button variant="contained" sx={{ flexGrow: 1 }}>
+                Write message
+              </Button>
+              <Button variant="outlined" onClick={handleClickRemoveFriend} sx={{ flexGrow: 1, ml: '0!important' }}>
+                Remove friend
+              </Button>
+            </>
           )}
         </CardActions>
       </Card>

@@ -95,7 +95,7 @@ export default function Post({ postData }: IPostProps) {
   };
 
   return (
-    <Card>
+    <Card sx={{ borderRadius: 4, boxShadow: { xs: 4, md: 0 } }}>
       <PostHeader postData={postData} setIsEdit={setIsEdit} />
       <CardContent>
         {!isEdit ? (

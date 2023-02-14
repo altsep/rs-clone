@@ -21,29 +21,6 @@ export default function ProfileHeader() {
     updateUser
   );
 
-  const handleClickRemoveFriend = async (): Promise<void> => {
-    if (currentProfile && authorizedUser) {
-      const argUpdateCurrentProfileUser: TUpdateUserArg = {
-        friendsIds: currentProfile.friendsIds
-          ? currentProfile.friendsIds.filter((friendId) => friendId !== idAuthorizedUser)
-          : [],
-      };
-      const dataResponseCurrentProfile = await triggerUpdateCurrentProfileUser(argUpdateCurrentProfileUser);
-      if (dataResponseCurrentProfile) {
-        dispatch(updateUserInState(dataResponseCurrentProfile));
-      }
-      const argUpdateAuthorizedUser: TUpdateUserArg = {
-        friendsIds: authorizedUser.friendsIds
-          ? authorizedUser.friendsIds.filter((friendId) => friendId !== idCurrentProfile)
-          : [],
-      };
-      const dataResponseAuthorized = await triggerUpdateAuthorizedUser(argUpdateAuthorizedUser);
-      if (dataResponseAuthorized) {
-        dispatch(updateUserInState(dataResponseAuthorized));
-      }
-    }
-  };
-
   const handleClickAddFriend = async (): Promise<void> => {
     if (currentProfile) {
       const argUpdateCurrentProfileUser: TUpdateUserArg = {
@@ -79,7 +56,7 @@ export default function ProfileHeader() {
   };
 
   return (
-    <Box sx={{ borderRadius: 2, boxShadow: 1 }}>
+    <Box sx={{ borderRadius: 4, boxShadow: 4 }}>
       <Box
         component="img"
         src={temporary}
@@ -123,8 +100,9 @@ export default function ProfileHeader() {
               </Skeleton>
             )}
             {idCurrentProfile === idAuthorizedUser && (
-              <Button variant="contained" startIcon={<CloudDownloadOutlinedIcon />}>
-                <Box sx={{ display: { xs: 'none', sm: 'block' } }}>Edit Cover</Box>
+              <Button variant="contained" sx={{ gap: 1 }}>
+                <CloudDownloadOutlinedIcon />
+                <Typography sx={{ display: { xs: 'none', sm: 'block' } }}>Edit Cover</Typography>
               </Button>
             )}
           </Box>
@@ -134,17 +112,31 @@ export default function ProfileHeader() {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', px: 2, pb: 3, pt: 5, minHeight: '36.5px' }}>
         <Typography variant="h5">{currentProfile && currentProfile.name}</Typography>
 
-        {idCurrentProfile === idAuthorizedUser && <Button>Edit basic info</Button>}
+        {idCurrentProfile === idAuthorizedUser && (
+          <Button variant="outlined" sx={{ background: 'secondary.main' }}>
+            Edit basic info
+          </Button>
+        )}
         {idCurrentProfile !== idAuthorizedUser && (
           <Box>
             {(authorizedUser?.pendingFriendsIds?.includes(idCurrentProfile) && (
-              <Button onClick={handleClickFollow}>Accept friend request</Button>
+              <Button variant="outlined" onClick={handleClickFollow}>
+                Accept friend request
+              </Button>
             )) ||
               (currentProfile?.friendsIds?.includes(idAuthorizedUser) && (
-                <Button onClick={handleClickRemoveFriend}>Remove friend</Button>
+                <Button variant="contained" sx={{ flexGrow: 1 }}>
+                  Write message
+                </Button>
               )) ||
-              (currentProfile?.pendingFriendsIds?.includes(idAuthorizedUser) && <Button disabled>Pending</Button>) || (
-                <Button onClick={handleClickAddFriend}>Add friend</Button>
+              (currentProfile?.pendingFriendsIds?.includes(idAuthorizedUser) && (
+                <Button variant="outlined" disabled>
+                  Friend request sent
+                </Button>
+              )) || (
+                <Button variant="outlined" onClick={handleClickAddFriend}>
+                  Add friend
+                </Button>
               )}
           </Box>
         )}

@@ -7,8 +7,9 @@ export default function ProfileInner() {
   return (
     <Stack
       sx={{
-        borderRadius: 2,
-        boxShadow: { xs: 0, md: 1 },
+        borderRadius: 4,
+        boxShadow: { xs: 0, md: 4 },
+        bgcolor: { xs: 'none', md: 'secondary.main' },
         p: { xs: 0, md: 2 },
         flexDirection: { xs: 'column', md: 'row' },
         justifyContent: 'space-between',

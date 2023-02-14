@@ -76,7 +76,7 @@ export default function LeftSideBar() {
   };
 
   const drawer = (
-    <Box onClick={handleClickCloseMenu} sx={{ position: 'sticky', zIndex: 1 }}>
+    <Box onClick={handleClickCloseMenu}>
       <List>
         {sideBarButtonsInfo &&
           sideBarButtonsInfo.map((sideBarButtonInfo) => (
@@ -84,6 +84,7 @@ export default function LeftSideBar() {
               <ListItemButton
                 onClick={sideBarButtonInfo.handleClick}
                 selected={sideBarButtonInfo.to === location.pathname}
+                sx={{ borderRadius: 4 }}
               >
                 <ListItemIcon>{sideBarButtonInfo.icon}</ListItemIcon>
                 <ListItemText primary={sideBarButtonInfo.text} />

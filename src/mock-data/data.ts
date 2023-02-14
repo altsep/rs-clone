@@ -1,6 +1,6 @@
 import { Locales } from '../constants';
 
-const idAuthorizedUser = 2;
+const idAuthorizedUser = 1;
 
 // const authorizedUser = {
 //   id: 1,
