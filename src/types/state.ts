@@ -15,6 +15,7 @@ type TUsersState = {
   authorizedUser: IUser | null;
   idAuthorizedUser: number;
   defineUserCompleted: boolean;
+  messagesWs: WebSocket | null;
 };
 
 type TThemeState = {

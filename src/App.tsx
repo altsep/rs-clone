@@ -9,12 +9,12 @@ import Login from './pages/Login';
 import Registration from './pages/Registration';
 import Header from './components/Header/Header';
 import Profile from './pages/Profile';
-import { ApiPath, API_BASE_URL, KEY_LOCAL_STORAGE, LSKeys, RoutePath } from './constants';
+import { ApiPath, API_BASE_URL, KEY_LOCAL_STORAGE, LSKeys, RoutePath, WS_BASE_URL } from './constants';
 import { refreshToken } from './api/usersApi';
 import { ILogin } from './types/data';
 import { setToken } from './utils/common';
 import { setAuth, setAuthError, setLoading } from './store/reducers/authSlice';
-import { setUser, usersLoadingSuccess } from './store/reducers/usersState';
+import { setUser, usersLoadingSuccess, setMessagesWs } from './store/reducers/usersState';
 import Messages from './pages/Messages';
 import Friends from './pages/Friends';
 import NotFound from './pages/NotFound';
@@ -30,6 +30,7 @@ function App() {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const theme = useAppSelector((state) => state.theme.mode);
+  const { idAuthorizedUser } = useAppSelector((state) => state.users);
   const { users, isLoading: isLoadingUsers, isValidating: isValidatingUser } = useUsers();
   const { posts, isLoading: isLoadingPosts, isValidating: isValidatingPost } = usePosts();
 
@@ -62,6 +63,27 @@ function App() {
     }
     localStorage.setItem(`${LSKeys.path}_${KEY_LOCAL_STORAGE}`, location.pathname);
   }, []);
+
+  useEffect(() => {
+    if (idAuthorizedUser) {
+      const wsUrl = new URL('messages', WS_BASE_URL);
+      const messagesWs = new WebSocket(wsUrl);
+
+      messagesWs.addEventListener('open', () => {
+        console.log('ws conn opened!');
+      });
+
+      messagesWs.addEventListener('message', (e) => {
+        if (typeof e.data === 'string') {
+          console.log(JSON.parse(e.data));
+        }
+
+        console.log('message received!');
+      });
+
+      dispatch(setMessagesWs(messagesWs));
+    }
+  }, [dispatch, idAuthorizedUser]);
 
   useEffect(() => {
     if (users && posts && !isLoadingPosts && !isLoadingUsers && !isValidatingPost && !isValidatingUser) {
