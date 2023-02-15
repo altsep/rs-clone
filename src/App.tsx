@@ -24,7 +24,7 @@ import usePosts from './hooks/usePosts';
 import useUsers from './hooks/useUsers';
 import { postsLoadingSuccess } from './store/reducers/postsState';
 import NotAuthRoute from './hoc/NotAuthRoute';
-import TemporaryHeader from './components/TemporaryHeader';
+import TemporaryHeader from './components/Header/HeaderBurger';
 
 function App() {
   const dispatch = useAppDispatch();
