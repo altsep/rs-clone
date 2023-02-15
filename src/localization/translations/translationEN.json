@@ -45,7 +45,7 @@
       },
       "country": {
         "required": "Country is required",
-        "validation": "It's too short. Country must be at least 3 characters long"
+        "validation": "It's too short. Country must be at least 3 characters long. Whitespace is not allowed"
       },
       "birthDate": {
         "required": "Birthdate is required",

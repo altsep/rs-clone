@@ -1,4 +1,11 @@
-import { IAddUserProps, IUpdateUserProps, IHideUserProps, ILoginUser, IRegistrationUser } from '../types/usersApi';
+import {
+  IAddUserProps,
+  IUpdateUserProps,
+  IHideUserProps,
+  ILoginUser,
+  IRegistrationUser,
+  IEditUserProps,
+} from '../types/usersApi';
 import { IUser } from '../types/data';
 
 const addUser = async (url: string, { arg }: IAddUserProps): Promise<void> => {
@@ -76,4 +83,16 @@ const refreshToken = async (url: string): Promise<Response> => {
   return res;
 };
 
-export { addUser, updateUser, hideUser, loginUser, registerUser, refreshToken, logoutUser };
+const editUser = async (url: string, { arg }: IEditUserProps): Promise<IUser> => {
+  const response = await fetch(url, {
+    method: 'PATCH',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(arg),
+  });
+  return (await response.json()) as IUser;
+};
+
+export { addUser, updateUser, hideUser, loginUser, registerUser, refreshToken, logoutUser, editUser };
