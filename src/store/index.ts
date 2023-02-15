@@ -1,5 +1,4 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-
 import { commentsState } from './reducers/commentsState';
 import { themeState } from './reducers/themeSlice';
 import { langState } from './reducers/langSlice';

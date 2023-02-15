@@ -15,7 +15,7 @@ export default function TabPanel({ children, index, value, isEmpty }: ITabPanelP
         id={`simple-tabpanel-${index}`}
         aria-labelledby={`simple-tab-${index}`}
         style={{
-          minHeight: '80vh',
+          minHeight: '78vh',
           display: value !== index ? 'none' : 'flex',
           justifyContent: 'center',
           alignItems: 'center',

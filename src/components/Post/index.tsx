@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import useSWRMutation from 'swr/mutation';
+import { TransitionGroup } from 'react-transition-group';
 import {
   Box,
   Button,
@@ -18,7 +19,6 @@ import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlin
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
 import ReplyOutlinedIcon from '@mui/icons-material/ReplyOutlined';
-
 import { IPost } from '../../types/data';
 import { API_BASE_URL, ApiPath } from '../../constants';
 import { TUpdatePostArg } from '../../types/postsApi';
@@ -174,9 +174,16 @@ export default function Post({ postData }: IPostProps) {
       <Divider sx={{ width: '94%', mx: 'auto' }} />
       <Collapse in={isOpenComments} timeout="auto" unmountOnExit>
         <List>
-          {comments.map(
-            (comment) => comment.postId === postData.id && <Comment key={comment.id} commentData={comment} />
-          )}
+          <TransitionGroup>
+            {comments.map(
+              (comment) =>
+                comment.postId === postData.id && (
+                  <Collapse key={comment.id}>
+                    <Comment commentData={comment} />
+                  </Collapse>
+                )
+            )}
+          </TransitionGroup>
         </List>
       </Collapse>
       <CommentCreator postData={postData} setIsOpenComments={setIsOpenComments} />
