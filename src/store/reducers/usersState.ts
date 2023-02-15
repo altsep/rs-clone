@@ -11,6 +11,7 @@ const initialState: TUsersState = {
   authorizedUser: null,
   idAuthorizedUser: 0,
   defineUserCompleted: false,
+  messagesWs: null,
 };
 
 const usersStateSlice = createSlice({
@@ -53,9 +54,13 @@ const usersStateSlice = createSlice({
         state.currentProfile = action.payload;
       }
     },
+    setMessagesWs: (state, action: PayloadAction<WebSocket>) => {
+      state.messagesWs = action.payload;
+    },
   },
 });
 
-export const { usersLoadingSuccess, defineProfile, updateUserInState, setUser } = usersStateSlice.actions;
+export const { usersLoadingSuccess, defineProfile, updateUserInState, setUser, setMessagesWs } =
+  usersStateSlice.actions;
 
 export const usersState = usersStateSlice.reducer;
