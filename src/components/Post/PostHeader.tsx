@@ -44,7 +44,6 @@ export default function PostHeader({ postData, setIsEdit }: IPostHeaderProps) {
   };
 
   const handleClickDeletePost = async (): Promise<void> => {
-    console.log(currentProfile?.postsIds);
     setAnchorEl(null);
     await triggerRemovePost();
     const argUpdateUser: TUpdateUserArg = {
