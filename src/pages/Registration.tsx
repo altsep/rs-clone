@@ -1,17 +1,20 @@
 import { Container, Grid, useTheme } from '@mui/material';
-import FormFooter from '../components/FormFooter';
-import FormHeader from '../components/FormHeader';
-import RegistrationForm from '../components/RegistrationForm';
+import { useTranslation } from 'react-i18next';
+import FormFooter from '../components/Forms/FormElements/FormFooter';
+import FormHeader from '../components/Forms/FormElements/FormHeader';
+import RegistrationForm from '../components/Forms/RegistrationForm/RegistrationForm';
 
 export default function Registration() {
+  const { t } = useTranslation();
   const { breakpoints } = useTheme();
   const { up } = breakpoints;
   return (
     <Container
       sx={{
         display: 'flex',
-        justifyContent: 'center',
-        marginTop: '10vh',
+        flexDirection: 'column',
+        alignItems: 'center',
+        marginTop: '5vh',
       }}
     >
       <Grid
@@ -22,20 +25,19 @@ export default function Registration() {
           width: '500px',
           maxWidth: 1,
           alignItems: 'center',
-          // bgcolor: 'secondary.main',
-          [up('sm')]: { p: '30px', width: '550px', boxShadow: 3, borderRadius: 3 },
+          [up('sm')]: { p: '30px', width: '550px', boxShadow: 3, borderRadius: 3, bgcolor: 'secondary.main' },
           [up('md')]: { width: '650px' },
         }}
       >
         <Grid item>
-          <FormHeader>Sign Up</FormHeader>
+          <FormHeader>{t('registration.title')}</FormHeader>
         </Grid>
         <Grid item>
           <RegistrationForm />
         </Grid>
         <Grid item>
-          <FormFooter linkTo="/" linkTitle="Sign In">
-            Already have an account?
+          <FormFooter linkTo="/" linkTitle={t('registration.signIn')}>
+            {t('registration.footerText')}
           </FormFooter>
         </Grid>
       </Grid>

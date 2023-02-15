@@ -1,0 +1,97 @@
+{
+  "login": {
+    "title": "Entrada",
+    "signIn": "Entrada",
+    "signUp": "Registro",
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "footerText": "¿No tienes una cuenta todavía?",
+    "errors": {
+      "email": "Correo electronico es requerido",
+      "password": "Se requiere contraseña"
+    },
+    "loginError": "Contraseña o dirección de correo electrónico incorrecta",
+    "authError": "Error de autorizacion se requiere volver a iniciar sesión"
+  },
+  "registration": {
+    "title": "Registro",
+    "signIn": "Entrada",
+    "signUp": "Registro",
+    "email": "Tu correo electrónico",
+    "name": "Su Nombre",
+    "passwordCreate": "Crear Contraseña",
+    "passwordConfirm": "Confirmar Contraseña",
+    "country": "País",
+    "birthDate": "Tu fecha de nacimiento",
+    "footerText": "¿Ya tienes una cuenta?",
+    "successMessage": "Para verificar su cuenta, siga el enlace enviado a su correo electrónico",
+    "errorMessage": "El usuario con este correo ya existe",
+    "errors": {
+      "email": {
+        "required": "Correo electronico es requerido",
+        "validation": "yourmail@example.com"
+      },
+      "password": {
+        "required": "Se requiere contraseña",
+        "validation": "La contraseña debe tener entre 8 y 15 caracteres e incluir al menos una letra minúscula, una letra mayúscula y un número"
+      },
+      "passwordConfirm": {
+        "required": "Confirmación de contraseña requerida",
+        "validation": "Las contraseñas deben coincidir"
+      },
+      "name": {
+        "required": "El nombre es requerido",
+        "validation": "Las contraseñas deben coincidir"
+      },
+      "country": {
+        "required": "El país es requerido",
+        "validation": "Es demasiado corto. El país debe tener al menos 3 caracteres"
+      },
+      "birthDate": {
+        "required": "Se requiere la fecha de nacimiento",
+        "validation": "Fecha no válida. La edad no puede ser inferior a 14"
+      },
+      "alias": {
+        "validation": "Es demasiado corto. El alias debe tener al menos 3 caracteres"
+      }
+    },
+    "registrationErrors": {
+      "email": "Usuario con correo electrónico {{ email }} ya existe"
+    },
+    "registrationSuccess": "Para completar el registro, siga el enlace enviado a su correo electrónico"
+  },
+  "settings": {
+    "menu": {
+      "language": "Idioma",
+      "theme": "Tema",
+      "editProfile": "Editar perfil"
+    },
+    "language": {
+      "title": "Idioma",
+      "subtitle": "Cambiar el idioma de RSSpace"
+    },
+    "theme": {
+      "title": "Tema",
+      "subtitle": "Cambiar el tema de color de RSSpace",
+      "selectItems": {
+        "light": "Luz",
+        "dark": "Oscuro"
+      }
+    },
+    "editProfile": {
+      "title": "Editar perfil",
+      "form": {
+        "name": "Nombre completo",
+        "email": "Correo electrónico",
+        "alias": "Alias",
+        "country": "País",
+        "birthDate": "Fecha de nacimiento",
+        "password": "Contraseña"
+      }
+    },
+    "buttons": {
+      "save": "Guardar",
+      "cancel": "Cancelar"
+    }
+  }
+}

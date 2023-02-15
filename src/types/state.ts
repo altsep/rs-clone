@@ -17,9 +17,24 @@ type TUsersState = {
   defineUserCompleted: boolean;
 };
 
+type TThemeState = {
+  mode: string;
+};
+
+type TAuthState = {
+  isAuth: boolean;
+  isLoading: boolean;
+  authError: boolean;
+};
+
+type TLoginFormState = {
+  passwordVisible: boolean;
+  loginError: string;
+};
+
 type TPostsState = {
   posts: IPost[];
   currentProfilePosts: IPost[] | null;
 };
 
-export type { IInputsState, ILeftSideBarState, TUsersState, TPostsState };
+export type { IInputsState, ILeftSideBarState, TUsersState, TPostsState, TThemeState, TAuthState, TLoginFormState };

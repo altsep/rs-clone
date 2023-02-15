@@ -1,22 +1,17 @@
-import { grey, blueGrey, lightBlue } from '@mui/material/colors';
 import { createTheme, Theme } from '@mui/material';
+import { grey, orange, blueGrey } from '@mui/material/colors';
 
-const darkTheme: Theme = createTheme({
+const lightTheme: Theme = createTheme({
   palette: {
     primary: {
-      main: lightBlue[600],
+      main: orange[500],
     },
     secondary: {
-      main: blueGrey[800],
-      contrastText: grey[50],
+      main: grey[200],
     },
     background: {
-      default: blueGrey[900],
-      paper: blueGrey[900],
-    },
-    text: {
-      primary: blueGrey[50],
-      secondary: grey.A400,
+      default: grey[50],
+      paper: grey[50],
     },
   },
   components: {
@@ -24,12 +19,12 @@ const darkTheme: Theme = createTheme({
       styleOverrides: {
         root: {
           '& label': {
-            color: blueGrey[100],
+            color: blueGrey[300],
             fontSize: '0.8rem',
             lineHeight: 2,
           },
           '& label.Mui-error': {
-            color: blueGrey[100],
+            color: blueGrey[300],
           },
           '& .MuiOutlinedInput-root': {
             '& fieldset': {
@@ -44,13 +39,6 @@ const darkTheme: Theme = createTheme({
         },
       },
     },
-    MuiSvgIcon: {
-      styleOverrides: {
-        root: {
-          color: blueGrey[100],
-        },
-      },
-    },
     MuiButton: {
       styleOverrides: {
         root: {
@@ -62,25 +50,11 @@ const darkTheme: Theme = createTheme({
     MuiSelect: {
       styleOverrides: {
         icon: {
-          color: grey[50],
-        },
-      },
-    },
-    MuiDivider: {
-      styleOverrides: {
-        root: {
-          background: grey[600],
-        },
-      },
-    },
-    MuiListItemButton: {
-      styleOverrides: {
-        root: {
-          borderColor: grey[600],
+          color: grey[900],
         },
       },
     },
   },
 });
 
-export { darkTheme };
+export { lightTheme };

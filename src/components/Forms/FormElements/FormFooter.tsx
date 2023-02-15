@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 type TFormFooter = {
@@ -8,12 +8,16 @@ type TFormFooter = {
 };
 
 export default function FormFooter({ children, linkTo, linkTitle }: TFormFooter) {
+  const { breakpoints } = useTheme();
+  const { up } = breakpoints;
   return (
     <Box
       sx={{
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        flexDirection: 'column',
+        [up('sm')]: { flexDirection: 'row' },
       }}
     >
       <Typography variant="body2" sx={{ mr: '10px' }}>

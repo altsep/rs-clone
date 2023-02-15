@@ -1,0 +1,97 @@
+{
+  "login": {
+    "title": "Sign In",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "footerText": "Don't have an account yet?",
+    "errors": {
+      "email": "Email is required",
+      "password": "Password is required"
+    },
+    "loginError": "Wrong password or email address",
+    "authError": "Authorisation error. Re-login required"
+  },
+  "registration": {
+    "title": "Sign Up",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "email": "Your Email",
+    "name": "Your Name",
+    "passwordCreate": "Create Password",
+    "passwordConfirm": "Confirm Password",
+    "country": "Country",
+    "birthDate": "Your Birthdate",
+    "footerText": "Already have an account?",
+    "successMessage": "To verify your account, follow the link sent to your email",
+    "errorMessage": "User with this email already exists",
+    "errors": {
+      "email": {
+        "required": "Email is required",
+        "validation": "yourmail@example.com"
+      },
+      "password": {
+        "required": "Password is required",
+        "validation": "Password must be 8-15 characters, include at least one lowercase letter, one uppercase letter, and a number"
+      },
+      "passwordConfirm": {
+        "required": "Password confirmation required",
+        "validation": "Passwords must match"
+      },
+      "name": {
+        "required": "Name is required",
+        "validation": "It's too short. The name must have at least 5 characters"
+      },
+      "country": {
+        "required": "Country is required",
+        "validation": "It's too short. Country must be at least 3 characters long"
+      },
+      "birthDate": {
+        "required": "Birthdate is required",
+        "validation": "Invalid date. Age cannot be less than 14"
+      },
+      "alias": {
+        "validation": "It's too short. Alias must be at least 3 characters long"
+      }
+    },
+    "registrationErrors": {
+      "email": "User with email {{ email }} already exist"
+    },
+    "registrationSuccess": "To complete registration, follow the link sent to your email"
+  },
+  "settings": {
+    "menu": {
+      "language": "Language",
+      "theme": "Theme",
+      "editProfile": "Edit Profile"
+    },
+    "language": {
+      "title": "Language",
+      "subtitle": "Change RSSpace language"
+    },
+    "theme": {
+      "title": "Theme",
+      "subtitle": "Change RSSpace color theme",
+      "selectItems": {
+        "light": "Light",
+        "dark": "Dark"
+      }
+    },
+    "editProfile": {
+      "title": "Edit Profile",
+      "form": {
+        "name": "Full Name",
+        "email": "Email",
+        "alias": "Alias",
+        "country": "Country",
+        "birthDate": "Birthdate",
+        "password": "Password"
+      }
+    },
+    "buttons": {
+      "save": "Save",
+      "cancel": "Cancel"
+    }
+  }
+}

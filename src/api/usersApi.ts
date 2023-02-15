@@ -1,5 +1,5 @@
+import { IAddUserProps, IUpdateUserProps, IHideUserProps, ILoginUser, IRegistrationUser } from '../types/usersApi';
 import { IUser } from '../types/data';
-import { IAddUserProps, IUpdateUserProps, IHideUserProps } from '../types/usersApi';
 
 const addUser = async (url: string, { arg }: IAddUserProps): Promise<void> => {
   await fetch(url, {
@@ -14,6 +14,7 @@ const addUser = async (url: string, { arg }: IAddUserProps): Promise<void> => {
 const updateUser = async (url: string, { arg }: IUpdateUserProps): Promise<IUser> => {
   const response = await fetch(url, {
     method: 'PATCH',
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
     },
@@ -32,4 +33,47 @@ const hideUser = async (url: string, { arg }: IHideUserProps): Promise<void> => 
   });
 };
 
-export { addUser, updateUser, hideUser };
+const loginUser = async (url: string, { arg }: ILoginUser): Promise<Response> => {
+  const res: Response = await fetch(url, {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(arg),
+  });
+  return res;
+};
+
+const logoutUser = async (url: string): Promise<Response> => {
+  const res = await fetch(url, {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  return res;
+};
+
+const registerUser = async (url: string, { arg }: IRegistrationUser): Promise<Response> => {
+  const res: Response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+    body: JSON.stringify(arg),
+  });
+  return res;
+};
+
+const refreshToken = async (url: string): Promise<Response> => {
+  const res: Response = await fetch(url, {
+    method: 'POST',
+    credentials: 'include',
+  });
+  return res;
+};
+
+export { addUser, updateUser, hideUser, loginUser, registerUser, refreshToken, logoutUser };

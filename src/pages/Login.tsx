@@ -1,17 +1,20 @@
 import { Container, Grid, useTheme } from '@mui/material';
-import LoginForm from '../components/LoginForm';
-import FormHeader from '../components/FormHeader';
-import FormFooter from '../components/FormFooter';
+import { useTranslation } from 'react-i18next';
+import LoginForm from '../components/Forms/LoginForm/LoginForm';
+import FormHeader from '../components/Forms/FormElements/FormHeader';
+import FormFooter from '../components/Forms/FormElements/FormFooter';
 
 export default function Login() {
+  const { t } = useTranslation();
   const { breakpoints } = useTheme();
   const { up } = breakpoints;
   return (
     <Container
       sx={{
         display: 'flex',
-        justifyContent: 'center',
-        marginTop: '10vh',
+        flexDirection: 'column',
+        alignItems: 'center',
+        marginTop: '5vh',
       }}
     >
       <Grid
@@ -20,13 +23,14 @@ export default function Login() {
           width: '400px',
           maxWidth: 1,
           alignItems: 'center',
-          // bgcolor: 'secondary.main',
-          [up('sm')]: { p: '20px', width: '450px', boxShadow: 3, borderRadius: 3 },
+          [up('sm')]: { p: '20px', width: '450px', boxShadow: 3, borderRadius: 3, bgcolor: 'secondary.main' },
         }}
       >
-        <FormHeader>Sign In</FormHeader>
+        <FormHeader>{t('login.title')}</FormHeader>
         <LoginForm />
-        <FormFooter linkTo="/registration" linkTitle="Sign Up">{`Don't have an account yet?`}</FormFooter>
+        <FormFooter linkTo="/registration" linkTitle={t('login.signUp')}>
+          {t('login.footerText')}
+        </FormFooter>
       </Grid>
     </Container>
   );

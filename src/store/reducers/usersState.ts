@@ -2,14 +2,14 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ReducerNames } from '../../constants';
 import { TUsersState } from '../../types/state';
 import { IUser } from '../../types/data';
-import { authorizedUser as authorizedUserMock, idAuthorizedUser as idAuthorizedUserMock } from '../../mock-data/data';
+// import { authorizedUser as authorizedUserMock, idAuthorizedUser as idAuthorizedUserMock } from '../../mock-data/data';
 
 const initialState: TUsersState = {
   users: [],
   currentProfile: null,
   idCurrentProfile: 0,
-  authorizedUser: authorizedUserMock,
-  idAuthorizedUser: idAuthorizedUserMock,
+  authorizedUser: null,
+  idAuthorizedUser: 0,
   defineUserCompleted: false,
 };
 
@@ -17,6 +17,10 @@ const usersStateSlice = createSlice({
   name: ReducerNames.users,
   initialState,
   reducers: {
+    setUser(state, action: PayloadAction<IUser>) {
+      state.authorizedUser = action.payload;
+      state.idAuthorizedUser = action.payload.id;
+    },
     usersLoadingSuccess: (state, action: PayloadAction<IUser[]>) => {
       state.users = action.payload;
     },
@@ -52,6 +56,6 @@ const usersStateSlice = createSlice({
   },
 });
 
-export const { usersLoadingSuccess, defineProfile, updateUserInState } = usersStateSlice.actions;
+export const { usersLoadingSuccess, defineProfile, updateUserInState, setUser } = usersStateSlice.actions;
 
 export const usersState = usersStateSlice.reducer;
