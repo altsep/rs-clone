@@ -1,11 +1,10 @@
 import { useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import useSWRMutation from 'swr/mutation';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { LocalizationProvider, DesktopDatePicker } from '@mui/x-date-pickers';
-import i18next from 'i18next';
 import moment from 'moment';
 import 'moment/dist/locale/ru';
 import 'moment/dist/locale/es';
@@ -26,7 +25,7 @@ import PublicIcon from '@mui/icons-material/Public';
 import { useTranslation } from 'react-i18next';
 import { IFormValues } from '../../../types/formValues';
 import FormInput from '../FormElements/FormInput';
-import { ApiPath, API_BASE_URL, locales } from '../../../constants';
+import { ApiPath, API_BASE_URL } from '../../../constants';
 import { registerUser } from '../../../api/usersApi';
 import { setToken } from '../../../utils/common';
 import { ILogin } from '../../../types/data';
@@ -37,15 +36,10 @@ import { setUser } from '../../../store/reducers/usersState';
 export default function RegistrationForm() {
   const dispatch = useAppDispatch();
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
-  const [birthdate, setBirthdate] = useState<string | null>('');
   const [registrationError, setRegistrationError] = useState<string>('');
   const [registrationSuccess, setRegistrationSuccess] = useState<boolean>(false);
 
   const { t } = useTranslation();
-
-  i18next.on('languageChanged', (lng: string): void => {
-    moment.locale(lng);
-  });
 
   const schema: yup.SchemaOf<IFormValues> = yup.object().shape({
     email: yup.string().required().email(),
@@ -64,12 +58,11 @@ export default function RegistrationForm() {
       .required()
       .test(
         'birthDate',
-        (date: string | undefined): boolean => moment().diff(moment(date, locales[moment.locale()]), 'years') >= 14
+        (date: string | undefined): boolean => moment().diff(moment(date, 'MM/DD/YYYY'), 'years') >= 14
       ),
   });
 
   const {
-    register,
     handleSubmit,
     control,
     formState: { errors },
@@ -232,37 +225,43 @@ export default function RegistrationForm() {
           />
         </Grid>
         <Grid item xs={12} md={6}>
-          <LocalizationProvider dateAdapter={AdapterMoment}>
-            <DesktopDatePicker
-              OpenPickerButtonProps={{
-                size: 'small',
-              }}
-              value={birthdate}
-              onChange={(val: string | null): void => setBirthdate(val)}
-              renderInput={(props: TextFieldProps): JSX.Element => {
-                return (
-                  <TextField
-                    type="date"
-                    {...props}
-                    {...register('birthDate')}
-                    label={`${t('registration.birthDate')}*`}
-                    size="medium"
-                    variant="outlined"
-                    error={!!errors.birthDate}
-                    fullWidth
-                    autoComplete="off"
-                  />
-                );
-              }}
-            />
-            {errors.birthDate ? (
-              <FormHelperText error>
-                {errors.birthDate.type === 'required'
-                  ? t('registration.errors.birthDate.required')
-                  : t('registration.errors.birthDate.validation')}
-              </FormHelperText>
-            ) : null}
-          </LocalizationProvider>
+          <Controller
+            name="birthDate"
+            control={control}
+            render={({ field: { onChange, value, onBlur }, fieldState: { error } }) => (
+              <LocalizationProvider dateAdapter={AdapterMoment}>
+                <DesktopDatePicker
+                  OpenPickerButtonProps={{
+                    size: 'small',
+                  }}
+                  value={value}
+                  onChange={onChange}
+                  renderInput={(props: TextFieldProps): JSX.Element => {
+                    return (
+                      <TextField
+                        type="date"
+                        {...props}
+                        label={`${t('registration.birthDate')}*`}
+                        size="medium"
+                        variant="outlined"
+                        error={!!error}
+                        fullWidth
+                        autoComplete="off"
+                        onBlur={onBlur}
+                      />
+                    );
+                  }}
+                />
+                {error ? (
+                  <FormHelperText error>
+                    {error.type === 'required'
+                      ? t('registration.errors.birthDate.required')
+                      : t('registration.errors.birthDate.validation')}
+                  </FormHelperText>
+                ) : null}
+              </LocalizationProvider>
+            )}
+          />
         </Grid>
       </Grid>
       <Button variant="contained" fullWidth type="submit" sx={{ mb: '10px' }}>

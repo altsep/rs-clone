@@ -11,7 +11,7 @@ import { ApiPath, API_BASE_URL } from '../../../../constants';
 import EditProfileInput from './EditProfileInput';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/redux';
 import { editUser } from '../../../../api/usersApi';
-import { setUser } from '../../../../store/reducers/usersState';
+import { setUser, updateUserInState } from '../../../../store/reducers/usersState';
 import { IEditFormValues } from '../../../../types/formValues';
 
 export default function EditProfileForm() {
@@ -83,6 +83,7 @@ export default function EditProfileForm() {
     const user = await trigger(filteredData);
     if (user) {
       dispatch(setUser(user));
+      dispatch(updateUserInState(user));
     }
   };
 
