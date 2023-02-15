@@ -9,14 +9,13 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { changeCreatePost } from '../../store/reducers/inputsState';
 import { updateUser } from '../../api/usersApi';
 import { TUpdateUserArg } from '../../types/usersApi';
-import { idAuthorizedUser } from '../../mock-data/data';
 import ClickableAvatar from '../ClickableAvatar';
 import { addPostInState } from '../../store/reducers/postsState';
 import { updateUserInState } from '../../store/reducers/usersState';
 
 export default function PostCreator() {
   const dispatch = useAppDispatch();
-  const { idCurrentProfile, currentProfile, authorizedUser } = useAppSelector((state) => state.users);
+  const { idCurrentProfile, currentProfile, authorizedUser, idAuthorizedUser } = useAppSelector((state) => state.users);
   const { valueCreatePost } = useAppSelector((state) => state.inputs);
 
   const { trigger: triggerAddPost } = useSWRMutation(`${API_BASE_URL}${ApiPath.posts}`, addPost, { revalidate: false });

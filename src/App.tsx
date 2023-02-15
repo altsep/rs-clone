@@ -26,7 +26,7 @@ import { postsLoadingSuccess } from './store/reducers/postsState';
 import useComments from './hooks/useComments';
 import { commentsLoadingSuccess } from './store/reducers/commentsState';
 import NotAuthRoute from './hoc/NotAuthRoute';
-import TemporaryHeader from './components/TemporaryHeader';
+// import TemporaryHeader from './components/TemporaryHeader';
 
 function App() {
   const dispatch = useAppDispatch();

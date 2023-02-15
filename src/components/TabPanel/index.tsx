@@ -33,7 +33,7 @@ export default function TabPanel({ children, index, value, isEmpty }: ITabPanelP
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
       style={{
-        minHeight: '80vh',
+        minHeight: '78vh',
       }}
     >
       {value === index && <Box sx={{ p: 3 }}>{children}</Box>}

@@ -1,7 +1,8 @@
 import useSWRMutation from 'swr/mutation';
+import { useNavigate } from 'react-router-dom';
 import { Box, Button, Typography, Badge, Avatar, IconButton, Skeleton } from '@mui/material';
 import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined';
-import { ApiPath, API_BASE_URL } from '../../constants';
+import { ApiPath, API_BASE_URL, RoutePath } from '../../constants';
 import { updateUser } from '../../api/usersApi';
 import { TUpdateUserArg } from '../../types/usersApi';
 import temporary from '../../assets/temporary-2.webp';
@@ -9,6 +10,8 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { updateUserInState } from '../../store/reducers/usersState';
 
 export default function ProfileHeader() {
+  const navigate = useNavigate();
+
   const dispatch = useAppDispatch();
   const { idCurrentProfile, idAuthorizedUser, currentProfile, authorizedUser } = useAppSelector((state) => state.users);
 
@@ -35,7 +38,7 @@ export default function ProfileHeader() {
     }
   };
 
-  const handleClickFollow = async () => {
+  const handleClickFollow = async (): Promise<void> => {
     if (authorizedUser) {
       const argUpdateAuthorizedUser: TUpdateUserArg = {
         friendsIds: authorizedUser.friendsIds ? [...authorizedUser.friendsIds, idCurrentProfile] : [idCurrentProfile],
@@ -53,6 +56,10 @@ export default function ProfileHeader() {
         dispatch(updateUserInState(dataResponseCurrentProfile));
       }
     }
+  };
+
+  const handleClickEditBasicInfo = () => {
+    navigate(`${RoutePath.settings}`);
   };
 
   return (
@@ -113,7 +120,7 @@ export default function ProfileHeader() {
         <Typography variant="h5">{currentProfile && currentProfile.name}</Typography>
 
         {idCurrentProfile === idAuthorizedUser && (
-          <Button variant="outlined" sx={{ background: 'secondary.main' }}>
+          <Button variant="outlined" onClick={handleClickEditBasicInfo} sx={{ background: 'secondary.main' }}>
             Edit basic info
           </Button>
         )}
