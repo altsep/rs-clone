@@ -5,8 +5,13 @@ const KEY_LOCAL_STORAGE = 'rs-clone-krevetka87-altsep-metalknock';
 const enum ApiPath {
   posts = '/posts',
   users = '/users',
+  user = '/user',
   comments = '/comments',
   auth = '/posts-auth',
+  refresh = '/refresh',
+  login = '/login',
+  logout = '/logout',
+  registration = '/registration',
 }
 
 const enum RoutePath {
@@ -22,6 +27,9 @@ const enum ReducerNames {
   users = 'users',
   posts = 'posts',
   comments = 'comments',
+  theme = 'theme',
+  language = 'language',
+  auth = 'auth',
 }
 
 const enum Locales {
@@ -35,4 +43,29 @@ const enum VariantsMoreMenu {
   withoutEdit = 'withoutEdit',
 }
 
-export { API_BASE_URL, KEY_LOCAL_STORAGE, ApiPath, ReducerNames, Locales, VariantsMoreMenu, RoutePath };
+const enum LSKeys {
+  theme = 'theme',
+  token = 'token',
+  path = 'path',
+}
+
+const locales: { [key: string]: string } = {
+  en: 'MM/DD/YYYY',
+  ru: 'DD.MM.YYYY',
+  es: 'DD/MM/YYYY',
+};
+
+const themes = ['light', 'dark'];
+
+export {
+  API_BASE_URL,
+  KEY_LOCAL_STORAGE,
+  ApiPath,
+  ReducerNames,
+  Locales,
+  VariantsMoreMenu,
+  locales,
+  themes,
+  LSKeys,
+  RoutePath,
+};

@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import store from '../src/store';
 import App from '../src/App';
 import '../src/index.scss';
+import '../src/localization/i18n';
 
 const container = document.getElementById('root') as HTMLDivElement;
 

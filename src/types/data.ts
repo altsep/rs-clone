@@ -34,4 +34,10 @@ interface IUser {
   pendingFriendsIds?: number[];
 }
 
-export type { IComment, IPost, IUser };
+interface ILogin {
+  accessToken: string;
+  refreshToken: string;
+  user: IUser;
+}
+
+export type { IComment, IPost, IUser, ILogin };

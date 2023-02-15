@@ -2,14 +2,13 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ReducerNames } from '../../constants';
 import { TUsersState } from '../../types/state';
 import { IUser } from '../../types/data';
-import { idAuthorizedUser as idAuthorizedUserMock } from '../../mock-data/data';
 
 const initialState: TUsersState = {
   users: [],
   currentProfile: null,
   idCurrentProfile: 0,
   authorizedUser: null,
-  idAuthorizedUser: idAuthorizedUserMock,
+  idAuthorizedUser: 0,
   defineUserCompleted: false,
   authorizedUserFriends: [],
   authorizedUserPendingFriends: [],
@@ -19,13 +18,12 @@ const usersStateSlice = createSlice({
   name: ReducerNames.users,
   initialState,
   reducers: {
+    setUser(state, action: PayloadAction<IUser>) {
+      state.authorizedUser = action.payload;
+      state.idAuthorizedUser = action.payload.id;
+    },
     usersLoadingSuccess: (state, action: PayloadAction<IUser[]>) => {
       state.users = action.payload;
-      // FIX_ME Delete after adding logic authorization
-      const findAuthorized = state.users.find((user) => user.id === state.idAuthorizedUser);
-      if (findAuthorized) {
-        state.authorizedUser = findAuthorized;
-      }
     },
     defineProfile: (state, action: PayloadAction<string>) => {
       if (action.payload.slice(0, 2) === 'id') {
@@ -65,7 +63,7 @@ const usersStateSlice = createSlice({
   },
 });
 
-export const { usersLoadingSuccess, defineProfile, updateUserInState, definePendingFriends, defineFriends } =
+export const { usersLoadingSuccess, defineProfile, updateUserInState, setUser, definePendingFriends, defineFriends } =
   usersStateSlice.actions;
 
 export const usersState = usersStateSlice.reducer;

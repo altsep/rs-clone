@@ -19,6 +19,21 @@ type TUsersState = {
   authorizedUserPendingFriends: IUser[];
 };
 
+type TThemeState = {
+  mode: string;
+};
+
+type TAuthState = {
+  isAuth: boolean;
+  isLoading: boolean;
+  authError: boolean;
+};
+
+type TLoginFormState = {
+  passwordVisible: boolean;
+  loginError: string;
+};
+
 type TPostsState = {
   posts: IPost[];
   currentProfilePosts: IPost[] | null;
@@ -28,4 +43,13 @@ type TCommentsState = {
   comments: IComment[];
 };
 
-export type { IInputsState, ILeftSideBarState, TUsersState, TPostsState, TCommentsState };
+export type {
+  IInputsState,
+  ILeftSideBarState,
+  TUsersState,
+  TPostsState,
+  TCommentsState,
+  TThemeState,
+  TAuthState,
+  TLoginFormState,
+};
