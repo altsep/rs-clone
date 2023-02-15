@@ -93,5 +93,7 @@
       "save": "Save",
       "cancel": "Cancel"
     }
-  }
+  },
+  "search": "Users not found",
+  "searchPlaceholder": "Find friends"
 }

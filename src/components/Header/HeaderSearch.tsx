@@ -2,10 +2,12 @@ import { Autocomplete, TextField, InputAdornment, Box, Stack } from '@mui/materi
 import SearchIcon from '@mui/icons-material/Search';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '../../hooks/redux';
 import { IUser } from '../../types/data';
 
 export default function HeaderSearch() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const users = useAppSelector((state) => state.users.users);
   const [searchValue, setSearchValue] = useState<string>('');
@@ -53,7 +55,7 @@ export default function HeaderSearch() {
         options={users}
         getOptionLabel={(option) => option.name || ''}
         isOptionEqualToValue={(option, value) => option.name === value.name}
-        noOptionsText="Users not found"
+        noOptionsText={t('search')}
         renderOption={(params, option) => (
           <Box component="li" {...params} key={`${option.id}`}>
             {option.name}
@@ -64,6 +66,7 @@ export default function HeaderSearch() {
             {...params}
             value={searchValue}
             onChange={handleChange}
+            placeholder={`${t('searchPlaceholder')}`}
             InputProps={{
               ...params.InputProps,
               startAdornment: (

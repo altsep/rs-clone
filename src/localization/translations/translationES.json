@@ -93,5 +93,7 @@
       "save": "Guardar",
       "cancel": "Cancelar"
     }
-  }
+  },
+  "search": "Usuarios no encontrados",
+  "searchPlaceholder": "Encontrar amigos"
 }
