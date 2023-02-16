@@ -2,7 +2,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ReducerNames } from '../../constants';
 import { TUsersState } from '../../types/state';
 import { IUser } from '../../types/data';
-// import { authorizedUser as authorizedUserMock, idAuthorizedUser as idAuthorizedUserMock } from '../../mock-data/data';
 
 const initialState: TUsersState = {
   users: [],
@@ -11,6 +10,8 @@ const initialState: TUsersState = {
   authorizedUser: null,
   idAuthorizedUser: 0,
   defineUserCompleted: false,
+  authorizedUserFriends: [],
+  authorizedUserPendingFriends: [],
   messagesWs: null,
 };
 
@@ -54,13 +55,26 @@ const usersStateSlice = createSlice({
         state.currentProfile = action.payload;
       }
     },
+    definePendingFriends: (state, action: PayloadAction<number[]>) => {
+      state.authorizedUserPendingFriends = state.users.filter((user) => action.payload.includes(user.id));
+    },
+    defineFriends: (state, action: PayloadAction<number[]>) => {
+      state.authorizedUserFriends = state.users.filter((user) => action.payload.includes(user.id));
+    },
     setMessagesWs: (state, action: PayloadAction<WebSocket>) => {
       state.messagesWs = action.payload;
     },
   },
 });
 
-export const { usersLoadingSuccess, defineProfile, updateUserInState, setUser, setMessagesWs } =
-  usersStateSlice.actions;
+export const {
+  usersLoadingSuccess,
+  defineProfile,
+  updateUserInState,
+  setUser,
+  definePendingFriends,
+  defineFriends,
+  setMessagesWs,
+} = usersStateSlice.actions;
 
 export const usersState = usersStateSlice.reducer;

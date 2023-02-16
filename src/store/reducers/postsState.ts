@@ -31,7 +31,7 @@ const postsStateSlice = createSlice({
       state.currentProfilePosts =
         state.currentProfilePosts && state.currentProfilePosts.filter((post) => post.id !== action.payload);
     },
-    editPost: (state, action: PayloadAction<IPost>) => {
+    updatePostInState: (state, action: PayloadAction<IPost>) => {
       state.posts = state.posts.map((post) => (post.id === action.payload.id ? action.payload : post));
       state.currentProfilePosts =
         state.currentProfilePosts &&
@@ -40,7 +40,7 @@ const postsStateSlice = createSlice({
   },
 });
 
-export const { postsLoadingSuccess, defineCurrentProfilePosts, addPostInState, editPost, removePostInState } =
+export const { postsLoadingSuccess, defineCurrentProfilePosts, addPostInState, updatePostInState, removePostInState } =
   postsStateSlice.actions;
 
 export const postsState = postsStateSlice.reducer;

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import useSWRMutation from 'swr/mutation';
+import { TransitionGroup } from 'react-transition-group';
 import {
   Box,
   Button,
@@ -10,6 +11,9 @@ import {
   Typography,
   AvatarGroup,
   TextField,
+  Divider,
+  List,
+  Collapse,
 } from '@mui/material';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
@@ -17,13 +21,15 @@ import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
 import ReplyOutlinedIcon from '@mui/icons-material/ReplyOutlined';
 import { IPost } from '../../types/data';
 import { API_BASE_URL, ApiPath } from '../../constants';
-import { UpdatePostArg } from '../../types/postsApi';
+import { TUpdatePostArg } from '../../types/postsApi';
 import { updatePost } from '../../api/postsApi';
 import ClickableAvatar from '../ClickableAvatar';
 import PostHeader from './PostHeader';
 import temporary from '../../assets/temporary-1.jpg';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { editPost } from '../../store/reducers/postsState';
+import { updatePostInState } from '../../store/reducers/postsState';
+import Comment from '../Comment';
+import CommentCreator from './CommentCreator';
 
 interface IPostProps {
   postData: IPost;
@@ -31,10 +37,13 @@ interface IPostProps {
 
 export default function Post({ postData }: IPostProps) {
   const [isEdit, setIsEdit] = useState(false);
+  const [isOpenComments, setIsOpenComments] = useState(false);
+
   const [valueInputDescription, setValueInputDescription] = useState(postData.description);
 
   const dispatch = useAppDispatch();
   const { users, idAuthorizedUser } = useAppSelector((state) => state.users);
+  const { comments } = useAppSelector((state) => state.comments);
 
   const { trigger: triggerUpdatePost } = useSWRMutation<IPost, Error>(
     `${API_BASE_URL}${ApiPath.posts}/${postData.id}`,
@@ -43,33 +52,33 @@ export default function Post({ postData }: IPostProps) {
 
   const handleClickLikeButton = async (): Promise<void> => {
     if (postData.likedUserIds && postData.likedUserIds.includes(idAuthorizedUser)) {
-      const argUpdatePost: UpdatePostArg = {
+      const argUpdatePost: TUpdatePostArg = {
         likes: postData.likes - 1,
         likedUserIds: postData.likedUserIds.filter((likedUserId) => likedUserId !== idAuthorizedUser),
       };
       const dataResponse = await triggerUpdatePost(argUpdatePost);
       if (dataResponse) {
-        dispatch(editPost(dataResponse));
+        dispatch(updatePostInState(dataResponse));
       }
     } else {
-      const argUpdatePost: UpdatePostArg = {
+      const argUpdatePost: TUpdatePostArg = {
         likes: postData.likes + 1,
         likedUserIds: postData.likedUserIds ? [...postData.likedUserIds, idAuthorizedUser] : [idAuthorizedUser],
       };
       const dataResponse = await triggerUpdatePost(argUpdatePost);
       if (dataResponse) {
-        dispatch(editPost(dataResponse));
+        dispatch(updatePostInState(dataResponse));
       }
     }
   };
 
   const handleClickSaveButton = async (): Promise<void> => {
-    const argUpdatePost: UpdatePostArg = {
+    const argUpdatePost: TUpdatePostArg = {
       description: valueInputDescription,
     };
     const dataResponse = await triggerUpdatePost(argUpdatePost);
     if (dataResponse) {
-      dispatch(editPost(dataResponse));
+      dispatch(updatePostInState(dataResponse));
     }
 
     setIsEdit(false);
@@ -81,23 +90,31 @@ export default function Post({ postData }: IPostProps) {
     }
   };
 
+  const handleClickComments = (): void => {
+    setIsOpenComments(!isOpenComments);
+  };
+
   return (
-    <Card>
+    <Card sx={{ borderRadius: 4, boxShadow: { xs: 4, md: 0 }, mb: 2 }}>
       <PostHeader postData={postData} setIsEdit={setIsEdit} />
       <CardContent>
         {!isEdit ? (
-          <Typography variant="body1" sx={{ wordBreak: 'break-all' }}>
-            {postData.description}
+          <Typography variant="body1" component="span">
+            <pre style={{ fontFamily: 'inherit', whiteSpace: 'pre-wrap', wordBreak: 'break-all', margin: 0 }}>
+              {postData.description}
+            </pre>
           </Typography>
         ) : (
-          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
             <TextField
               multiline
               value={valueInputDescription}
               onChange={handleChangeInputDescription}
-              sx={{ flexGrow: 1 }}
+              sx={{ flexGrow: 1, width: '100%' }}
             />
-            <Button onClick={handleClickSaveButton}>Save</Button>
+            <Button onClick={handleClickSaveButton} sx={{ ml: 'auto' }}>
+              Save
+            </Button>
           </Box>
         )}
       </CardContent>
@@ -113,7 +130,9 @@ export default function Post({ postData }: IPostProps) {
               .map((likedUserId) => {
                 if (users) {
                   const currentUser = users.find((val) => val.id === likedUserId);
-                  return currentUser && <ClickableAvatar key={likedUserId} user={currentUser} />;
+                  return (
+                    currentUser && <ClickableAvatar key={likedUserId} user={currentUser} width="20px" height="20px" />
+                  );
                 }
                 return '';
               })}
@@ -123,7 +142,7 @@ export default function Post({ postData }: IPostProps) {
           postData.commentsIds ? postData.commentsIds.length : 0
         } Comments`}</Typography>
       </Box>
-
+      <Divider sx={{ width: '94%', mx: 'auto' }} />
       <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Button
           aria-label="Like"
@@ -138,7 +157,12 @@ export default function Post({ postData }: IPostProps) {
 
           <Typography sx={{ display: { xs: 'none', md: 'block' } }}>Like</Typography>
         </Button>
-        <Button aria-label="Comments" sx={{ gap: 1, p: { xs: 0, sm: '6px' } }}>
+        <Button
+          aria-label="Comments"
+          onClick={handleClickComments}
+          disabled={!postData.commentsIds || (postData.commentsIds && postData.commentsIds.length === 0)}
+          sx={{ gap: 1, p: { xs: 0, sm: '6px' } }}
+        >
           <CommentOutlinedIcon />
           <Typography sx={{ display: { xs: 'none', md: 'block' } }}>Comments</Typography>
         </Button>
@@ -147,6 +171,22 @@ export default function Post({ postData }: IPostProps) {
           <Typography sx={{ display: { xs: 'none', md: 'block' } }}>Share</Typography>
         </Button>
       </CardActions>
+      <Divider sx={{ width: '94%', mx: 'auto' }} />
+      <Collapse in={isOpenComments} timeout="auto" unmountOnExit>
+        <List>
+          <TransitionGroup>
+            {comments.map(
+              (comment) =>
+                comment.postId === postData.id && (
+                  <Collapse key={comment.id}>
+                    <Comment commentData={comment} />
+                  </Collapse>
+                )
+            )}
+          </TransitionGroup>
+        </List>
+      </Collapse>
+      <CommentCreator postData={postData} setIsOpenComments={setIsOpenComments} />
     </Card>
   );
 }
