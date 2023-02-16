@@ -13,6 +13,7 @@ const enum ApiPath {
   login = '/login',
   logout = '/logout',
   registration = '/registration',
+  chats = '/chats',
 }
 
 const enum RoutePath {
@@ -31,6 +32,7 @@ const enum ReducerNames {
   theme = 'theme',
   language = 'language',
   auth = 'auth',
+  chats = 'chats',
 }
 
 const enum Locales {
