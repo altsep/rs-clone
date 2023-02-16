@@ -29,7 +29,7 @@ export default function HeaderSettings() {
     },
   });
   return (
-    <Box sx={{ flex: '1 1 30%', display: 'flex', justifyContent: 'flex-end' }}>
+    <Box sx={{ flex: '1 1 30%', display: 'flex', justifyContent: { xs: 'flex-start', sm: 'flex-end' } }}>
       <SelectWrapper
         sx={{ mr: '5px' }}
         startAdornment={

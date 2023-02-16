@@ -12,6 +12,7 @@ import { closeLeftSideBar } from '../../store/reducers/leftSideBarState';
 import { logoutUser } from '../../api/usersApi';
 import { setAuth, setLoading } from '../../store/reducers/authSlice';
 import { removeToken } from '../../utils/common';
+import Search from '../Search/Search';
 
 export default function LeftSideBar() {
   const location = useLocation();
@@ -120,7 +121,12 @@ export default function LeftSideBar() {
           display: { xs: 'block', sm: 'none' },
         }}
       >
-        <Box>{drawer}</Box>
+        <Box>
+          <Box sx={{ m: '16px' }}>
+            <Search />
+          </Box>
+          <Box>{drawer}</Box>
+        </Box>
       </Drawer>
 
       <Box

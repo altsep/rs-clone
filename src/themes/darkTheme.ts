@@ -19,6 +19,12 @@ const darkTheme: Theme = createTheme({
       secondary: grey.A400,
     },
   },
+  typography: {
+    subtitle2: {
+      fontFamily: '"Lato", sans-serif',
+      color: lightBlue[600],
+    },
+  },
   components: {
     MuiTextField: {
       styleOverrides: {

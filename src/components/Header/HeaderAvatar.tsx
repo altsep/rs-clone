@@ -5,7 +5,13 @@ import { useAppSelector } from '../../hooks/redux';
 export default function HeaderAvatar() {
   const user = useAppSelector((state) => state.users.authorizedUser);
   return (
-    <Box sx={{ flex: '0 1 30%', display: 'flex', justifyContent: 'flex-end' }}>
+    <Box
+      sx={{
+        flex: '0 1 30%',
+        justifyContent: 'flex-end',
+        display: { xs: 'none', sm: 'flex', mr: '10px' },
+      }}
+    >
       <Link to={`/${user?.alias ? user.alias : `id${user?.id as number}`}`}>
         <Avatar
           src={user?.avatarURL}
@@ -13,7 +19,6 @@ export default function HeaderAvatar() {
           sx={{
             width: '50px',
             height: '50px',
-            display: { xs: 'none', sm: 'flex', mr: '10px' },
           }}
         />
       </Link>
