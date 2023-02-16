@@ -95,5 +95,13 @@
     }
   },
   "search": "Пользователи не найдены",
-  "searchPlaceholder": "Найдите друзей"
+  "searchPlaceholder": "Найдите друзей",
+  "sideBar": {
+    "profile": "Профиль",
+    "messages": "Сообщения",
+    "friends": "Друзья",
+    "settings": "Настройки",
+    "logout": "Выход"
+  }
+
 }

@@ -95,5 +95,12 @@
     }
   },
   "search": "Usuarios no encontrados",
-  "searchPlaceholder": "Encontrar amigos"
+  "searchPlaceholder": "Encontrar amigos",
+  "sideBar": {
+    "profile": "Perfil",
+    "messages": "Mensajes",
+    "friends": "Amigos",
+    "settings": "Configuraciones",
+    "logout": "Cerrar sesión"
+  }
 }
