@@ -97,8 +97,8 @@ export default function RegistrationForm() {
       const resData = (await res?.json()) as ILogin;
       const { accessToken, user } = resData;
       setToken(accessToken);
-      dispatch(setAuth(true));
-      dispatch(setUser(user));
+      // dispatch(setAuth(true));
+      // dispatch(setUser(user));
     } else {
       setRegistrationSuccess(false);
       setRegistrationError(email);

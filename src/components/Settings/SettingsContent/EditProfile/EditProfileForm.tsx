@@ -48,7 +48,8 @@ export default function EditProfileForm() {
       .string()
       .nullable()
       .transform((value: string, origin: string) => (origin === '' ? null : value))
-      .matches(/^(\S*$){3,}/),
+      .min(5)
+      .test('alias', (value: string | null | undefined): boolean => (value === null ? true : !value?.includes(' '))),
   });
 
   const defaultValues: IEditFormValues = {

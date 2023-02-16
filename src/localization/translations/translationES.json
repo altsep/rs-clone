@@ -52,7 +52,7 @@
         "validation": "Fecha no válida. La edad no puede ser inferior a 14"
       },
       "alias": {
-        "validation": "Es demasiado corto. El alias debe tener al menos 3 caracteres. No se permiten espacios en blanco"
+        "validation": "El alias debe tener al menos 5 caracteres. No se permiten espacios en blanco"
       }
     },
     "registrationErrors": {

@@ -52,7 +52,7 @@
         "validation": "Invalid date. Age cannot be less than 14"
       },
       "alias": {
-        "validation": "It's too short. Alias must be at least 3 characters long"
+        "validation": "Alias must be at least 5 characters long. Whitespaces not allowed"
       }
     },
     "registrationErrors": {

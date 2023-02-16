@@ -24,7 +24,7 @@ export default function SettingsMenu() {
   });
 
   return (
-    <Box sx={{ flex: '0 1 30%', pr: '15px', pt: '20px', pl: '20px', pb: '20px' }}>
+    <Box sx={{ flex: { xs: '0 1 auto', md: '0 1 30%' }, pr: '15px', pt: '20px', pl: '20px', pb: '20px' }}>
       <List component="nav">
         <MenuItemWrapper
           divider
@@ -33,10 +33,12 @@ export default function SettingsMenu() {
         >
           <Link to="edit-profile">
             <PersonOutlinedIcon fontSize="small" sx={{ mr: '15px' }} />
-            <Typography variant="body2" sx={{ flex: 1 }}>
+            <Typography variant="body2" sx={{ flex: 1, mr: '20px' }}>
               {t('settings.menu.editProfile')}
             </Typography>
-            {activeItem === 'edit' && <ArrowForwardIosIcon fontSize="small" />}
+            {activeItem === 'edit' && (
+              <ArrowForwardIosIcon fontSize="small" sx={{ display: { xs: 'none', md: 'block' } }} />
+            )}
           </Link>
         </MenuItemWrapper>
         <MenuItemWrapper
@@ -46,11 +48,13 @@ export default function SettingsMenu() {
         >
           <Link to="language">
             <TranslateOutlinedIcon fontSize="small" sx={{ mr: '15px' }} />
-            <Typography variant="body2" sx={{ flex: 1 }}>
+            <Typography variant="body2" sx={{ flex: 1, mr: '20px' }}>
               {' '}
               {t('settings.menu.language')}
             </Typography>
-            {activeItem === 'language' && <ArrowForwardIosIcon fontSize="small" />}
+            {activeItem === 'language' && (
+              <ArrowForwardIosIcon fontSize="small" sx={{ display: { xs: 'none', md: 'block' } }} />
+            )}
           </Link>
         </MenuItemWrapper>
         <MenuItemWrapper
@@ -60,11 +64,13 @@ export default function SettingsMenu() {
         >
           <Link to="theme">
             <LightModeIcon fontSize="small" sx={{ mr: '15px' }} />
-            <Typography variant="body2" sx={{ flex: 1 }}>
+            <Typography variant="body2" sx={{ flex: 1, mr: '20px' }}>
               {' '}
               {t('settings.menu.theme')}
             </Typography>
-            {activeItem === 'theme' && <ArrowForwardIosIcon fontSize="small" />}
+            {activeItem === 'theme' && (
+              <ArrowForwardIosIcon fontSize="small" sx={{ display: { xs: 'none', md: 'block' } }} />
+            )}
           </Link>
         </MenuItemWrapper>
       </List>
