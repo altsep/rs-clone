@@ -28,6 +28,11 @@ export default function useMessagesWs() {
         if (type === 'system') {
           console.log('WS (messages): %s', payload);
         }
+
+        if (type === 'watch') {
+          console.log('WS (messages): %s', 'Message received.');
+          console.log(payload);
+        }
       }
     };
 
