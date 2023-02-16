@@ -4,19 +4,18 @@ import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternate
 import useSWRMutation from 'swr/mutation';
 import { API_BASE_URL, ApiPath } from '../../constants';
 import { addPost } from '../../api/postsApi';
-import { AddPostArg } from '../../types/postsApi';
+import { TAddPostArg } from '../../types/postsApi';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { changeCreatePost } from '../../store/reducers/inputsState';
 import { updateUser } from '../../api/usersApi';
-import { UpdateUserArg } from '../../types/usersApi';
-import { idAuthorizedUser } from '../../mock-data/data';
+import { TUpdateUserArg } from '../../types/usersApi';
 import ClickableAvatar from '../ClickableAvatar';
 import { addPostInState } from '../../store/reducers/postsState';
 import { updateUserInState } from '../../store/reducers/usersState';
 
 export default function PostCreator() {
   const dispatch = useAppDispatch();
-  const { idCurrentProfile, currentProfile, authorizedUser } = useAppSelector((state) => state.users);
+  const { idCurrentProfile, currentProfile, authorizedUser, idAuthorizedUser } = useAppSelector((state) => state.users);
   const { valueCreatePost } = useAppSelector((state) => state.inputs);
 
   const { trigger: triggerAddPost } = useSWRMutation(`${API_BASE_URL}${ApiPath.posts}`, addPost, { revalidate: false });
@@ -26,14 +25,13 @@ export default function PostCreator() {
   );
 
   const handleClickCreatePost = async (): Promise<void> => {
-    const argAddPost: AddPostArg = {
-      createdAt: new Date(Date.now()).toISOString(),
+    const argAddPost: TAddPostArg = {
       description: valueCreatePost,
       userId: idAuthorizedUser,
     };
     const responseDataAppPost = await triggerAddPost(argAddPost);
     if (responseDataAppPost && currentProfile) {
-      const argUpdateUser: UpdateUserArg = {
+      const argUpdateUser: TUpdateUserArg = {
         postsIds: currentProfile.postsIds
           ? [...currentProfile.postsIds, responseDataAppPost.id]
           : [responseDataAppPost.id],
@@ -47,36 +45,35 @@ export default function PostCreator() {
     dispatch(changeCreatePost(''));
   };
 
-  const handleKeyDownCreatePost = async (e: React.KeyboardEvent<HTMLDivElement>): Promise<void> => {
-    if (e.key === 'Enter' && valueCreatePost) {
-      await handleClickCreatePost();
-    }
-  };
-
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
     dispatch(changeCreatePost(e.target.value));
   };
 
   return (
-    <Card>
+    <Card sx={{ borderRadius: 4, boxShadow: { xs: 4, md: 0 } }}>
       <Box>
-        <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+        <CardContent sx={{ display: 'flex', gap: 2 }}>
           {authorizedUser ? (
-            <ClickableAvatar user={authorizedUser} />
+            <Box sx={{ mt: '8px' }}>
+              <ClickableAvatar user={authorizedUser} />
+            </Box>
           ) : (
             <Skeleton variant="circular">
               <Avatar />
             </Skeleton>
           )}
           <TextField
+            multiline
             onChange={handleChangeInput}
-            onKeyDown={handleKeyDownCreatePost}
             label="What's happening?"
             value={valueCreatePost}
-            sx={{ flexGrow: '1' }}
+            sx={{
+              flexGrow: '1',
+            }}
           />
         </CardContent>
       </Box>
+
       <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Button aria-label="Upload photo" sx={{ gap: 1 }}>
           <AddPhotoAlternateOutlinedIcon />

@@ -1,4 +1,4 @@
-import { IPost, IUser } from './data';
+import { IComment, IPost, IUser } from './data';
 
 interface IInputsState {
   valueCreatePost: string;
@@ -15,6 +15,9 @@ type TUsersState = {
   authorizedUser: IUser | null;
   idAuthorizedUser: number;
   defineUserCompleted: boolean;
+  authorizedUserFriends: IUser[];
+  authorizedUserPendingFriends: IUser[];
+  messagesWs: WebSocket | null;
 };
 
 type TThemeState = {
@@ -37,4 +40,17 @@ type TPostsState = {
   currentProfilePosts: IPost[] | null;
 };
 
-export type { IInputsState, ILeftSideBarState, TUsersState, TPostsState, TThemeState, TAuthState, TLoginFormState };
+type TCommentsState = {
+  comments: IComment[];
+};
+
+export type {
+  IInputsState,
+  ILeftSideBarState,
+  TUsersState,
+  TPostsState,
+  TCommentsState,
+  TThemeState,
+  TAuthState,
+  TLoginFormState,
+};

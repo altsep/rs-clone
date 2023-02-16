@@ -31,6 +31,7 @@ interface IUser {
   avatarURL?: string;
   postsIds?: number[];
   friendsIds?: number[];
+  pendingFriendsIds?: number[];
 }
 
 interface ILogin {

@@ -1,23 +1,32 @@
 import { IUser } from './data';
 import { IEditFormValues, IFormValues, TLoginValues } from './formValues';
 
-type AddUserArg = Pick<IUser, 'name' | 'email' | 'password' | 'country' | 'birthDate' | 'createdAt' | 'alias'>;
+type TAddUserArg = Pick<IUser, 'name' | 'email' | 'password' | 'country' | 'birthDate' | 'createdAt' | 'alias'>;
 
-type UpdateUserArg = Partial<
+type TUpdateUserArg = Partial<
   Pick<
     IUser,
-    'name' | 'email' | 'password' | 'country' | 'birthDate' | 'alias' | 'avatarURL' | 'postsIds' | 'friendsIds'
+    | 'name'
+    | 'email'
+    | 'password'
+    | 'country'
+    | 'birthDate'
+    | 'alias'
+    | 'avatarURL'
+    | 'postsIds'
+    | 'friendsIds'
+    | 'pendingFriendsIds'
   >
 >;
 
-type HideUserArg = Pick<IUser, 'password'>;
+type THideUserArg = Pick<IUser, 'password'>;
 
 interface IAddUserProps {
-  arg: AddUserArg;
+  arg: TAddUserArg;
 }
 
 interface IUpdateUserProps {
-  arg: UpdateUserArg;
+  arg: TUpdateUserArg;
 }
 
 interface IEditUserProps {
@@ -25,7 +34,7 @@ interface IEditUserProps {
 }
 
 interface IHideUserProps {
-  arg: HideUserArg;
+  arg: THideUserArg;
 }
 
 interface ILoginUser {
@@ -37,9 +46,9 @@ interface IRegistrationUser {
 }
 
 export type {
-  AddUserArg,
-  UpdateUserArg,
-  HideUserArg,
+  TAddUserArg,
+  TUpdateUserArg,
+  THideUserArg,
   IAddUserProps,
   IUpdateUserProps,
   IHideUserProps,
