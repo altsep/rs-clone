@@ -12,7 +12,7 @@ import Profile from './pages/Profile';
 import { ApiPath, API_BASE_URL, KEY_LOCAL_STORAGE, LSKeys, RoutePath } from './constants';
 import { refreshToken } from './api/usersApi';
 import { ILogin } from './types/data';
-import { getToken, removeToken, setToken } from './utils/common';
+import { getToken, setToken } from './utils/common';
 import { setAuth, setAuthError, setLoading } from './store/reducers/authSlice';
 import { setUser, usersLoadingSuccess } from './store/reducers/usersState';
 import Messages from './pages/Messages';
@@ -51,7 +51,6 @@ function App() {
         throw new Error('Authorisation error. Re-login required');
       }
     } catch {
-      removeToken();
       dispatch(setAuthError(true));
     } finally {
       dispatch(setLoading(false));
