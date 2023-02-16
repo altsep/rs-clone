@@ -1,4 +1,4 @@
-import { IComment, IPost, IUser } from './data';
+import { IChat, IComment, IMessage, IPost, IUser } from './data';
 
 interface IInputsState {
   valueCreatePost: string;
@@ -44,6 +44,12 @@ type TCommentsState = {
   comments: IComment[];
 };
 
+type TChatsState = {
+  chats: IChat[];
+  currentChatIndex: number;
+  currentChatMessages: IMessage[];
+};
+
 export type {
   IInputsState,
   ILeftSideBarState,
@@ -53,4 +59,5 @@ export type {
   TThemeState,
   TAuthState,
   TLoginFormState,
+  TChatsState,
 };
