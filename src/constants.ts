@@ -1,4 +1,5 @@
 const API_BASE_URL = 'http://localhost:3000/api';
+const WS_BASE_URL = 'ws://localhost:3000/';
 
 const KEY_LOCAL_STORAGE = 'rs-clone-krevetka87-altsep-metalknock';
 
@@ -58,6 +59,7 @@ const locales: { [key: string]: string } = {
 const themes = ['light', 'dark'];
 
 export {
+  WS_BASE_URL,
   API_BASE_URL,
   KEY_LOCAL_STORAGE,
   ApiPath,

@@ -17,6 +17,7 @@ type TUsersState = {
   defineUserCompleted: boolean;
   authorizedUserFriends: IUser[];
   authorizedUserPendingFriends: IUser[];
+  messagesWs: WebSocket | null;
 };
 
 type TThemeState = {
