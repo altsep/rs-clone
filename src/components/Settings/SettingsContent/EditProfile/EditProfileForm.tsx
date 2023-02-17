@@ -1,24 +1,27 @@
 import * as yup from 'yup';
 import moment from 'moment';
-import { Box, Button, Grid, InputLabel, TextField, TextFieldProps } from '@mui/material';
+import { Box, Button, FormHelperText, Grid, InputLabel, TextField, TextFieldProps } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import useSWRMutation from 'swr/mutation';
 import { useTranslation } from 'react-i18next';
 import { DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import { useState } from 'react';
 import { ApiPath, API_BASE_URL } from '../../../../constants';
 import EditProfileInput from './EditProfileInput';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/redux';
 import { editUser } from '../../../../api/usersApi';
 import { setUser, updateUserInState } from '../../../../store/reducers/usersState';
 import { IEditFormValues } from '../../../../types/formValues';
+import { IUser } from '../../../../types/data';
 
 export default function EditProfileForm() {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const userId = useAppSelector((state) => state.users.idAuthorizedUser);
   const authUser = useAppSelector((state) => state.users.authorizedUser);
+  const [alias, setAlias] = useState<string | undefined>('');
 
   const schema = yup.object().shape({
     email: yup.string().email(),
@@ -75,20 +78,32 @@ export default function EditProfileForm() {
   const { trigger } = useSWRMutation(`${API_BASE_URL}${ApiPath.users}/${userId}`, editUser);
 
   const update = async (data: Partial<IEditFormValues>): Promise<void> => {
+    setAlias('');
+
     const filteredData: Partial<IEditFormValues> = Object.fromEntries(Object.entries(data).filter((el) => el[1]));
 
     if (filteredData.birthDate) {
       filteredData.birthDate = new Date(filteredData.birthDate).toISOString();
     }
+    try {
+      const res = await trigger(filteredData);
 
-    const user = await trigger(filteredData);
-    if (user) {
-      dispatch(setUser(user));
-      dispatch(updateUserInState(user));
+      if (res?.ok) {
+        const user = (await res.json()) as IUser;
+        dispatch(setUser(user));
+        dispatch(updateUserInState(user));
+      } else {
+        throw new Error('Invalid value');
+      }
+    } catch {
+      setAlias(filteredData.alias);
     }
   };
 
-  const resetForm = (): void => reset(defaultValues);
+  const resetForm = (): void => {
+    reset(defaultValues);
+    setAlias('');
+  };
 
   return (
     <Box component="form" sx={{ display: 'flex', flexDirection: 'column' }} onSubmit={handleSubmit(update)}>
@@ -110,6 +125,7 @@ export default function EditProfileForm() {
           >
             {t('settings.editProfile.form.alias')}
           </EditProfileInput>
+          {alias && <FormHelperText error>{t('settings.editProfile.aliasError', { alias })}</FormHelperText>}
         </Grid>
         <Grid item xs={12} md={6}>
           <EditProfileInput

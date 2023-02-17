@@ -83,7 +83,7 @@ const refreshToken = async (url: string): Promise<Response> => {
   return res;
 };
 
-const editUser = async (url: string, { arg }: IEditUserProps): Promise<IUser> => {
+const editUser = async (url: string, { arg }: IEditUserProps): Promise<Response> => {
   const response = await fetch(url, {
     method: 'PATCH',
     credentials: 'include',
@@ -92,7 +92,7 @@ const editUser = async (url: string, { arg }: IEditUserProps): Promise<IUser> =>
     },
     body: JSON.stringify(arg),
   });
-  return (await response.json()) as IUser;
+  return response;
 };
 
 export { addUser, updateUser, hideUser, loginUser, registerUser, refreshToken, logoutUser, editUser };

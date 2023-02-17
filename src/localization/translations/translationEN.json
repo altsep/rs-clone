@@ -11,7 +11,8 @@
       "password": "Password is required"
     },
     "loginError": "Wrong password or email address",
-    "authError": "Authorisation error. Re-login required"
+    "authError": "Authorisation error. Re-login required",
+    "confirmError": "Authorisation error. Email confirmation required"
   },
   "registration": {
     "title": "Sign Up",
@@ -87,7 +88,8 @@
         "country": "Country",
         "birthDate": "Birthdate",
         "password": "Password"
-      }
+      },
+      "aliasError": "Invalid value or user {{ alias }} already exist"
     },
     "buttons": {
       "save": "Save",
@@ -102,5 +104,44 @@
     "friends": "Friends",
     "settings": "Settings",
     "logout": "Logout"
+  },
+  "friends": {
+    "friends": "Friends",
+    "friendRequests": "Friend requests",
+    "friendsEmpty": "Empty. First add someone as a friend.",
+    "requestsEmpty": "Empty. You don't have friend requests.",
+    "friendCard": {
+      "message": "Write message",
+      "remove": "Remove friend",
+      "accept": "Accept",
+      "ignore": "Ignore"
+    }
+  },
+  "profile": {
+    "header": {
+      "editCover": "Edit Cover",
+      "editInfo": "Edit Basic Info",
+      "acceptRequest": "Accept friend request",
+      "message": "Write message",
+      "sentRequest": "Friend request sent",
+      "addFriend": "Add friend"
+    },
+    "addPost": {
+      "label": "What's happening?",
+      "button": "Post",
+      "photo": "Photo"
+    },
+    "friends": {
+      "title": "Friends",
+      "content": "Empty. First add someone as a friend."
+    },
+    "post": {
+      "delete": "Delete post",
+      "edit": "Edit",
+      "like": "Like",
+      "comments": "Comments",
+      "share": "Share",
+      "placeholder": "Write a comment..."
+    }
   }
 }

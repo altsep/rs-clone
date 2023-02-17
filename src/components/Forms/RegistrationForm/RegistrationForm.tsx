@@ -27,11 +27,8 @@ import { IFormValues } from '../../../types/formValues';
 import FormInput from '../FormElements/FormInput';
 import { ApiPath, API_BASE_URL } from '../../../constants';
 import { registerUser } from '../../../api/usersApi';
-import { setToken } from '../../../utils/common';
-import { ILogin } from '../../../types/data';
 import { useAppDispatch } from '../../../hooks/redux';
-import { setAuth, setAuthError } from '../../../store/reducers/authSlice';
-import { setUser } from '../../../store/reducers/usersState';
+import { setAuthError } from '../../../store/reducers/authSlice';
 
 export default function RegistrationForm() {
   const dispatch = useAppDispatch();
@@ -94,11 +91,6 @@ export default function RegistrationForm() {
     if (res?.ok) {
       setRegistrationError('');
       setRegistrationSuccess(true);
-      const resData = (await res?.json()) as ILogin;
-      const { accessToken, user } = resData;
-      setToken(accessToken);
-      // dispatch(setAuth(true));
-      // dispatch(setUser(user));
     } else {
       setRegistrationSuccess(false);
       setRegistrationError(email);

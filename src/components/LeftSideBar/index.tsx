@@ -7,7 +7,7 @@ import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import { useTranslation } from 'react-i18next';
 import { TSideBarButtonsInfo } from '../../types/sideBar';
-import { ApiPath, API_BASE_URL, RoutePath } from '../../constants';
+import { ApiPath, API_BASE_URL, KEY_LOCAL_STORAGE, LSKeys, RoutePath } from '../../constants';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { closeLeftSideBar } from '../../store/reducers/leftSideBarState';
 import { logoutUser } from '../../api/usersApi';
@@ -31,6 +31,7 @@ export default function LeftSideBar() {
       removeToken();
       dispatch(setAuth(false));
       dispatch(setLoading(false));
+      localStorage.removeItem(`${LSKeys.path}_${KEY_LOCAL_STORAGE}`);
       navigate('/');
     }
   };

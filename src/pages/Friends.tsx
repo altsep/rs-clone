@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Container, Grid, Stack, Tab, Tabs, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import FriendCard from '../components/FriendCard';
 import LeftSideBar from '../components/LeftSideBar';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
@@ -7,6 +8,7 @@ import { defineFriends, definePendingFriends } from '../store/reducers/usersStat
 import TabPanel from '../components/TabPanel';
 
 export default function Friends() {
+  const { t } = useTranslation();
   const [value, setValue] = useState(0);
 
   const dispatch = useAppDispatch();
@@ -31,8 +33,8 @@ export default function Friends() {
         <LeftSideBar />
         <Box sx={{ borderRadius: 4, boxShadow: 4, bgcolor: 'secondary.main', width: '100%' }}>
           <Tabs variant="fullWidth" value={value} onChange={handleChangeTabs} aria-label="basic tabs example">
-            <Tab label="Friends" id="simple-tab-0" aria-controls="simple-tabpanel-0" />
-            <Tab label="Friend requests" id="simple-tab-1" aria-controls="simple-tabpanel-1" />
+            <Tab label={t('friends.friends')} id="simple-tab-0" aria-controls="simple-tabpanel-0" />
+            <Tab label={t('friends.friendRequests')} id="simple-tab-1" aria-controls="simple-tabpanel-1" />
           </Tabs>
           {authorizedUserFriends.length !== 0 ? (
             <TabPanel value={value} index={0}>
@@ -47,7 +49,7 @@ export default function Friends() {
               <Grid container spacing={2}>
                 <Grid item xs={12} sx={{ justifyContent: 'center', alignItems: 'center', height: '100%' }}>
                   <Typography variant="h5" sx={{ textAlign: 'center' }}>
-                    Empty. First add someone as a friend.
+                    {t('friends.friendsEmpty')}
                   </Typography>
                 </Grid>
               </Grid>
@@ -66,7 +68,7 @@ export default function Friends() {
               <Grid container spacing={2}>
                 <Grid item xs={12} sx={{ justifyContent: 'center', alignItems: 'center', height: '100%' }}>
                   <Typography variant="h5" sx={{ textAlign: 'center' }}>
-                    Empty. You don&apos;t have friend requests.
+                    {t('friends.requestsEmpty')}
                   </Typography>
                 </Grid>
               </Grid>
