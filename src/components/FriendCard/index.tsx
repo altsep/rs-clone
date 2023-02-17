@@ -8,6 +8,8 @@ import { ApiPath, API_BASE_URL, RoutePath } from '../../constants';
 import { updateUser } from '../../api/usersApi';
 import { TUpdateUserArg } from '../../types/usersApi';
 import { updateUserInState } from '../../store/reducers/usersState';
+import { addChat } from '../../api/chatsApi';
+import { setCurrentChat } from '../../store/reducers/chatsState';
 
 interface IFriendCardProps {
   user: IUser;
@@ -19,6 +21,8 @@ export default function FriendCard({ user, isRequest }: IFriendCardProps) {
 
   const dispatch = useAppDispatch();
   const { idAuthorizedUser, authorizedUser } = useAppSelector((state) => state.users);
+  const { usersIdsOfExistingChats } = useAppSelector((state) => state.chats);
+
   const { trigger: triggerUpdateAuthorizedUser } = useSWRMutation(
     `${API_BASE_URL}${ApiPath.users}/${idAuthorizedUser}`,
     updateUser
@@ -27,6 +31,7 @@ export default function FriendCard({ user, isRequest }: IFriendCardProps) {
     `${API_BASE_URL}${ApiPath.users}/${user.id}`,
     updateUser
   );
+  const { trigger: triggerAddChat } = useSWRMutation(`${API_BASE_URL}${ApiPath.chats}`, addChat);
 
   const handleClickIgnore = async () => {
     if (authorizedUser) {
@@ -91,8 +96,13 @@ export default function FriendCard({ user, isRequest }: IFriendCardProps) {
     }
   };
 
-  const handleClickWriteMessage = () => {
-    navigate(`${RoutePath.messages}`);
+  const handleClickWriteMessage = async () => {
+    if (!usersIdsOfExistingChats.includes(user.id)) {
+      const argAddChat = { userIds: [idAuthorizedUser, user.id] };
+      await triggerAddChat(argAddChat);
+    }
+    dispatch(setCurrentChat(user.id));
+    navigate(`${RoutePath.messages}/${user.id}`);
   };
 
   return (

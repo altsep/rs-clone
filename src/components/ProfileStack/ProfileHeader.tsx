@@ -8,8 +8,8 @@ import { TUpdateUserArg } from '../../types/usersApi';
 import temporary from '../../assets/temporary-2.webp';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { updateUserInState } from '../../store/reducers/usersState';
-import { setUserIdForWritingMessage } from '../../store/reducers/chatsState';
 import { addChat } from '../../api/chatsApi';
+import { setCurrentChat } from '../../store/reducers/chatsState';
 
 export default function ProfileHeader() {
   const navigate = useNavigate();
@@ -67,30 +67,12 @@ export default function ProfileHeader() {
   };
 
   const handleClickWriteMessage = async () => {
-    // if (!usersIdsOfExistingChats.includes(idCurrentProfile)) {
-    //   const argAddChat = { userIds: [idAuthorizedUser, idCurrentProfile] };
-    //   await triggerAddChat(argAddChat);
-    // }
-    // navigate(`${RoutePath.messages}`);
-    // dispatch(setUserIdForWritingMessage(idCurrentProfile));
-
-    // await fetch(`${API_BASE_URL}${ApiPath.chats}`, {
-    //   method: 'POST',
-    //   credentials: 'include',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify(arg),
-    // });
-    await fetch(`http://localhost:3000/api/chats`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        userIds: [31, 15],
-      }),
-    });
+    if (!usersIdsOfExistingChats.includes(idCurrentProfile)) {
+      const argAddChat = { userIds: [idAuthorizedUser, idCurrentProfile] };
+      await triggerAddChat(argAddChat);
+    }
+    dispatch(setCurrentChat(idCurrentProfile));
+    navigate(`${RoutePath.messages}/${idCurrentProfile}`);
   };
 
   return (

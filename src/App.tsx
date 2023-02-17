@@ -27,15 +27,19 @@ import useComments from './hooks/useComments';
 import { commentsLoadingSuccess } from './store/reducers/commentsState';
 import NotAuthRoute from './hoc/NotAuthRoute';
 import useMessagesWs from './hooks/useMessagesWs';
+import useUserChats from './hooks/useUserChats';
+import { setChats, setUsersIdsOfExistingChats } from './store/reducers/chatsState';
 
 function App() {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const theme = useAppSelector((state) => state.theme.mode);
+  const { idAuthorizedUser } = useAppSelector((state) => state.users);
 
   const { users, isLoadingUsers, isValidatingUsers } = useUsers();
   const { posts, isLoadingPosts, isValidatingPosts } = usePosts();
   const { comments, isLoadingComments, isValidatingComments } = useComments();
+  const { userChats, isErrorUserChats } = useUserChats(idAuthorizedUser);
 
   const { trigger } = useSWRMutation(`${API_BASE_URL}${ApiPath.refresh}`, refreshToken);
 
@@ -100,6 +104,13 @@ function App() {
     isValidatingComments,
     dispatch,
   ]);
+
+  useEffect(() => {
+    if (userChats && idAuthorizedUser && !isErrorUserChats) {
+      dispatch(setChats(userChats));
+      dispatch(setUsersIdsOfExistingChats(idAuthorizedUser));
+    }
+  }, [dispatch, userChats, idAuthorizedUser, isErrorUserChats]);
 
   return (
     <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>

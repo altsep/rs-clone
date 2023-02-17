@@ -49,7 +49,6 @@ type TChatsState = {
   currentChatIndex: number;
   currentChatMessages: IMessage[];
   usersIdsOfExistingChats: number[];
-  userIdForWritingMessage: number;
 };
 
 export type {

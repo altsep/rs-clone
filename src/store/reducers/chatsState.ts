@@ -8,8 +8,6 @@ const initialState: TChatsState = {
   currentChatIndex: 0,
   currentChatMessages: [],
   usersIdsOfExistingChats: [],
-  // CHANGE_NAME
-  userIdForWritingMessage: 0,
 };
 
 const chatsStateSlice = createSlice({
@@ -27,7 +25,7 @@ const chatsStateSlice = createSlice({
     setCurrentChat(state, action: PayloadAction<number>) {
       state.currentChatIndex = state.chats.findIndex((chat) => chat.userIds.includes(action.payload));
 
-      if (state.chats.length > 0) {
+      if (state.chats.length > 0 && state.currentChatIndex !== -1) {
         state.currentChatMessages = state.chats[state.currentChatIndex].messages;
       }
     },
@@ -39,14 +37,9 @@ const chatsStateSlice = createSlice({
         state.currentChatMessages.push(action.payload);
       }
     },
-    // CHANGE_NAME
-    setUserIdForWritingMessage(state, action: PayloadAction<number>) {
-      state.userIdForWritingMessage = action.payload;
-    },
   },
 });
 
-export const { setChats, addMessage, setCurrentChat, setUsersIdsOfExistingChats, setUserIdForWritingMessage } =
-  chatsStateSlice.actions;
+export const { setChats, addMessage, setCurrentChat, setUsersIdsOfExistingChats } = chatsStateSlice.actions;
 
 export const chatsState = chatsStateSlice.reducer;
