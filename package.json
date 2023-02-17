@@ -8,8 +8,10 @@
   ],
   "license": "MIT",
   "private": true,
+  "proxy": "http://localhost:3000",
   "scripts": {
     "start": "webpack serve --mode=development",
+    "start:prod": "webpack serve --mode=production",
     "build": "webpack --mode=production",
     "test": "jest",
     "lint": "tsc && eslint . --ext .js,.jsx,.ts,.tsx",

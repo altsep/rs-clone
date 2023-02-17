@@ -44,7 +44,6 @@ const config = {
       template: './public/index.html',
     }),
     new ForkTsCheckerWebpackPlugin(),
-    new Dotenv(),
   ],
   optimization: {
     minimizer: [
@@ -64,6 +63,9 @@ const config = {
         warnings: false,
       },
     },
+    proxy: {
+      '/api': 'http://localhost:3000',
+    },
   },
   watchOptions: {
     ignored: '**/node_modules',
@@ -81,6 +83,10 @@ module.exports = (_env, argv) => {
     config.plugins.push(new ESLintPlugin());
     config.devtool = 'source-map';
   }
+
+  config.plugins.push(
+    new Dotenv()
+  );
 
   config.output.filename = filename('js');
 
