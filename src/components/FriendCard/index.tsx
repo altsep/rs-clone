@@ -4,7 +4,7 @@ import { Button, Card, CardActionArea, CardActions, CardHeader, Grid } from '@mu
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { IUser } from '../../types/data';
 import ClickableAvatar from '../ClickableAvatar';
-import { ApiPath, API_BASE_URL } from '../../constants';
+import { ApiPath, API_BASE_URL, RoutePath } from '../../constants';
 import { updateUser } from '../../api/usersApi';
 import { TUpdateUserArg } from '../../types/usersApi';
 import { updateUserInState } from '../../store/reducers/usersState';
@@ -91,6 +91,10 @@ export default function FriendCard({ user, isRequest }: IFriendCardProps) {
     }
   };
 
+  const handleClickWriteMessage = () => {
+    navigate(`${RoutePath.messages}`);
+  };
+
   return (
     <Grid item xs={12 / 1} sm={12 / 2} md={12 / 3} sx={{ minHeight: '100%' }}>
       <Card
@@ -124,7 +128,7 @@ export default function FriendCard({ user, isRequest }: IFriendCardProps) {
             </>
           ) : (
             <>
-              <Button variant="contained" sx={{ flexGrow: 1 }}>
+              <Button variant="contained" onClick={handleClickWriteMessage} sx={{ flexGrow: 1 }}>
                 Write message
               </Button>
               <Button variant="outlined" onClick={handleClickRemoveFriend} sx={{ flexGrow: 1, ml: '0!important' }}>

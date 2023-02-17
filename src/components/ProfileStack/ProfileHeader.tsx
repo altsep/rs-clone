@@ -8,12 +8,15 @@ import { TUpdateUserArg } from '../../types/usersApi';
 import temporary from '../../assets/temporary-2.webp';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { updateUserInState } from '../../store/reducers/usersState';
+import { setUserIdForWritingMessage } from '../../store/reducers/chatsState';
+import { addChat } from '../../api/chatsApi';
 
 export default function ProfileHeader() {
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
   const { idCurrentProfile, idAuthorizedUser, currentProfile, authorizedUser } = useAppSelector((state) => state.users);
+  const { usersIdsOfExistingChats } = useAppSelector((state) => state.chats);
 
   const { trigger: triggerUpdateAuthorizedUser } = useSWRMutation(
     `${API_BASE_URL}${ApiPath.users}/${idAuthorizedUser}`,
@@ -23,6 +26,7 @@ export default function ProfileHeader() {
     `${API_BASE_URL}${ApiPath.users}/${idCurrentProfile}`,
     updateUser
   );
+  const { trigger: triggerAddChat } = useSWRMutation(`${API_BASE_URL}${ApiPath.chats}`, addChat);
 
   const handleClickAddFriend = async (): Promise<void> => {
     if (currentProfile) {
@@ -60,6 +64,33 @@ export default function ProfileHeader() {
 
   const handleClickEditBasicInfo = () => {
     navigate(`${RoutePath.settings}`);
+  };
+
+  const handleClickWriteMessage = async () => {
+    // if (!usersIdsOfExistingChats.includes(idCurrentProfile)) {
+    //   const argAddChat = { userIds: [idAuthorizedUser, idCurrentProfile] };
+    //   await triggerAddChat(argAddChat);
+    // }
+    // navigate(`${RoutePath.messages}`);
+    // dispatch(setUserIdForWritingMessage(idCurrentProfile));
+
+    // await fetch(`${API_BASE_URL}${ApiPath.chats}`, {
+    //   method: 'POST',
+    //   credentials: 'include',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify(arg),
+    // });
+    await fetch(`http://localhost:3000/api/chats`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userIds: [31, 15],
+      }),
+    });
   };
 
   return (
@@ -132,7 +163,7 @@ export default function ProfileHeader() {
               </Button>
             )) ||
               (currentProfile?.friendsIds?.includes(idAuthorizedUser) && (
-                <Button variant="contained" sx={{ flexGrow: 1 }}>
+                <Button variant="contained" onClick={handleClickWriteMessage} sx={{ flexGrow: 1 }}>
                   Write message
                 </Button>
               )) ||
