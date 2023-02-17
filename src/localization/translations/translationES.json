@@ -142,6 +142,8 @@
       "comments": "Comentarios",
       "share": "Comparte",
       "placeholder": "Escribe un comentario..."
-    }
+    },
+    "notFound": "Usuario no encontrado",
+    "intro": "introducción"
   }
 }

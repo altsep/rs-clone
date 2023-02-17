@@ -142,6 +142,8 @@
       "comments": "Comments",
       "share": "Share",
       "placeholder": "Write a comment..."
-    }
+    },
+    "notFound": "User not found",
+    "intro": "Intro"
   }
 }
