@@ -1,13 +1,25 @@
-import { Box, Button, Grid } from '@mui/material';
+import { Box, Button, FormHelperText, Grid } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
+import useSWRMutation from 'swr/mutation';
+import { useState } from 'react';
 import EditProfileInput from '../EditProfile/EditProfileInput';
 import { IEditFormValues } from '../../../../types/formValues';
+import { ApiPath, API_BASE_URL } from '../../../../constants';
+import { changePassword } from '../../../../api/usersApi';
+import { useAppDispatch, useAppSelector } from '../../../../hooks/redux';
+import { ILogin } from '../../../../types/data';
+import { setToken } from '../../../../utils/common';
+import { setUser, updateUserInState } from '../../../../store/reducers/usersState';
 
 export default function ChangePassword() {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+  const { idAuthorizedUser } = useAppSelector((state) => state.users);
+  const [successChange, setSuccessChange] = useState<boolean>(false);
+  const [errorChange, setErrorChange] = useState<boolean>(false);
 
   const schema = yup.object().shape({
     password: yup
@@ -32,8 +44,35 @@ export default function ChangePassword() {
     resolver: yupResolver(schema),
   });
 
-  const updatePassword = (data: Pick<IEditFormValues, 'password'>) => console.log(data);
-  const resetPassword = (): void => reset(defaultValues);
+  const { trigger } = useSWRMutation(`${API_BASE_URL}${ApiPath.password}`, changePassword);
+
+  const updatePassword = async (data: Pick<IEditFormValues, 'password'>): Promise<void> => {
+    setSuccessChange(false);
+    setErrorChange(false);
+
+    try {
+      const res: Response | undefined = await trigger({ userId: idAuthorizedUser, password: data.password });
+
+      if (res?.ok) {
+        const resData = (await res.json()) as ILogin;
+        const { accessToken, user } = resData;
+        setToken(accessToken);
+        setSuccessChange(true);
+        dispatch(setUser(user));
+        dispatch(updateUserInState(user));
+      } else {
+        throw new Error('Unsuccessful attempt to change password');
+      }
+    } catch {
+      setErrorChange(true);
+    }
+  };
+
+  const resetPassword = (): void => {
+    reset(defaultValues);
+    setSuccessChange(false);
+    setErrorChange(false);
+  };
 
   return (
     <Box component="form" onSubmit={handleSubmit(updatePassword)} sx={{ minWidth: '100%' }}>
@@ -44,8 +83,12 @@ export default function ChangePassword() {
             name="password"
             control={control}
           >
-            {t('settings.editProfile.form.password')}
+            {t('settings.security.password')}
           </EditProfileInput>
+          {successChange && (
+            <FormHelperText sx={{ color: 'green' }}>{t('settings.security.changeSuccess')}</FormHelperText>
+          )}
+          {errorChange && <FormHelperText error>{t('settings.security.changeError')}</FormHelperText>}
         </Grid>
         <Grid item sx={{ display: 'flex' }}>
           <Button sx={{ mr: '10px', color: 'text.secondary' }} onClick={resetPassword}>

@@ -82,7 +82,10 @@
     },
     "security": {
       "title": "Seguridad",
-      "closeProfile": "Cerrar perfil"
+      "closeProfile": "Cerrar perfil",
+      "password": "Contraseña",
+      "changeSuccess": "Contraseña cambiada exitosamente",
+      "changeError": "Intento fallido de cambio de contraseña. Intentar otra vez"
     },
     "editProfile": {
       "title": "Editar perfil",
@@ -91,8 +94,7 @@
         "email": "Correo electrónico",
         "alias": "Alias",
         "country": "País",
-        "birthDate": "Fecha de nacimiento",
-        "password": "Contraseña"
+        "birthDate": "Fecha de nacimiento"
       },
       "aliasError": "El valor no es válido o el usuario {{ alias }} ya existe"
     },

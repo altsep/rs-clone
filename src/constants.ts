@@ -13,6 +13,7 @@ const enum ApiPath {
   login = '/login',
   logout = '/logout',
   registration = '/registration',
+  password = '/users-pwd',
 }
 
 const enum RoutePath {

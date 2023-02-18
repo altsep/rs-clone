@@ -82,7 +82,10 @@
     },
     "security": {
       "title": "Security",
-      "closeProfile": "Сlose profile"
+      "closeProfile": "Сlose profile",
+      "password": "Password",
+      "changeSuccess": "Password changed successfully",
+      "changeError": "Unsuccessful attempt to change password. Try again"
     },
     "editProfile": {
       "title": "Edit Profile",
@@ -91,8 +94,7 @@
         "email": "Email",
         "alias": "Alias",
         "country": "Country",
-        "birthDate": "Birthdate",
-        "password": "Password"
+        "birthDate": "Birthdate"
       },
       "aliasError": "Invalid value or user {{ alias }} already exist"
     },
