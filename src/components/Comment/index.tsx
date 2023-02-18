@@ -6,7 +6,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 import ClickableAvatar from '../ClickableAvatar';
-import { currentLocales } from '../../mock-data/data';
 import { IComment } from '../../types/data';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { ApiPath, API_BASE_URL } from '../../constants';
@@ -22,6 +21,7 @@ interface ICommentProps {
 }
 
 export default function Comment({ commentData }: ICommentProps) {
+  const currentLocale = useAppSelector((state) => state.language.lang);
   const [isEdit, setIsEdit] = useState(false);
   const [valueInputDescription, setValueInputDescription] = useState(commentData.description);
 
@@ -139,7 +139,7 @@ export default function Comment({ commentData }: ICommentProps) {
         )}
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Typography variant="caption">
-            {new Date(commentData.createdAt).toLocaleString(currentLocales, {
+            {new Date(commentData.createdAt).toLocaleString(currentLocale, {
               day: 'numeric',
               month: 'short',
               hour: '2-digit',

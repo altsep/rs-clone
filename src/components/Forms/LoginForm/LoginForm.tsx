@@ -13,7 +13,7 @@ import FormInput from '../FormElements/FormInput';
 import { ApiPath, API_BASE_URL } from '../../../constants';
 import { loginUser } from '../../../api/usersApi';
 import { ILogin } from '../../../types/data';
-import { setAuth, setAuthError } from '../../../store/reducers/authSlice';
+import { setAuth, setAuthError, setConfirmError } from '../../../store/reducers/authSlice';
 import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
 import { setToken } from '../../../utils/common';
 import { setUser } from '../../../store/reducers/usersState';
@@ -23,6 +23,7 @@ export default function LoginForm() {
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
   const [loginError, setLoginError] = useState<boolean>(false);
   const authError = useAppSelector((state) => state.auth.authError);
+  const confirmError = useAppSelector((state) => state.auth.confirmError);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -48,16 +49,22 @@ export default function LoginForm() {
 
   const onSubmit = async (data: TLoginValues): Promise<void> => {
     dispatch(setAuthError(false));
+    dispatch(setConfirmError(false));
     const res: Response | undefined = await trigger(data);
     if (res?.ok) {
       setLoginError(false);
       const resData = (await res?.json()) as ILogin;
       const { accessToken, user } = resData;
-      const { id } = user;
-      setToken(accessToken);
-      dispatch(setAuth(true));
-      dispatch(setUser(user));
-      navigate(`/id${id}`);
+      const { id, isActivated } = user;
+      if (isActivated) {
+        dispatch(setConfirmError(false));
+        setToken(accessToken);
+        dispatch(setAuth(true));
+        dispatch(setUser(user));
+        navigate(user.alias ? `/${user.alias}` : `/id${id}`);
+      } else {
+        dispatch(setConfirmError(true));
+      }
     } else {
       setLoginError(true);
     }
@@ -123,6 +130,11 @@ export default function LoginForm() {
       {authError && (
         <FormHelperText error sx={{ fontSize: '14px', textAlign: 'center' }}>
           {t('login.authError')}
+        </FormHelperText>
+      )}
+      {confirmError && (
+        <FormHelperText error sx={{ fontSize: '14px', textAlign: 'center' }}>
+          {t('login.confirmError')}
         </FormHelperText>
       )}
     </Box>

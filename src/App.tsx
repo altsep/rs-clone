@@ -26,6 +26,7 @@ import { postsLoadingSuccess } from './store/reducers/postsState';
 import useComments from './hooks/useComments';
 import { commentsLoadingSuccess } from './store/reducers/commentsState';
 import NotAuthRoute from './hoc/NotAuthRoute';
+import Footer from './components/Footer/Footer';
 import useMessagesWs from './hooks/useMessagesWs';
 
 function App() {
@@ -158,7 +159,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Box>
-      <footer />
+      <Footer />
     </ThemeProvider>
   );
 }

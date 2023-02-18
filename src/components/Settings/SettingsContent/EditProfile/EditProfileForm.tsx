@@ -1,31 +1,28 @@
 import * as yup from 'yup';
 import moment from 'moment';
-import { Box, Button, Grid, InputLabel, TextField, TextFieldProps } from '@mui/material';
-import { useForm } from 'react-hook-form';
+import { Box, Button, FormHelperText, Grid, InputLabel, TextField, TextFieldProps } from '@mui/material';
+import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import useSWRMutation from 'swr/mutation';
 import { useTranslation } from 'react-i18next';
 import { DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { useState } from 'react';
-import i18next from 'i18next';
-import { ApiPath, API_BASE_URL, locales } from '../../../../constants';
+import { ApiPath, API_BASE_URL } from '../../../../constants';
 import EditProfileInput from './EditProfileInput';
-import { IUser } from '../../../../types/data';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/redux';
-import { updateUser } from '../../../../api/usersApi';
-import { setUser } from '../../../../store/reducers/usersState';
+import { editUser } from '../../../../api/usersApi';
+import { setUser, updateUserInState } from '../../../../store/reducers/usersState';
+import { IEditFormValues } from '../../../../types/formValues';
+import { IUser } from '../../../../types/data';
 
 export default function EditProfileForm() {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const userId = useAppSelector((state) => state.users.idAuthorizedUser);
   const authUser = useAppSelector((state) => state.users.authorizedUser);
-  const [birthdate, setBirthdate] = useState<string | null>('');
-
-  i18next.on('languageChanged', (lng: string): void => {
-    moment.locale(lng);
-  });
+  const [alias, setAlias] = useState<string | undefined>('');
+  moment.suppressDeprecationWarnings = true;
 
   const schema = yup.object().shape({
     email: yup.string().email(),
@@ -48,53 +45,66 @@ export default function EditProfileForm() {
       .string()
       .nullable()
       .transform((value: string, origin: string) => (origin === '' ? null : value))
-      .test('birthDate', (date: string | undefined | null): boolean =>
-        date === null ? true : moment().diff(moment(date, locales[moment.locale()]), 'years') >= 14
+      .test('birthDate', (date: string | null | undefined): boolean =>
+        date === null || date === undefined ? true : moment().diff(moment(date).format('MM/DD/YYYY'), 'years') >= 14
       ),
     alias: yup
       .string()
       .nullable()
       .transform((value: string, origin: string) => (origin === '' ? null : value))
-      .min(5),
+      .min(5)
+      .test('alias', (value: string | null | undefined): boolean => (value === null ? true : !value?.includes(' '))),
   });
 
-  const defaultValues = {
-    email: authUser?.email,
-    name: authUser?.name,
+  const defaultValues: IEditFormValues = {
+    email: authUser?.email || '',
+    name: authUser?.name || '',
     password: '',
-    country: authUser?.country,
-    birthDate: '',
+    country: authUser?.country || '',
+    birthDate: null,
     alias: authUser?.alias || '',
   };
 
   const {
     handleSubmit,
     control,
-    register,
     reset,
     formState: { errors },
-  } = useForm<Partial<IUser>>({
+  } = useForm<Partial<IEditFormValues>>({
     defaultValues,
     mode: 'onBlur',
     resolver: yupResolver(schema),
   });
 
-  const { trigger } = useSWRMutation(`${API_BASE_URL}${ApiPath.users}/${userId}`, updateUser);
+  const { trigger } = useSWRMutation(`${API_BASE_URL}${ApiPath.users}/${userId}`, editUser);
 
-  const update = async (data: Partial<IUser>): Promise<void> => {
-    const filteredData: Partial<IUser> = Object.fromEntries(Object.entries(data).filter((el) => el[1]));
+  const update = async (data: Partial<IEditFormValues>): Promise<void> => {
+    setAlias('');
+
+    const filteredData: Partial<IEditFormValues> = Object.fromEntries(Object.entries(data).filter((el) => el[1]));
 
     if (filteredData.birthDate) {
       filteredData.birthDate = new Date(filteredData.birthDate).toISOString();
     }
+    try {
+      const res = await trigger(filteredData);
 
-    const user = await trigger(filteredData);
-    if (user) {
-      dispatch(setUser(user));
+      if (res?.ok) {
+        const user = (await res.json()) as IUser;
+        dispatch(setUser(user));
+        dispatch(updateUserInState(user));
+      } else {
+        throw new Error('Invalid value');
+      }
+    } catch {
+      setAlias(filteredData.alias);
     }
   };
 
-  const resetForm = () => reset(defaultValues);
+  const resetForm = (): void => {
+    reset(defaultValues);
+    setAlias('');
+  };
 
   return (
     <Box component="form" sx={{ display: 'flex', flexDirection: 'column' }} onSubmit={handleSubmit(update)}>
@@ -116,6 +126,7 @@ export default function EditProfileForm() {
           >
             {t('settings.editProfile.form.alias')}
           </EditProfileInput>
+          {alias && <FormHelperText error>{t('settings.editProfile.aliasError', { alias })}</FormHelperText>}
         </Grid>
         <Grid item xs={12} md={6}>
           <EditProfileInput
@@ -145,35 +156,45 @@ export default function EditProfileForm() {
           </EditProfileInput>
         </Grid>
         <Grid item xs={12} md={6}>
-          <LocalizationProvider dateAdapter={AdapterMoment}>
-            <DesktopDatePicker
-              OpenPickerButtonProps={{
-                size: 'small',
-              }}
-              value={birthdate}
-              onChange={(val: string | null): void => setBirthdate(val)}
-              renderInput={(props: TextFieldProps): JSX.Element => {
-                return (
-                  <Box>
-                    <InputLabel sx={{ mb: '5px', fontWeight: '700', fontSize: '0.9rem' }}>
-                      {t('settings.editProfile.form.birthDate')}
-                    </InputLabel>
-                    <TextField
-                      type="date"
-                      {...props}
-                      {...register('birthDate')}
-                      size="small"
-                      variant="outlined"
-                      error={!!errors.birthDate}
-                      fullWidth
-                      autoComplete="off"
-                      helperText={errors.birthDate ? t('registration.errors.birthDate.validation') : ''}
-                    />
-                  </Box>
-                );
-              }}
-            />
-          </LocalizationProvider>
+          <Controller
+            name="birthDate"
+            control={control}
+            render={({ field: { onChange, value, onBlur }, fieldState: { error } }) => (
+              <LocalizationProvider dateAdapter={AdapterMoment}>
+                <DesktopDatePicker
+                  OpenPickerButtonProps={{
+                    size: 'small',
+                  }}
+                  maxDate={moment().subtract(14, 'years')}
+                  inputFormat="MM/DD/YYYY"
+                  value={value}
+                  onChange={(val) => {
+                    onChange(val);
+                  }}
+                  renderInput={(props: TextFieldProps): JSX.Element => {
+                    return (
+                      <Box>
+                        <InputLabel sx={{ mb: '5px', fontWeight: '700', fontSize: '0.9rem' }}>
+                          {t('settings.editProfile.form.birthDate')}
+                        </InputLabel>
+                        <TextField
+                          onBlur={onBlur}
+                          type="date"
+                          {...props}
+                          size="small"
+                          variant="outlined"
+                          error={!!error}
+                          fullWidth
+                          autoComplete="off"
+                          helperText={error ? t('registration.errors.birthDate.validation') : ''}
+                        />
+                      </Box>
+                    );
+                  }}
+                />
+              </LocalizationProvider>
+            )}
+          />
         </Grid>
       </Grid>
       <Box sx={{ alignSelf: 'flex-end' }}>

@@ -4,7 +4,6 @@ import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import { CardHeader, IconButton } from '@mui/material';
 import ClickableAvatar from '../ClickableAvatar';
 import { IPost } from '../../types/data';
-import { currentLocales } from '../../mock-data/data';
 import MoreMenu from './MoreMenu';
 import { VariantsMoreMenu, ApiPath, API_BASE_URL } from '../../constants';
 import { removePost } from '../../api/postsApi';
@@ -21,6 +20,7 @@ interface IPostHeaderProps {
 }
 
 export default function PostHeader({ postData, setIsEdit }: IPostHeaderProps) {
+  const currentLocale = useAppSelector((state) => state.language.lang);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   const dispatch = useAppDispatch();
@@ -74,7 +74,7 @@ export default function PostHeader({ postData, setIsEdit }: IPostHeaderProps) {
       <CardHeader
         avatar={<ClickableAvatar user={currentUser} />}
         title={currentUser.name}
-        subheader={new Date(postData.createdAt).toLocaleString(currentLocales, {
+        subheader={new Date(postData.createdAt).toLocaleString(currentLocale, {
           day: 'numeric',
           month: 'short',
           hour: '2-digit',
