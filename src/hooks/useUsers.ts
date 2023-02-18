@@ -11,9 +11,9 @@ export default function useUsers() {
 
   return {
     users: data,
-    isLoading,
-    isError: error,
+    isLoadingUsers: isLoading,
+    isErrorUsers: error,
     mutate,
-    isValidating,
+    isValidatingUsers: isValidating,
   };
 }

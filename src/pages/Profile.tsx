@@ -25,8 +25,8 @@ export default function Profile() {
 
   if (currentProfile === null && defineUserCompleted) {
     return (
-      <Container>
-        <Stack direction="row" sx={{ gap: 2 }}>
+      <Container sx={{ mt: '5vh', mb: '5vh', display: 'flex' }}>
+        <Stack direction="row" sx={{ gap: 2, minWidth: '100%' }}>
           <LeftSideBar />
           <Typography
             variant="h3"
@@ -41,8 +41,8 @@ export default function Profile() {
 
   if (!defineUserCompleted) {
     return (
-      <Container>
-        <Stack direction="row" sx={{ gap: 2 }}>
+      <Container sx={{ mt: '5vh', mb: '5vh', display: 'flex' }}>
+        <Stack direction="row" sx={{ gap: 2, minWidth: '100%' }}>
           <LeftSideBar />
           <Typography
             variant="h3"
@@ -58,8 +58,8 @@ export default function Profile() {
   }
 
   return (
-    <Container>
-      <Stack direction="row" sx={{ gap: 2 }}>
+    <Container sx={{ mt: '5vh', mb: '5vh', display: 'flex' }}>
+      <Stack direction="row" sx={{ gap: 2, minWidth: '100%' }}>
         <LeftSideBar />
         <ProfileStack />
       </Stack>

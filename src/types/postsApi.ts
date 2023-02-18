@@ -1,21 +1,15 @@
-import { IPost, IUser } from './data';
+import { IPost } from './data';
 
-type AddPostArg = Pick<IPost, 'userId' | 'description' | 'createdAt'>;
+type TAddPostArg = Pick<IPost, 'userId' | 'description'>;
 
-type UpdatePostArg = Partial<Pick<IPost, 'description' | 'likes' | 'commentsIds' | 'likedUserIds'>>;
-
-type RemovePostArg = Pick<IUser, 'password'>;
+type TUpdatePostArg = Partial<Pick<IPost, 'description' | 'likes' | 'commentsIds' | 'likedUserIds'>>;
 
 interface IAddPostProps {
-  arg: AddPostArg;
+  arg: TAddPostArg;
 }
 
 interface IUpdatePostProps {
-  arg: UpdatePostArg;
+  arg: TUpdatePostArg;
 }
 
-interface IRemovePostProps {
-  arg: RemovePostArg;
-}
-
-export type { IAddPostProps, IUpdatePostProps, IRemovePostProps, AddPostArg, UpdatePostArg, RemovePostArg };
+export type { IAddPostProps, IUpdatePostProps, TAddPostArg, TUpdatePostArg };

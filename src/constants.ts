@@ -27,6 +27,7 @@ const enum ReducerNames {
   leftSideBar = 'leftSideBar',
   users = 'users',
   posts = 'posts',
+  comments = 'comments',
   theme = 'theme',
   language = 'language',
   auth = 'auth',

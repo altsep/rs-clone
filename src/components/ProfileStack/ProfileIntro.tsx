@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, CardHeader, Typography } from '@mui/material';
+import { Box, Card, CardContent, CardHeader, Divider, Typography } from '@mui/material';
 import CakeOutlinedIcon from '@mui/icons-material/CakeOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import { currentLocales } from '../../mock-data/data';
@@ -8,8 +8,9 @@ export default function ProfileIntro() {
   const { currentProfile } = useAppSelector((state) => state.users);
 
   return (
-    <Card>
+    <Card sx={{ borderRadius: 4, boxShadow: { xs: 4, md: 0 } }}>
       <CardHeader title="Intro" sx={{ textAlign: 'center' }} />
+      <Divider />
       <CardContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
         <Box
           sx={{

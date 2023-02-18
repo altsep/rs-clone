@@ -1,18 +1,21 @@
 import useSWRMutation from 'swr/mutation';
+import { useNavigate } from 'react-router-dom';
 import { Box, Button, Typography, Badge, Avatar, IconButton, Skeleton } from '@mui/material';
 import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined';
-import { ApiPath, API_BASE_URL } from '../../constants';
+import { ApiPath, API_BASE_URL, RoutePath } from '../../constants';
 import { updateUser } from '../../api/usersApi';
-import { UpdateUserArg } from '../../types/usersApi';
+import { TUpdateUserArg } from '../../types/usersApi';
 import temporary from '../../assets/temporary-2.webp';
-import { useAppSelector } from '../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { updateUserInState } from '../../store/reducers/usersState';
 
 export default function ProfileHeader() {
-  const { idCurrentProfile, idAuthorizedUser, currentProfile, authorizedUser, defineUserCompleted } = useAppSelector(
-    (state) => state.users
-  );
+  const navigate = useNavigate();
 
-  const { trigger: triggerUpdateCurrentAuthorizedUser } = useSWRMutation(
+  const dispatch = useAppDispatch();
+  const { idCurrentProfile, idAuthorizedUser, currentProfile, authorizedUser } = useAppSelector((state) => state.users);
+
+  const { trigger: triggerUpdateAuthorizedUser } = useSWRMutation(
     `${API_BASE_URL}${ApiPath.users}/${idAuthorizedUser}`,
     updateUser
   );
@@ -21,25 +24,46 @@ export default function ProfileHeader() {
     updateUser
   );
 
-  const handleClickRemoveFriend = async (): Promise<void> => {};
-
   const handleClickAddFriend = async (): Promise<void> => {
-    // FIX_ME Friends must be added after confirmation
-
-    if (currentProfile && authorizedUser) {
-      const argUpdateCurrentAuthorizedUser: UpdateUserArg = {
-        friendsIds: authorizedUser.friendsIds ? [...authorizedUser.friendsIds, idCurrentProfile] : [idCurrentProfile],
+    if (currentProfile) {
+      const argUpdateCurrentProfileUser: TUpdateUserArg = {
+        pendingFriendsIds: currentProfile.pendingFriendsIds
+          ? [...currentProfile.pendingFriendsIds, idAuthorizedUser]
+          : [idAuthorizedUser],
       };
-      await triggerUpdateCurrentAuthorizedUser(argUpdateCurrentAuthorizedUser);
-      const argUpdateCurrentProfileUser: UpdateUserArg = {
-        friendsIds: authorizedUser.friendsIds ? [...authorizedUser.friendsIds, idAuthorizedUser] : [idAuthorizedUser],
-      };
-      await triggerUpdateCurrentProfileUser(argUpdateCurrentProfileUser);
+      const dataResponse = await triggerUpdateCurrentProfileUser(argUpdateCurrentProfileUser);
+      if (dataResponse) {
+        dispatch(updateUserInState(dataResponse));
+      }
     }
   };
 
+  const handleClickFollow = async (): Promise<void> => {
+    if (authorizedUser) {
+      const argUpdateAuthorizedUser: TUpdateUserArg = {
+        friendsIds: authorizedUser.friendsIds ? [...authorizedUser.friendsIds, idCurrentProfile] : [idCurrentProfile],
+        pendingFriendsIds: authorizedUser.pendingFriendsIds
+          ? authorizedUser.pendingFriendsIds.filter((pendingFriendId) => pendingFriendId !== idCurrentProfile)
+          : [],
+      };
+      const dataResponseAuthorized = await triggerUpdateAuthorizedUser(argUpdateAuthorizedUser);
+      const argUpdateCurrentProfileUser: TUpdateUserArg = {
+        friendsIds: currentProfile?.friendsIds ? [...currentProfile.friendsIds, idAuthorizedUser] : [idAuthorizedUser],
+      };
+      const dataResponseCurrentProfile = await triggerUpdateCurrentProfileUser(argUpdateCurrentProfileUser);
+      if (dataResponseAuthorized && dataResponseCurrentProfile) {
+        dispatch(updateUserInState(dataResponseAuthorized));
+        dispatch(updateUserInState(dataResponseCurrentProfile));
+      }
+    }
+  };
+
+  const handleClickEditBasicInfo = () => {
+    navigate(`${RoutePath.settings}`);
+  };
+
   return (
-    <Box sx={{ borderRadius: 2, boxShadow: 1 }}>
+    <Box sx={{ borderRadius: 4, boxShadow: 4 }}>
       <Box
         component="img"
         src={temporary}
@@ -83,8 +107,9 @@ export default function ProfileHeader() {
               </Skeleton>
             )}
             {idCurrentProfile === idAuthorizedUser && (
-              <Button variant="contained" startIcon={<CloudDownloadOutlinedIcon />}>
-                <Box sx={{ display: { xs: 'none', sm: 'block' } }}>Edit Cover</Box>
+              <Button variant="contained" sx={{ gap: 1 }}>
+                <CloudDownloadOutlinedIcon />
+                <Typography sx={{ display: { xs: 'none', sm: 'block' } }}>Edit Cover</Typography>
               </Button>
             )}
           </Box>
@@ -94,14 +119,32 @@ export default function ProfileHeader() {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', px: 2, pb: 3, pt: 5, minHeight: '36.5px' }}>
         <Typography variant="h5">{currentProfile && currentProfile.name}</Typography>
 
-        {idCurrentProfile === idAuthorizedUser ? (
-          <Button disabled={!defineUserCompleted}>Edit basic info</Button>
-        ) : (
+        {idCurrentProfile === idAuthorizedUser && (
+          <Button variant="outlined" onClick={handleClickEditBasicInfo} sx={{ background: 'secondary.main' }}>
+            Edit basic info
+          </Button>
+        )}
+        {idCurrentProfile !== idAuthorizedUser && (
           <Box>
-            {(currentProfile && currentProfile.friendsIds && currentProfile.friendsIds.includes(idAuthorizedUser) && (
-              <Button onClick={handleClickRemoveFriend}>Remove friend</Button>
+            {(authorizedUser?.pendingFriendsIds?.includes(idCurrentProfile) && (
+              <Button variant="outlined" onClick={handleClickFollow}>
+                Accept friend request
+              </Button>
             )) ||
-              (defineUserCompleted ? <Button onClick={handleClickAddFriend}>Add friend</Button> : <Button />)}
+              (currentProfile?.friendsIds?.includes(idAuthorizedUser) && (
+                <Button variant="contained" sx={{ flexGrow: 1 }}>
+                  Write message
+                </Button>
+              )) ||
+              (currentProfile?.pendingFriendsIds?.includes(idAuthorizedUser) && (
+                <Button variant="outlined" disabled>
+                  Friend request sent
+                </Button>
+              )) || (
+                <Button variant="outlined" onClick={handleClickAddFriend}>
+                  Add friend
+                </Button>
+              )}
           </Box>
         )}
       </Box>
