@@ -22,6 +22,7 @@ export default function EditProfileForm() {
   const userId = useAppSelector((state) => state.users.idAuthorizedUser);
   const authUser = useAppSelector((state) => state.users.authorizedUser);
   const [alias, setAlias] = useState<string | undefined>('');
+  moment.suppressDeprecationWarnings = true;
 
   const schema = yup.object().shape({
     email: yup.string().email(),
@@ -45,7 +46,7 @@ export default function EditProfileForm() {
       .nullable()
       .transform((value: string, origin: string) => (origin === '' ? null : value))
       .test('birthDate', (date: string | null | undefined): boolean =>
-        date === null ? true : moment().diff(moment(date, 'MM/DD/YYYY'), 'years') >= 14
+        date === null || date === undefined ? true : moment().diff(moment(date).format('MM/DD/YYYY'), 'years') >= 14
       ),
     alias: yup
       .string()
@@ -164,6 +165,8 @@ export default function EditProfileForm() {
                   OpenPickerButtonProps={{
                     size: 'small',
                   }}
+                  maxDate={moment().subtract(14, 'years')}
+                  inputFormat="MM/DD/YYYY"
                   value={value}
                   onChange={(val) => {
                     onChange(val);

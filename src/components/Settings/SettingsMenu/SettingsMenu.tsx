@@ -12,6 +12,7 @@ export default function SettingsMenu() {
 
   const MenuItemWrapper = styled(ListItemButton)({
     position: 'relative',
+    padding: 0,
     '&.Mui-selected': {
       '&::after': {
         content: '"❯"',
@@ -28,6 +29,7 @@ export default function SettingsMenu() {
       alignItems: 'center',
       color: 'inherit',
       width: '100%',
+      padding: '15px',
     },
   });
 

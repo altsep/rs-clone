@@ -35,6 +35,7 @@ export default function RegistrationForm() {
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
   const [registrationError, setRegistrationError] = useState<string>('');
   const [registrationSuccess, setRegistrationSuccess] = useState<boolean>(false);
+  moment.suppressDeprecationWarnings = true;
 
   const { t } = useTranslation();
 
@@ -55,7 +56,7 @@ export default function RegistrationForm() {
       .required()
       .test(
         'birthDate',
-        (date: string | undefined): boolean => moment().diff(moment(date, 'MM/DD/YYYY'), 'years') >= 14
+        (date: string | undefined): boolean => moment().diff(moment(date).format('MM/DD/YYYY'), 'years') >= 14
       ),
   });
 
@@ -226,6 +227,8 @@ export default function RegistrationForm() {
                   OpenPickerButtonProps={{
                     size: 'small',
                   }}
+                  maxDate={moment().subtract(14, 'years')}
+                  inputFormat="MM/DD/YYYY"
                   value={value}
                   onChange={onChange}
                   renderInput={(props: TextFieldProps): JSX.Element => {
