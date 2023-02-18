@@ -2,8 +2,17 @@ import { Stack } from '@mui/material';
 import ProfileRightColumn from './ProfileRightColumn';
 import ProfileFeed from './ProfileFeed';
 import ProfileIntro from './ProfileIntro';
+import { useAppSelector } from '../../hooks/redux';
+import ProfileHidden from './ProfileHidden';
 
 export default function ProfileInner() {
+  const currentUser = useAppSelector((state) => state.users.currentProfile);
+  const authorizedUser = useAppSelector((state) => state.users.authorizedUser);
+
+  if (currentUser?.hidden && currentUser?.id !== authorizedUser?.id) {
+    return <ProfileHidden />;
+  }
+
   return (
     <Stack
       sx={{

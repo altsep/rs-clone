@@ -2,6 +2,7 @@ import useSWRMutation from 'swr/mutation';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Typography, Badge, Avatar, IconButton, Skeleton } from '@mui/material';
 import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined';
+import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import { useTranslation } from 'react-i18next';
 import { ApiPath, API_BASE_URL, RoutePath } from '../../constants';
 import { updateUser } from '../../api/usersApi';
@@ -98,10 +99,14 @@ export default function ProfileHeader() {
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
               >
                 <Avatar
-                  src={currentProfile.avatarURL}
+                  src={idCurrentProfile !== idAuthorizedUser && currentProfile.hidden ? '' : currentProfile.avatarURL}
                   alt="Avatar"
                   sx={{ width: 150, height: 150, border: 3, borderColor: 'common.white' }}
-                />
+                >
+                  {idCurrentProfile !== idAuthorizedUser && currentProfile.hidden && currentProfile.avatarURL !== '' ? (
+                    <VisibilityOffOutlinedIcon fontSize="large" />
+                  ) : null}
+                </Avatar>
               </Badge>
             ) : (
               <Skeleton variant="circular">

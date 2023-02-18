@@ -16,6 +16,7 @@ type TUpdateUserArg = Partial<
     | 'postsIds'
     | 'friendsIds'
     | 'pendingFriendsIds'
+    | 'hidden'
   >
 >;
 

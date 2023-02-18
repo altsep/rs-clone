@@ -65,7 +65,8 @@
     "menu": {
       "language": "Idioma",
       "theme": "Tema",
-      "editProfile": "Editar perfil"
+      "editProfile": "Editar perfil",
+      "security": "Seguridad"
     },
     "language": {
       "title": "Idioma",
@@ -78,6 +79,10 @@
         "light": "Luz",
         "dark": "Oscuro"
       }
+    },
+    "security": {
+      "title": "Seguridad",
+      "closeProfile": "Cerrar perfil"
     },
     "editProfile": {
       "title": "Editar perfil",
@@ -144,6 +149,8 @@
       "placeholder": "Escribe un comentario..."
     },
     "notFound": "Usuario no encontrado",
-    "intro": "introducción"
+    "intro": "introducción",
+    "hiddenUser": "Este usuario optó por ocultar sus datos",
+    "hiddenInfo": "la información está oculta"
   }
 }

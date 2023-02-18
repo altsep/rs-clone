@@ -48,7 +48,6 @@ export default function SettingsMenu() {
           <Link to="language">
             <TranslateOutlinedIcon fontSize="small" sx={{ mr: '15px' }} />
             <Typography variant="body2" sx={{ flex: 1, mr: '20px' }}>
-              {' '}
               {t('settings.menu.language')}
             </Typography>
           </Link>
@@ -57,8 +56,15 @@ export default function SettingsMenu() {
           <Link to="theme">
             <LightModeIcon fontSize="small" sx={{ mr: '15px' }} />
             <Typography variant="body2" sx={{ flex: 1, mr: '20px' }}>
-              {' '}
               {t('settings.menu.theme')}
+            </Typography>
+          </Link>
+        </MenuItemWrapper>
+        <MenuItemWrapper divider selected={location.pathname === '/settings/security'}>
+          <Link to="security">
+            <LightModeIcon fontSize="small" sx={{ mr: '15px' }} />
+            <Typography variant="body2" sx={{ flex: 1, mr: '20px' }}>
+              {t('settings.menu.security')}
             </Typography>
           </Link>
         </MenuItemWrapper>

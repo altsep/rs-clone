@@ -65,7 +65,8 @@
     "menu": {
       "language": "Language",
       "theme": "Theme",
-      "editProfile": "Edit Profile"
+      "editProfile": "Edit Profile",
+      "security": "Security"
     },
     "language": {
       "title": "Language",
@@ -78,6 +79,10 @@
         "light": "Light",
         "dark": "Dark"
       }
+    },
+    "security": {
+      "title": "Security",
+      "closeProfile": "Сlose profile"
     },
     "editProfile": {
       "title": "Edit Profile",
@@ -144,6 +149,8 @@
       "placeholder": "Write a comment..."
     },
     "notFound": "User not found",
-    "intro": "Intro"
+    "intro": "Intro",
+    "hiddenUser": "This user chose to hide their data",
+    "hiddenInfo": "Information is hidden"
   }
 }

@@ -2,6 +2,7 @@ import { Box } from '@mui/material';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import EditProfile from './EditProfile/EditProfile';
 import Language from './Language/Language';
+import Security from './Security/Security';
 import Theme from './Theme/Theme';
 
 export default function SettingsContent() {
@@ -12,6 +13,7 @@ export default function SettingsContent() {
         <Route path="language" element={<Language />} />
         <Route index path="edit-profile" element={<EditProfile />} />
         <Route path="theme" element={<Theme />} />
+        <Route path="security" element={<Security />} />
       </Routes>
     </Box>
   );

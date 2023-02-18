@@ -27,7 +27,7 @@ export default function ClickableAvatar({ user, width, height }: IClickableAvata
   if (width === '20px' && height === '20px') {
     return (
       <Avatar
-        src={user.avatarURL}
+        src={idCurrentProfile !== user.id && user.hidden ? '' : user.avatarURL}
         onClick={() => handleClickAvatar(user.id)}
         sx={{ textTransform: 'capitalize', cursor: 'pointer', width, height, fontSize: 'small' }}
       >
@@ -38,7 +38,7 @@ export default function ClickableAvatar({ user, width, height }: IClickableAvata
 
   return (
     <Avatar
-      src={user.avatarURL}
+      src={idCurrentProfile !== user.id && user.hidden ? '' : user.avatarURL}
       onClick={() => handleClickAvatar(user.id)}
       sx={{ textTransform: 'capitalize', cursor: 'pointer', width, height }}
     >
