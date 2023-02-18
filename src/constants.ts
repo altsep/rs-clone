@@ -1,6 +1,8 @@
-/* eslint-disable prefer-destructuring */
 const API_BASE_URL = process.env.API_BASE_URL || '/api';
-const WS_BASE_URL = process.env.WS_BASE_URL || `wss://${window.location.host}`;
+const WS_BASE_URL =
+  process.env.WS_BASE_URL || window.location.hostname === 'localhost'
+    ? 'ws://localhost:3000'
+    : `wss://${window.location.host}`;
 
 const KEY_LOCAL_STORAGE = 'rs-clone-krevetka87-altsep-metalknock';
 

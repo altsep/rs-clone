@@ -69,11 +69,16 @@ function App() {
 
   useEffect(() => {
     if (idAuthorizedUser) {
-      const wsUrl = new URL('messages', WS_BASE_URL);
-      const messagesWs = new WebSocket(wsUrl);
+      const messagesWsUrl = new URL('messages', WS_BASE_URL);
+      const messagesWs = new WebSocket(messagesWsUrl);
+      const rootWs = new WebSocket(WS_BASE_URL);
+
+      rootWs.addEventListener('open', () => {
+        console.log('Root WS conn opened!');
+      });
 
       messagesWs.addEventListener('open', () => {
-        console.log('ws conn opened!');
+        console.log('Messages WS conn opened!');
       });
 
       messagesWs.addEventListener('message', (e) => {
