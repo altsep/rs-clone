@@ -1,15 +1,17 @@
 import { Box, Card, CardContent, CardHeader, Divider, Typography } from '@mui/material';
 import CakeOutlinedIcon from '@mui/icons-material/CakeOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
-import { currentLocales } from '../../mock-data/data';
+import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '../../hooks/redux';
 
 export default function ProfileIntro() {
+  const { t } = useTranslation();
+  const currentLocale = useAppSelector((state) => state.language.lang);
   const { currentProfile } = useAppSelector((state) => state.users);
 
   return (
     <Card sx={{ borderRadius: 4, boxShadow: { xs: 4, md: 0 } }}>
-      <CardHeader title="Intro" sx={{ textAlign: 'center' }} />
+      <CardHeader title={t('profile.intro')} sx={{ textAlign: 'center' }} />
       <Divider />
       <CardContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
         <Box
@@ -38,7 +40,7 @@ export default function ProfileIntro() {
           <CakeOutlinedIcon />
           <Typography>
             {currentProfile &&
-              new Date(currentProfile.birthDate).toLocaleString(currentLocales, {
+              new Date(currentProfile.birthDate).toLocaleString(currentLocale, {
                 day: 'numeric',
                 month: 'short',
                 year: 'numeric',

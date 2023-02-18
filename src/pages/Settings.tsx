@@ -15,10 +15,12 @@ export default function Settings() {
             display: 'flex',
             bgcolor: 'secondary.main',
             flex: 1,
+            justifyContent: 'flex-start',
+            flexDirection: { xs: 'column', md: 'row' },
           }}
         >
           <SettingsMenu />
-          <Divider orientation="vertical" flexItem />
+          <Divider orientation="vertical" flexItem sx={{ display: { xs: 'none', md: 'block' } }} />
           <SettingsContent />
         </Box>
       </Stack>

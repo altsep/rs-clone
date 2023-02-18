@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Stack, Container, Typography, CircularProgress, Box } from '@mui/material';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import LeftSideBar from '../components/LeftSideBar';
 import ProfileStack from '../components/ProfileStack';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
@@ -8,6 +9,7 @@ import { defineCurrentProfilePosts } from '../store/reducers/postsState';
 import { defineProfile } from '../store/reducers/usersState';
 
 export default function Profile() {
+  const { t } = useTranslation();
   const { id } = useParams();
 
   const dispatch = useAppDispatch();
@@ -32,7 +34,7 @@ export default function Profile() {
             variant="h3"
             sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100vh' }}
           >
-            User not found
+            {t('profile.notFound')}
           </Typography>
         </Stack>
       </Container>

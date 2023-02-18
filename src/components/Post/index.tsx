@@ -19,6 +19,7 @@ import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlin
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
 import ReplyOutlinedIcon from '@mui/icons-material/ReplyOutlined';
+import { useTranslation } from 'react-i18next';
 import { IPost } from '../../types/data';
 import { API_BASE_URL, ApiPath } from '../../constants';
 import { TUpdatePostArg } from '../../types/postsApi';
@@ -36,6 +37,7 @@ interface IPostProps {
 }
 
 export default function Post({ postData }: IPostProps) {
+  const { t } = useTranslation();
   const [isEdit, setIsEdit] = useState(false);
   const [isOpenComments, setIsOpenComments] = useState(false);
 
@@ -138,9 +140,9 @@ export default function Post({ postData }: IPostProps) {
               })}
           </AvatarGroup>
         )}
-        <Typography sx={{ ml: 'auto' }}>{`${
-          postData.commentsIds ? postData.commentsIds.length : 0
-        } Comments`}</Typography>
+        <Typography sx={{ ml: 'auto' }}>{`${postData.commentsIds ? postData.commentsIds.length : 0} ${t(
+          'profile.post.comments'
+        )}`}</Typography>
       </Box>
       <Divider sx={{ width: '94%', mx: 'auto' }} />
       <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -155,7 +157,7 @@ export default function Post({ postData }: IPostProps) {
             <FavoriteBorderOutlinedIcon />
           )}
 
-          <Typography sx={{ display: { xs: 'none', md: 'block' } }}>Like</Typography>
+          <Typography sx={{ display: { xs: 'none', md: 'block' } }}>{t('profile.post.like')}</Typography>
         </Button>
         <Button
           aria-label="Comments"
@@ -164,11 +166,11 @@ export default function Post({ postData }: IPostProps) {
           sx={{ gap: 1, p: { xs: 0, sm: '6px' } }}
         >
           <CommentOutlinedIcon />
-          <Typography sx={{ display: { xs: 'none', md: 'block' } }}>Comments</Typography>
+          <Typography sx={{ display: { xs: 'none', md: 'block' } }}>{t('profile.post.comments')}</Typography>
         </Button>
         <Button aria-label="Share" sx={{ gap: 1, p: { xs: 0, sm: '6px' } }}>
           <ReplyOutlinedIcon sx={{ transform: 'scaleX(-1)' }} />
-          <Typography sx={{ display: { xs: 'none', md: 'block' } }}>Share</Typography>
+          <Typography sx={{ display: { xs: 'none', md: 'block' } }}>{t('profile.post.share')}</Typography>
         </Button>
       </CardActions>
       <Divider sx={{ width: '94%', mx: 'auto' }} />

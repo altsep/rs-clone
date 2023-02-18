@@ -14,6 +14,12 @@ const lightTheme: Theme = createTheme({
       paper: grey[50],
     },
   },
+  typography: {
+    subtitle2: {
+      fontFamily: '"Lato", sans-serif',
+      color: orange[500],
+    },
+  },
   components: {
     MuiTextField: {
       styleOverrides: {

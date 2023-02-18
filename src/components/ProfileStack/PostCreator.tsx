@@ -2,6 +2,7 @@ import React from 'react';
 import { Avatar, Box, Button, Card, CardActions, CardContent, Skeleton, TextField, Typography } from '@mui/material';
 import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
 import useSWRMutation from 'swr/mutation';
+import { useTranslation } from 'react-i18next';
 import { API_BASE_URL, ApiPath } from '../../constants';
 import { addPost } from '../../api/postsApi';
 import { TAddPostArg } from '../../types/postsApi';
@@ -14,6 +15,7 @@ import { addPostInState } from '../../store/reducers/postsState';
 import { updateUserInState } from '../../store/reducers/usersState';
 
 export default function PostCreator() {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { idCurrentProfile, currentProfile, authorizedUser, idAuthorizedUser } = useAppSelector((state) => state.users);
   const { valueCreatePost } = useAppSelector((state) => state.inputs);
@@ -65,7 +67,7 @@ export default function PostCreator() {
           <TextField
             multiline
             onChange={handleChangeInput}
-            label="What's happening?"
+            label={t('profile.addPost.label')}
             value={valueCreatePost}
             sx={{
               flexGrow: '1',
@@ -77,7 +79,7 @@ export default function PostCreator() {
       <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Button aria-label="Upload photo" sx={{ gap: 1 }}>
           <AddPhotoAlternateOutlinedIcon />
-          <Typography sx={{ display: { xs: 'none', md: 'block' } }}>Photo</Typography>
+          <Typography sx={{ display: { xs: 'none', md: 'block' } }}>{t('profile.addPost.photo')}</Typography>
         </Button>
         <Button
           variant="contained"
@@ -86,7 +88,7 @@ export default function PostCreator() {
           disabled={Boolean(!valueCreatePost)}
           sx={{ gap: 1 }}
         >
-          <Typography>Post</Typography>
+          <Typography>{t('profile.addPost.button')}</Typography>
         </Button>
       </CardActions>
     </Card>

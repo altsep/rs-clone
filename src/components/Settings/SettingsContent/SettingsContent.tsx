@@ -6,7 +6,7 @@ import Theme from './Theme/Theme';
 
 export default function SettingsContent() {
   return (
-    <Box sx={{ flex: 1, p: '20px', display: 'flex' }}>
+    <Box sx={{ flex: { xs: '0 1 auto', md: '0 1 70%' }, p: '20px', display: 'flex' }}>
       <Routes>
         <Route index element={<Navigate to="edit-profile" replace />} />
         <Route path="language" element={<Language />} />

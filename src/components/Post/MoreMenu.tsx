@@ -1,4 +1,5 @@
 import { Menu, MenuItem } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { VariantsMoreMenu } from '../../constants';
 
 interface IMoreMenuProps {
@@ -18,6 +19,7 @@ export default function MoreMenu({
   handleClickEditPost,
   type,
 }: IMoreMenuProps) {
+  const { t } = useTranslation();
   return (
     <Menu
       id="post-menu"
@@ -29,11 +31,11 @@ export default function MoreMenu({
       onClose={handleCloseMoreMenu}
     >
       <MenuItem aria-label="post-delete" onClick={handleClickDeletePost}>
-        Delete post
+        {t('profile.post.delete')}
       </MenuItem>
       {type === VariantsMoreMenu.default && (
         <MenuItem aria-label="post-edit" onClick={handleClickEditPost}>
-          Edit
+          {t('profile.post.edit')}
         </MenuItem>
       )}
     </Menu>

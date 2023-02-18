@@ -2,6 +2,7 @@ import { useState } from 'react';
 import useSWRMutation from 'swr/mutation';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import { Box, Button, CardContent, TextField } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import ClickableAvatar from '../ClickableAvatar';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { ApiPath, API_BASE_URL } from '../../constants';
@@ -19,6 +20,7 @@ interface ICommentCreatorProps {
 }
 
 export default function CommentCreator({ postData, setIsOpenComments }: ICommentCreatorProps) {
+  const { t } = useTranslation();
   const [valueInputComment, setValueInputComment] = useState('');
 
   const dispatch = useAppDispatch();
@@ -69,7 +71,7 @@ export default function CommentCreator({ postData, setIsOpenComments }: IComment
     <CardContent sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2 }}>
       <Box>{authorizedUser && <ClickableAvatar user={authorizedUser} />}</Box>
       <TextField
-        label="Write a comment..."
+        label={t('profile.post.placeholder')}
         value={valueInputComment}
         onKeyDown={handleKeyDownCreateComment}
         onChange={handleChangeInputComment}

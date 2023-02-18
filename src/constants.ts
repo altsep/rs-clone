@@ -51,6 +51,7 @@ const enum LSKeys {
   theme = 'theme',
   token = 'token',
   path = 'path',
+  locale = 'i18nextLng',
 }
 
 const locales: { [key: string]: string } = {
