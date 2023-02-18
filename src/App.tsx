@@ -9,12 +9,12 @@ import Login from './pages/Login';
 import Registration from './pages/Registration';
 import Header from './components/Header/Header';
 import Profile from './pages/Profile';
-import { ApiPath, API_BASE_URL, KEY_LOCAL_STORAGE, LSKeys, RoutePath, WS_BASE_URL } from './constants';
+import { ApiPath, API_BASE_URL, KEY_LOCAL_STORAGE, LSKeys, RoutePath } from './constants';
 import { refreshToken } from './api/usersApi';
 import { ILogin } from './types/data';
-import { setToken } from './utils/common';
+import { getToken, setToken } from './utils/common';
 import { setAuth, setAuthError, setLoading } from './store/reducers/authSlice';
-import { setUser, usersLoadingSuccess, setMessagesWs } from './store/reducers/usersState';
+import { setUser, usersLoadingSuccess } from './store/reducers/usersState';
 import Messages from './pages/Messages';
 import Friends from './pages/Friends';
 import NotFound from './pages/NotFound';
@@ -27,12 +27,12 @@ import useComments from './hooks/useComments';
 import { commentsLoadingSuccess } from './store/reducers/commentsState';
 import NotAuthRoute from './hoc/NotAuthRoute';
 import Footer from './components/Footer/Footer';
+import useMessagesWs from './hooks/useMessagesWs';
 
 function App() {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const theme = useAppSelector((state) => state.theme.mode);
-  const { idAuthorizedUser } = useAppSelector((state) => state.users);
 
   const { users, isLoadingUsers, isValidatingUsers } = useUsers();
   const { posts, isLoadingPosts, isValidatingPosts } = usePosts();
@@ -62,32 +62,16 @@ function App() {
   };
 
   useEffect(() => {
-    if (localStorage.getItem(`${LSKeys.token}_${KEY_LOCAL_STORAGE}`)) {
+    const accessToken = getToken();
+
+    if (accessToken) {
       checkAuth().catch((err: Error): Error => err);
     }
+
     localStorage.setItem(`${LSKeys.path}_${KEY_LOCAL_STORAGE}`, location.pathname);
   }, []);
 
-  useEffect(() => {
-    if (idAuthorizedUser) {
-      const wsUrl = new URL('messages', WS_BASE_URL);
-      const messagesWs = new WebSocket(wsUrl);
-
-      messagesWs.addEventListener('open', () => {
-        console.log('ws conn opened!');
-      });
-
-      messagesWs.addEventListener('message', (e) => {
-        if (typeof e.data === 'string') {
-          console.log(JSON.parse(e.data));
-        }
-
-        console.log('message received!');
-      });
-
-      dispatch(setMessagesWs(messagesWs));
-    }
-  }, [dispatch, idAuthorizedUser]);
+  useMessagesWs();
 
   useEffect(() => {
     if (
