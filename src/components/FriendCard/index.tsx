@@ -101,7 +101,7 @@ export default function FriendCard({ user, isRequest }: IFriendCardProps) {
       const argAddChat = { userIds: [idAuthorizedUser, user.id] };
       await triggerAddChat(argAddChat);
     }
-    dispatch(setCurrentChat(user.id));
+    // dispatch(setCurrentChat(user.id));
     navigate(`${RoutePath.messages}/${user.id}`);
   };
 

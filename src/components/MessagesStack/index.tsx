@@ -1,23 +1,9 @@
 import { Stack } from '@mui/material';
-import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { setCurrentChat } from '../../store/reducers/chatsState';
-
+import { Route, Routes } from 'react-router-dom';
 import ActiveChat from './ActiveChat';
 import ChatList from './ChatList';
 
 export default function MessagesStack() {
-  // FIX_ME fix all this either on useParams or something else
-  const dispatch = useAppDispatch();
-  const { chats } = useAppSelector((state) => state.chats);
-  const { idAuthorizedUser } = useAppSelector((state) => state.users);
-
-  useEffect(() => {
-    if (chats) {
-      dispatch(setCurrentChat(idAuthorizedUser !== 13 ? 13 : 15));
-    }
-  }, [dispatch, idAuthorizedUser, chats]);
-
   return (
     <Stack
       direction="row"
@@ -31,7 +17,9 @@ export default function MessagesStack() {
       }}
     >
       <ChatList />
-      <ActiveChat />
+      <Routes>
+        <Route path=":id" element={<ActiveChat />} />
+      </Routes>
     </Stack>
   );
 }

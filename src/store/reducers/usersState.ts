@@ -13,6 +13,7 @@ const initialState: TUsersState = {
   authorizedUserFriends: [],
   authorizedUserPendingFriends: [],
   messagesWs: null,
+  usersOfExistingChats: [],
 };
 
 const usersStateSlice = createSlice({
@@ -64,6 +65,9 @@ const usersStateSlice = createSlice({
     setMessagesWs: (state, action: PayloadAction<WebSocket>) => {
       state.messagesWs = action.payload;
     },
+    setUsersOfExistingChats(state, action: PayloadAction<number[]>) {
+      state.usersOfExistingChats = action.payload.map((id) => state.users.find((user) => user.id === id));
+    },
   },
 });
 
@@ -75,6 +79,7 @@ export const {
   definePendingFriends,
   defineFriends,
   setMessagesWs,
+  setUsersOfExistingChats,
 } = usersStateSlice.actions;
 
 export const usersState = usersStateSlice.reducer;

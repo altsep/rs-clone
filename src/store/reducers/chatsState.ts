@@ -5,6 +5,7 @@ import { TChatsState } from '../../types/state';
 
 const initialState: TChatsState = {
   chats: [],
+  currentChat: null,
   currentChatIndex: 0,
   currentChatMessages: [],
   usersIdsOfExistingChats: [],
@@ -23,6 +24,8 @@ const chatsStateSlice = createSlice({
       );
     },
     setCurrentChat(state, action: PayloadAction<number>) {
+      state.currentChat = state.chats.find((chat) => chat.userIds.includes(action.payload)) || null;
+
       state.currentChatIndex = state.chats.findIndex((chat) => chat.userIds.includes(action.payload));
 
       if (state.chats.length > 0 && state.currentChatIndex !== -1) {

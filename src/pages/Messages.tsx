@@ -1,6 +1,6 @@
 import { Container, Stack } from '@mui/material';
 import LeftSideBar from '../components/LeftSideBar';
-import MessagesStack from '../components/MessagesStack/index';
+import MessagesStack from '../components/MessagesStack';
 
 export default function Messages() {
   return (

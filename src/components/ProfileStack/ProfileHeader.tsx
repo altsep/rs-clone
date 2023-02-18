@@ -71,7 +71,7 @@ export default function ProfileHeader() {
       const argAddChat = { userIds: [idAuthorizedUser, idCurrentProfile] };
       await triggerAddChat(argAddChat);
     }
-    dispatch(setCurrentChat(idCurrentProfile));
+    // dispatch(setCurrentChat(dCurrentProfile));
     navigate(`${RoutePath.messages}/${idCurrentProfile}`);
   };
 

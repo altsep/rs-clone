@@ -1,45 +1,40 @@
-import { Box, ListItem, Stack } from '@mui/material';
-import { useAppSelector } from '../../../hooks/redux';
+import { Box, ListItem, Stack, Typography } from '@mui/material';
+import { currentLocales } from '../../../mock-data/data';
+import { IMessage, IUser } from '../../../types/data';
 import ClickableAvatar from '../../ClickableAvatar';
 
 interface IMessageProps {
-  message: string;
+  user: IUser;
+  message: IMessage;
   isLeft: boolean;
 }
 
-export default function Message({ message, isLeft }: IMessageProps) {
-  // FIX_ME Delete after adding real data
-  const { authorizedUser } = useAppSelector((state) => state.users);
-
-  if (!authorizedUser) {
-    return <div>error</div>;
-  }
-
-  const mockTime = '11:26 am';
-  //
-
-  if (!isLeft) {
-    return (
-      <ListItem sx={{ flexDirection: 'column' }}>
-        <Stack sx={{ flexDirection: 'row', alignItems: 'end', gap: 2, width: '100%' }}>
-          <Box sx={{ flexGrow: 1, bgcolor: 'secondary.main', p: 2, borderRadius: 2 }}>{message}</Box>
-          <ClickableAvatar user={authorizedUser} />
-        </Stack>
-        <Stack sx={{ flexDirection: 'row', width: '100%' }}>
-          <Box sx={{ mr: 'auto' }}>{mockTime}</Box>
-        </Stack>
-      </ListItem>
-    );
-  }
-
+export default function Message({ user, message, isLeft }: IMessageProps) {
   return (
-    <ListItem sx={{ flexDirection: 'column' }}>
+    <ListItem sx={{ flexDirection: 'column', mr: isLeft ? 'auto' : 0, maxWidth: '80%', ml: !isLeft ? 'auto' : 0 }}>
       <Stack sx={{ flexDirection: 'row', alignItems: 'end', gap: 2, width: '100%' }}>
-        <ClickableAvatar user={authorizedUser} />
-        <Box sx={{ flexGrow: 1, bgcolor: 'primary.main', p: 2, borderRadius: 2 }}>{message}</Box>
+        {isLeft && <ClickableAvatar user={user} />}
+        <Typography
+          sx={{
+            flexGrow: 1,
+            bgcolor: isLeft ? 'primary.main' : 'secondary.main',
+            p: 2,
+            borderRadius: isLeft ? '8px 8px 8px 0 ' : '8px 8px 0 8px',
+            wordWrap: 'break-word',
+            wordBreak: 'break-all',
+          }}
+        >
+          {message.description}
+        </Typography>
+        {!isLeft && <ClickableAvatar user={user} />}
       </Stack>
       <Stack sx={{ flexDirection: 'row', width: '100%' }}>
-        <Box sx={{ ml: 'auto' }}>{mockTime}</Box>
+        <Box sx={{ ml: isLeft ? 'auto' : 0, mr: !isLeft ? 'auto' : 0 }}>
+          {new Date(message.createdAt).toLocaleString(currentLocales, {
+            hour: '2-digit',
+            minute: '2-digit',
+          })}
+        </Box>
       </Stack>
     </ListItem>
   );

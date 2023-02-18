@@ -143,7 +143,7 @@ function App() {
             }
           />
           <Route
-            path={RoutePath.messages}
+            path={`${RoutePath.messages}/*`}
             element={
               <PrivateRoute>
                 <Messages />

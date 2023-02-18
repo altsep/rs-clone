@@ -1,26 +1,36 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { Card, CardActions, CardHeader, Divider, IconButton, List, TextField } from '@mui/material';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import ClickableAvatar from '../../ClickableAvatar';
-import { useAppSelector } from '../../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
 import Message from './Message';
+import { setCurrentChat } from '../../../store/reducers/chatsState';
+import { IUser } from '../../../types/data';
 
 export default function ActiveChat() {
+  const { id } = useParams();
+  const [currentUser, setCurrentUser] = useState<IUser | null>(null);
+
   const [valueMessage, setValueMessage] = useState('');
 
-  // FIX_ME Delete after adding real data
-  const { authorizedUser, messagesWs, idAuthorizedUser } = useAppSelector((state) => state.users);
+  const dispatch = useAppDispatch();
 
-  if (!authorizedUser) {
-    return <div>error</div>;
-  }
-  //
+  const { messagesWs, idAuthorizedUser, users, authorizedUser } = useAppSelector((state) => state.users);
+  const { chats, currentChatMessages } = useAppSelector((state) => state.chats);
+
+  useEffect(() => {
+    if (chats && id && users) {
+      dispatch(setCurrentChat(+id));
+      setCurrentUser(users.find((user) => id && user.id === +id) || null);
+    }
+  }, [dispatch, chats, id, users]);
 
   const handleClickSend = () => {
-    if (messagesWs) {
+    if (messagesWs && currentUser) {
       const msg = {
         type: 'send',
-        payload: { chatId: '63ee81ec605002ff787d7a4a', userId: idAuthorizedUser, description: valueMessage },
+        payload: { chatId: '63efa0ebded284b5f315b262', userId: idAuthorizedUser, description: valueMessage },
       };
       messagesWs.send(JSON.stringify(msg));
       setValueMessage('');
@@ -42,16 +52,23 @@ export default function ActiveChat() {
         minHeight: '100%',
       }}
     >
-      <CardHeader
-        avatar={<ClickableAvatar user={authorizedUser} />}
-        title={authorizedUser.name}
-        subheader="Active now"
-      />
+      {currentUser && (
+        <CardHeader avatar={<ClickableAvatar user={currentUser} />} title={currentUser.name} subheader="Active now" />
+      )}
+
       <Divider />
       <List sx={{ flexGrow: 1 }}>
-        <Message message="123" isLeft />
-        <Message message="321" isLeft={false} />
-        <Message message="51" isLeft />
+        {currentChatMessages &&
+          currentUser &&
+          authorizedUser &&
+          currentChatMessages.map((message) => (
+            <Message
+              key={message.id}
+              user={message.userId === currentUser.id ? currentUser : authorizedUser}
+              message={message}
+              isLeft={message.userId === currentUser.id}
+            />
+          ))}
       </List>
       <Divider />
       <CardActions sx={{ display: 'flex', justifyContent: 'space-between', p: 2 }}>
