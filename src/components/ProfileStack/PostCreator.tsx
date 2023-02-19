@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Avatar, Box, Button, Card, CardActions, CardContent, Skeleton, TextField, Typography } from '@mui/material';
 import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
 import useSWRMutation from 'swr/mutation';
@@ -17,6 +17,7 @@ import { updateUserInState } from '../../store/reducers/usersState';
 export default function PostCreator() {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const [isLoading, setLoading] = useState(false);
   const { idCurrentProfile, currentProfile, authorizedUser, idAuthorizedUser } = useAppSelector((state) => state.users);
   const { valueCreatePost } = useAppSelector((state) => state.inputs);
 
@@ -27,6 +28,7 @@ export default function PostCreator() {
   );
 
   const handleClickCreatePost = async (): Promise<void> => {
+    setLoading(true);
     const argAddPost: TAddPostArg = {
       description: valueCreatePost,
       userId: idAuthorizedUser,
@@ -45,6 +47,7 @@ export default function PostCreator() {
       }
     }
     dispatch(changeCreatePost(''));
+    setLoading(false);
   };
 
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
@@ -85,7 +88,7 @@ export default function PostCreator() {
           variant="contained"
           aria-label="Create post"
           onClick={handleClickCreatePost}
-          disabled={Boolean(!valueCreatePost)}
+          disabled={Boolean(!valueCreatePost) || isLoading}
           sx={{ gap: 1 }}
         >
           <Typography>{t('profile.addPost.button')}</Typography>

@@ -47,24 +47,27 @@ export default function ChangePassword() {
   const { trigger } = useSWRMutation(`${API_BASE_URL}${ApiPath.password}`, changePassword);
 
   const updatePassword = async (data: Pick<IEditFormValues, 'password'>): Promise<void> => {
-    setSuccessChange(false);
-    setErrorChange(false);
+    const { password } = data;
 
-    try {
-      const res: Response | undefined = await trigger({ userId: idAuthorizedUser, password: data.password });
+    if (password) {
+      setSuccessChange(false);
+      setErrorChange(false);
+      try {
+        const res: Response | undefined = await trigger({ userId: idAuthorizedUser, password });
 
-      if (res?.ok) {
-        const resData = (await res.json()) as ILogin;
-        const { accessToken, user } = resData;
-        setToken(accessToken);
-        setSuccessChange(true);
-        dispatch(setUser(user));
-        dispatch(updateUserInState(user));
-      } else {
-        throw new Error('Unsuccessful attempt to change password');
+        if (res?.ok) {
+          const resData = (await res.json()) as ILogin;
+          const { accessToken, user } = resData;
+          setToken(accessToken);
+          setSuccessChange(true);
+          dispatch(setUser(user));
+          dispatch(updateUserInState(user));
+        } else {
+          throw new Error('Unsuccessful attempt to change password');
+        }
+      } catch {
+        setErrorChange(true);
       }
-    } catch {
-      setErrorChange(true);
     }
   };
 
@@ -75,9 +78,9 @@ export default function ChangePassword() {
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit(updatePassword)} sx={{ minWidth: '100%' }}>
+    <Box component="form" onSubmit={handleSubmit(updatePassword)} sx={{ minWidth: '100%', mt: '20px' }}>
       <Grid container direction="column" sx={{ width: '50%' }}>
-        <Grid item sx={{ mb: '30px' }}>
+        <Grid item sx={{ mb: '20px' }}>
           <EditProfileInput
             helperText={errors.password ? t('registration.errors.password.validation') : ''}
             name="password"

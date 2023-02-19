@@ -21,6 +21,7 @@ interface ICommentCreatorProps {
 
 export default function CommentCreator({ postData, setIsOpenComments }: ICommentCreatorProps) {
   const { t } = useTranslation();
+  const [isLoading, setLoading] = useState(false);
   const [valueInputComment, setValueInputComment] = useState('');
 
   const dispatch = useAppDispatch();
@@ -38,6 +39,7 @@ export default function CommentCreator({ postData, setIsOpenComments }: IComment
   };
 
   const handleClickSendButton = async (): Promise<void> => {
+    setLoading(true);
     const argAddComment: TAddCommentArg = {
       userId: idAuthorizedUser,
       postId: postData.id,
@@ -58,6 +60,7 @@ export default function CommentCreator({ postData, setIsOpenComments }: IComment
     }
     setValueInputComment('');
     setIsOpenComments(true);
+    setLoading(false);
   };
 
   const handleKeyDownCreateComment = async (e: React.KeyboardEvent<HTMLDivElement>): Promise<void> => {
@@ -77,7 +80,11 @@ export default function CommentCreator({ postData, setIsOpenComments }: IComment
         onChange={handleChangeInputComment}
         size="small"
       />
-      <Button endIcon={<SendOutlinedIcon />} onClick={handleClickSendButton} disabled={!valueInputComment} />
+      <Button
+        endIcon={<SendOutlinedIcon />}
+        onClick={handleClickSendButton}
+        disabled={!valueInputComment || isLoading}
+      />
     </CardContent>
   );
 }

@@ -21,6 +21,10 @@ const enum RoutePath {
   messages = '/messages',
   friends = '/friends',
   settings = '/settings',
+  language = 'language',
+  editProfile = 'edit-profile',
+  theme = 'theme',
+  security = 'security',
 }
 
 const enum ReducerNames {

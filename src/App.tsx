@@ -106,7 +106,7 @@ function App() {
     <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
       <CssBaseline />
       <Header />
-      <Box component="main" sx={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+      <Box component="main" sx={{ flex: 1, display: 'flex', justifyContent: 'center', p: '40px' }}>
         <Routes>
           <Route
             path="/"

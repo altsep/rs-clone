@@ -1,4 +1,4 @@
-import { Stack, Typography } from '@mui/material';
+import { Divider, Stack, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import HideUserInfo from '../../../HideUserInfo/HideUserInfo';
 import ChangePassword from './ChangePassword';
@@ -11,6 +11,7 @@ export default function Security() {
         {t('settings.security.title')}
       </Typography>
       <HideUserInfo />
+      <Divider />
       <ChangePassword />
     </Stack>
   );
