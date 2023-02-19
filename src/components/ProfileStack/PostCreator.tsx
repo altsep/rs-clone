@@ -1,5 +1,16 @@
 import React, { useState } from 'react';
-import { Avatar, Box, Button, Card, CardActions, CardContent, Skeleton, TextField, Typography } from '@mui/material';
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CircularProgress,
+  Skeleton,
+  TextField,
+  Typography,
+} from '@mui/material';
 import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
 import useSWRMutation from 'swr/mutation';
 import { useTranslation } from 'react-i18next';
@@ -84,15 +95,19 @@ export default function PostCreator() {
           <AddPhotoAlternateOutlinedIcon />
           <Typography sx={{ display: { xs: 'none', md: 'block' } }}>{t('profile.addPost.photo')}</Typography>
         </Button>
-        <Button
-          variant="contained"
-          aria-label="Create post"
-          onClick={handleClickCreatePost}
-          disabled={Boolean(!valueCreatePost) || isLoading}
-          sx={{ gap: 1 }}
-        >
-          <Typography>{t('profile.addPost.button')}</Typography>
-        </Button>
+        {isLoading ? (
+          <CircularProgress size={20} sx={{ mr: 3 }} />
+        ) : (
+          <Button
+            variant="contained"
+            aria-label="Create post"
+            onClick={handleClickCreatePost}
+            disabled={Boolean(!valueCreatePost)}
+            sx={{ gap: 1 }}
+          >
+            <Typography>{t('profile.addPost.button')}</Typography>
+          </Button>
+        )}
       </CardActions>
     </Card>
   );

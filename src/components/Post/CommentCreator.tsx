@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import useSWRMutation from 'swr/mutation';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
-import { Box, Button, CardContent, TextField } from '@mui/material';
+import { Box, Button, CardContent, CircularProgress, TextField } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import ClickableAvatar from '../ClickableAvatar';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
@@ -80,11 +80,12 @@ export default function CommentCreator({ postData, setIsOpenComments }: IComment
         onChange={handleChangeInputComment}
         size="small"
       />
-      <Button
-        endIcon={<SendOutlinedIcon />}
-        onClick={handleClickSendButton}
-        disabled={!valueInputComment || isLoading}
-      />
+
+      {isLoading ? (
+        <CircularProgress size={20} sx={{ mr: 3 }} />
+      ) : (
+        <Button endIcon={<SendOutlinedIcon />} onClick={handleClickSendButton} disabled={!valueInputComment} />
+      )}
     </CardContent>
   );
 }
