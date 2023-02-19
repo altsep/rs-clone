@@ -1,6 +1,6 @@
 import { IAddChatProps } from '../types/chatsApi';
 
-const addChat = async (url: string, { arg }: IAddChatProps): Promise<Response> => {
+const addChat = async (url: string, { arg }: IAddChatProps): Promise<unknown> => {
   const response = await fetch(url, {
     method: 'POST',
     credentials: 'include',
@@ -9,7 +9,7 @@ const addChat = async (url: string, { arg }: IAddChatProps): Promise<Response> =
     },
     body: JSON.stringify(arg),
   });
-  return response;
+  return response.json();
 };
 
 export { addChat };

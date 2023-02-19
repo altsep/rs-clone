@@ -1,41 +1,41 @@
 import { ListItemAvatar, ListItemButton, Stack, Typography } from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useAppSelector } from '../../../hooks/redux';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { currentLocales } from '../../../mock-data/data';
-import { IChat } from '../../../types/data';
+import { IChat, IUser } from '../../../types/data';
 import ClickableAvatar from '../../ClickableAvatar';
 
 interface IChatItemProps {
   chat: IChat;
+  user: IUser | undefined;
 }
 
-export default function ChatItem({ chat }: IChatItemProps) {
+export default function ChatItem({ chat, user }: IChatItemProps) {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const { id } = useParams();
-
-  const { idAuthorizedUser, users } = useAppSelector((state) => state.users);
-
-  // FIX_ME move to redux
-  const idCurrentUser = +chat.userIds.filter((userId) => userId !== idAuthorizedUser).join();
-  const currentUser = users.find((user) => user.id === idCurrentUser);
   const lastMessage = chat.messages[chat.messages.length - 1];
 
   const handleClick = () => {
-    navigate(`./${idCurrentUser}`);
+    if (user) {
+      navigate(`./${user.id}`);
+    }
   };
 
-  if (!currentUser) {
-    return <div>user not found</div>;
+  if (!user) {
+    return <ListItemButton>User is not found</ListItemButton>;
   }
   return (
-    <ListItemButton selected={id ? idCurrentUser === +id : false} onClick={handleClick} sx={{ borderRadius: 2 }}>
+    <ListItemButton
+      selected={location.pathname === `/messages/${user.id}`}
+      onClick={handleClick}
+      sx={{ borderRadius: 2 }}
+    >
       <ListItemAvatar>
-        <ClickableAvatar user={currentUser} />
+        <ClickableAvatar user={user} />
       </ListItemAvatar>
       <Stack sx={{ width: '100%' }}>
         <Stack sx={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Typography>{currentUser.name}</Typography>
+          <Typography>{user.name}</Typography>
           <Typography variant="caption">
             {lastMessage
               ? new Date(lastMessage.createdAt).toLocaleString(currentLocales, {

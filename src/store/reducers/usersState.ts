@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ReducerNames } from '../../constants';
 import { TUsersState } from '../../types/state';
-import { IUser } from '../../types/data';
+import { IChat, IUser } from '../../types/data';
 
 const initialState: TUsersState = {
   users: [],
@@ -14,6 +14,7 @@ const initialState: TUsersState = {
   authorizedUserPendingFriends: [],
   messagesWs: null,
   usersOfExistingChats: [],
+  userOfActiveChat: null,
 };
 
 const usersStateSlice = createSlice({
@@ -65,8 +66,15 @@ const usersStateSlice = createSlice({
     setMessagesWs: (state, action: PayloadAction<WebSocket>) => {
       state.messagesWs = action.payload;
     },
-    setUsersOfExistingChats(state, action: PayloadAction<number[]>) {
-      state.usersOfExistingChats = action.payload.map((id) => state.users.find((user) => user.id === id));
+    setUsersOfExistingChats(state, action: PayloadAction<IChat[]>) {
+      const usersIds = action.payload.map(
+        (chat) => +chat.userIds.filter((userId) => userId !== state.idAuthorizedUser).join()
+      );
+
+      state.usersOfExistingChats = usersIds.map((id) => state.users.find((user) => user.id === id));
+    },
+    setUserOfActiveChat(state, action: PayloadAction<IUser>) {
+      state.userOfActiveChat = action.payload;
     },
   },
 });
@@ -80,6 +88,7 @@ export const {
   defineFriends,
   setMessagesWs,
   setUsersOfExistingChats,
+  setUserOfActiveChat,
 } = usersStateSlice.actions;
 
 export const usersState = usersStateSlice.reducer;

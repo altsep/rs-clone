@@ -14,7 +14,7 @@ import { refreshToken } from './api/usersApi';
 import { ILogin } from './types/data';
 import { getToken, setToken } from './utils/common';
 import { setAuth, setAuthError, setLoading } from './store/reducers/authSlice';
-import { setUser, usersLoadingSuccess } from './store/reducers/usersState';
+import { setUser, setUsersOfExistingChats, usersLoadingSuccess } from './store/reducers/usersState';
 import Messages from './pages/Messages';
 import Friends from './pages/Friends';
 import NotFound from './pages/NotFound';
@@ -28,13 +28,14 @@ import { commentsLoadingSuccess } from './store/reducers/commentsState';
 import NotAuthRoute from './hoc/NotAuthRoute';
 import useMessagesWs from './hooks/useMessagesWs';
 import useUserChats from './hooks/useUserChats';
-import { setChats, setUsersIdsOfExistingChats } from './store/reducers/chatsState';
+import { setChats } from './store/reducers/chatsState';
 
 function App() {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const theme = useAppSelector((state) => state.theme.mode);
   const { idAuthorizedUser } = useAppSelector((state) => state.users);
+  const { chats } = useAppSelector((state) => state.chats);
 
   const { users, isLoadingUsers, isValidatingUsers } = useUsers();
   const { posts, isLoadingPosts, isValidatingPosts } = usePosts();
@@ -108,9 +109,14 @@ function App() {
   useEffect(() => {
     if (userChats && idAuthorizedUser && !isErrorUserChats) {
       dispatch(setChats(userChats));
-      dispatch(setUsersIdsOfExistingChats(idAuthorizedUser));
     }
   }, [dispatch, userChats, idAuthorizedUser, isErrorUserChats]);
+
+  useEffect(() => {
+    if (chats.length > 0 && idAuthorizedUser && users && users.length > 0) {
+      dispatch(setUsersOfExistingChats(chats));
+    }
+  }, [dispatch, chats, idAuthorizedUser, users]);
 
   return (
     <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>

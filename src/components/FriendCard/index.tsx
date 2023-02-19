@@ -7,9 +7,10 @@ import ClickableAvatar from '../ClickableAvatar';
 import { ApiPath, API_BASE_URL, RoutePath } from '../../constants';
 import { updateUser } from '../../api/usersApi';
 import { TUpdateUserArg } from '../../types/usersApi';
-import { updateUserInState } from '../../store/reducers/usersState';
+import { setUserOfActiveChat, updateUserInState } from '../../store/reducers/usersState';
 import { addChat } from '../../api/chatsApi';
-import { setCurrentChat } from '../../store/reducers/chatsState';
+import { addChatInState, setActiveChat } from '../../store/reducers/chatsState';
+import { isChat } from '../../types/predicates';
 
 interface IFriendCardProps {
   user: IUser;
@@ -20,8 +21,7 @@ export default function FriendCard({ user, isRequest }: IFriendCardProps) {
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
-  const { idAuthorizedUser, authorizedUser } = useAppSelector((state) => state.users);
-  const { usersIdsOfExistingChats } = useAppSelector((state) => state.chats);
+  const { idAuthorizedUser, authorizedUser, usersOfExistingChats } = useAppSelector((state) => state.users);
 
   const { trigger: triggerUpdateAuthorizedUser } = useSWRMutation(
     `${API_BASE_URL}${ApiPath.users}/${idAuthorizedUser}`,
@@ -97,11 +97,17 @@ export default function FriendCard({ user, isRequest }: IFriendCardProps) {
   };
 
   const handleClickWriteMessage = async () => {
-    if (!usersIdsOfExistingChats.includes(user.id)) {
+    if (
+      !usersOfExistingChats.find((userOfExistingChats) => userOfExistingChats && userOfExistingChats.id === user.id)
+    ) {
       const argAddChat = { userIds: [idAuthorizedUser, user.id] };
-      await triggerAddChat(argAddChat);
+      const dataResponse = await triggerAddChat(argAddChat);
+      if (isChat(dataResponse)) {
+        dispatch(addChatInState(dataResponse));
+      }
     }
-    // dispatch(setCurrentChat(user.id));
+    dispatch(setUserOfActiveChat(user));
+    dispatch(setActiveChat(user.id));
     navigate(`${RoutePath.messages}/${user.id}`);
   };
 

@@ -19,6 +19,7 @@ type TUsersState = {
   authorizedUserPendingFriends: IUser[];
   messagesWs: WebSocket | null;
   usersOfExistingChats: (IUser | undefined)[];
+  userOfActiveChat: IUser | null;
 };
 
 type TThemeState = {
@@ -47,10 +48,9 @@ type TCommentsState = {
 
 type TChatsState = {
   chats: IChat[];
-  currentChat: IChat | null;
-  currentChatIndex: number;
-  currentChatMessages: IMessage[];
-  usersIdsOfExistingChats: number[];
+  activeChat: IChat | null;
+  activeChatIndex: number;
+  activeChatMessages: IMessage[];
 };
 
 export type {

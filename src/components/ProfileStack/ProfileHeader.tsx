@@ -7,16 +7,18 @@ import { updateUser } from '../../api/usersApi';
 import { TUpdateUserArg } from '../../types/usersApi';
 import temporary from '../../assets/temporary-2.webp';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { updateUserInState } from '../../store/reducers/usersState';
+import { setUserOfActiveChat, updateUserInState } from '../../store/reducers/usersState';
 import { addChat } from '../../api/chatsApi';
-import { setCurrentChat } from '../../store/reducers/chatsState';
+import { addChatInState, setActiveChat } from '../../store/reducers/chatsState';
+import { isChat } from '../../types/predicates';
 
 export default function ProfileHeader() {
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
-  const { idCurrentProfile, idAuthorizedUser, currentProfile, authorizedUser } = useAppSelector((state) => state.users);
-  const { usersIdsOfExistingChats } = useAppSelector((state) => state.chats);
+  const { idCurrentProfile, idAuthorizedUser, currentProfile, authorizedUser, usersOfExistingChats } = useAppSelector(
+    (state) => state.users
+  );
 
   const { trigger: triggerUpdateAuthorizedUser } = useSWRMutation(
     `${API_BASE_URL}${ApiPath.users}/${idAuthorizedUser}`,
@@ -67,12 +69,22 @@ export default function ProfileHeader() {
   };
 
   const handleClickWriteMessage = async () => {
-    if (!usersIdsOfExistingChats.includes(idCurrentProfile)) {
-      const argAddChat = { userIds: [idAuthorizedUser, idCurrentProfile] };
-      await triggerAddChat(argAddChat);
+    if (currentProfile) {
+      if (
+        !usersOfExistingChats.find(
+          (userOfExistingChats) => userOfExistingChats && userOfExistingChats.id === currentProfile.id
+        )
+      ) {
+        const argAddChat = { userIds: [idAuthorizedUser, idCurrentProfile] };
+        const dataResponse = await triggerAddChat(argAddChat);
+        if (isChat(dataResponse)) {
+          dispatch(addChatInState(dataResponse));
+        }
+      }
+      dispatch(setUserOfActiveChat(currentProfile));
+      dispatch(setActiveChat(currentProfile.id));
+      navigate(`${RoutePath.messages}/${idCurrentProfile}`);
     }
-    // dispatch(setCurrentChat(dCurrentProfile));
-    navigate(`${RoutePath.messages}/${idCurrentProfile}`);
   };
 
   return (

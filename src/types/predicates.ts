@@ -1,4 +1,4 @@
-import { IMessage } from './data';
+import { IChat, IMessage } from './data';
 
 function isMessage(value: unknown): value is IMessage {
   const valueWithType = value as IMessage;
@@ -11,4 +11,14 @@ function isMessage(value: unknown): value is IMessage {
   );
 }
 
-export { isMessage };
+function isChat(value: unknown): value is IChat {
+  const valueWithType = value as IChat;
+  return (
+    valueWithType.id !== undefined &&
+    valueWithType.messages !== undefined &&
+    valueWithType.createdAt !== undefined &&
+    valueWithType.userIds !== undefined
+  );
+}
+
+export { isMessage, isChat };
