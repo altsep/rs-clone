@@ -4,6 +4,7 @@ const { ESBuildMinifyPlugin } = require('esbuild-loader');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
 const config = {
   context: __dirname,
@@ -43,6 +44,7 @@ const config = {
       template: './public/index.html',
     }),
     new ForkTsCheckerWebpackPlugin(),
+    new Dotenv(),
   ],
   optimization: {
     minimizer: [
@@ -78,6 +80,9 @@ module.exports = (_env, argv) => {
   } else {
     config.plugins.push(new ESLintPlugin());
     config.devtool = 'source-map';
+    config.devServer.proxy = {
+      '/api': 'http://localhost:3000',
+    };
   }
 
   config.output.filename = filename('js');
