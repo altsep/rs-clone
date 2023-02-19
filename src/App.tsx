@@ -1,33 +1,25 @@
 import { useEffect } from 'react';
 import useSWRMutation from 'swr/mutation';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Box, CssBaseline, ThemeProvider } from '@mui/material';
 import { darkTheme } from './themes/darkTheme';
 import { lightTheme } from './themes/lightTheme';
 import { useAppDispatch, useAppSelector } from './hooks/redux';
-import Login from './pages/Login';
-import Registration from './pages/Registration';
 import Header from './components/Header/Header';
-import Profile from './pages/Profile';
-import { ApiPath, API_BASE_URL, KEY_LOCAL_STORAGE, LSKeys, RoutePath } from './constants';
+import { ApiPath, API_BASE_URL, KEY_LOCAL_STORAGE, LSKeys } from './constants';
 import { refreshToken } from './api/usersApi';
 import { ILogin } from './types/data';
 import { getToken, setToken } from './utils/common';
 import { setAuth, setAuthError, setLoading } from './store/reducers/authSlice';
 import { setUser, usersLoadingSuccess } from './store/reducers/usersState';
-import Messages from './pages/Messages';
-import Friends from './pages/Friends';
-import NotFound from './pages/NotFound';
-import Settings from './pages/Settings';
-import PrivateRoute from './hoc/PrivateRoute';
 import usePosts from './hooks/usePosts';
 import useUsers from './hooks/useUsers';
 import { postsLoadingSuccess } from './store/reducers/postsState';
 import useComments from './hooks/useComments';
 import { commentsLoadingSuccess } from './store/reducers/commentsState';
-import NotAuthRoute from './hoc/NotAuthRoute';
 import Footer from './components/Footer/Footer';
 import useMessagesWs from './hooks/useMessagesWs';
+import Routes from './components/Routes';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -107,57 +99,7 @@ function App() {
       <CssBaseline />
       <Header />
       <Box component="main" sx={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <NotAuthRoute>
-                <Login />
-              </NotAuthRoute>
-            }
-          />
-          <Route
-            path={RoutePath.registration}
-            element={
-              <NotAuthRoute>
-                <Registration />
-              </NotAuthRoute>
-            }
-          />
-          <Route
-            path="/:id"
-            element={
-              <PrivateRoute>
-                <Profile />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path={RoutePath.messages}
-            element={
-              <PrivateRoute>
-                <Messages />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path={RoutePath.friends}
-            element={
-              <PrivateRoute>
-                <Friends />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path={`${RoutePath.settings}/*`}
-            element={
-              <PrivateRoute>
-                <Settings />
-              </PrivateRoute>
-            }
-          />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <Routes />
       </Box>
       <Footer />
     </ThemeProvider>
