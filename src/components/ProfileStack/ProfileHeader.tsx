@@ -81,8 +81,6 @@ export default function ProfileHeader() {
           dispatch(addChatInState(dataResponse));
         }
       }
-      dispatch(setUserOfActiveChat(currentProfile));
-      dispatch(setActiveChat(currentProfile.id));
       navigate(`${RoutePath.messages}/${idCurrentProfile}`);
     }
   };

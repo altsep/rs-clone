@@ -50,6 +50,9 @@ const enum LSKeys {
   theme = 'theme',
   token = 'token',
   path = 'path',
+  // CHANGE_NAME
+  numberOfNewMessagesInChats = 'numberOfNewMessagesInChats',
+  totalNumberOfNewMessages = 'totalNumberOfNewMessages',
 }
 
 const locales: { [key: string]: string } = {

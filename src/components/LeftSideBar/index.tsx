@@ -20,6 +20,7 @@ export default function LeftSideBar() {
   const dispatch = useAppDispatch();
   const { isOpen } = useAppSelector((state) => state.leftSideBar);
   const { idAuthorizedUser, authorizedUser } = useAppSelector((state) => state.users);
+  const { totalNumberOfNewMessages } = useAppSelector((state) => state.chats);
 
   const logout = async (): Promise<void> => {
     dispatch(setLoading(true));
@@ -36,6 +37,7 @@ export default function LeftSideBar() {
     {
       text: 'Profile',
       icon: <AccountBoxOutlinedIcon />,
+      counter: null,
       to: `${
         authorizedUser?.alias && location.pathname !== `/id${idAuthorizedUser}`
           ? `/${authorizedUser.alias}`
@@ -52,6 +54,7 @@ export default function LeftSideBar() {
     {
       text: 'Messages',
       icon: <ChatOutlinedIcon />,
+      counter: totalNumberOfNewMessages,
       to: `${RoutePath.messages}`,
       handleClick: (): void => {
         navigate(`${RoutePath.messages}`);
@@ -60,6 +63,7 @@ export default function LeftSideBar() {
     {
       text: 'Friends',
       icon: <Diversity3OutlinedIcon />,
+      counter: null,
       to: `${RoutePath.friends}`,
       handleClick: (): void => {
         navigate(`${RoutePath.friends}`);
@@ -68,6 +72,7 @@ export default function LeftSideBar() {
     {
       text: 'Settings',
       icon: <SettingsOutlinedIcon />,
+      counter: null,
       to: `${RoutePath.settings}`,
       handleClick: (): void => {
         navigate(`${RoutePath.settings}`);
@@ -76,6 +81,7 @@ export default function LeftSideBar() {
     {
       text: 'Logout',
       icon: <LogoutOutlinedIcon />,
+      counter: null,
       to: '/',
       handleClick: () => {
         logout().catch((err: Error): Error => err);
@@ -102,6 +108,7 @@ export default function LeftSideBar() {
               >
                 <ListItemIcon>{sideBarButtonInfo.icon}</ListItemIcon>
                 <ListItemText primary={sideBarButtonInfo.text} />
+                {sideBarButtonInfo.counter !== 0 && <Box>{sideBarButtonInfo.counter}</Box>}
               </ListItemButton>
             </ListItem>
           ))}

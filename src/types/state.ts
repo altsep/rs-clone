@@ -46,11 +46,20 @@ type TCommentsState = {
   comments: IComment[];
 };
 
+// CHANGE_NAME
+type TNumberOfNewMessagesInChat = {
+  userId: number;
+  counter: number;
+};
+
 type TChatsState = {
   chats: IChat[];
   activeChat: IChat | null;
   activeChatIndex: number;
   activeChatMessages: IMessage[];
+  // CHANGE_NAME
+  numberOfNewMessagesInChats: TNumberOfNewMessagesInChat[];
+  totalNumberOfNewMessages: number;
 };
 
 export type {
@@ -62,5 +71,6 @@ export type {
   TThemeState,
   TAuthState,
   TLoginFormState,
+  TNumberOfNewMessagesInChat,
   TChatsState,
 };

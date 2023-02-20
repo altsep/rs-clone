@@ -106,8 +106,6 @@ export default function FriendCard({ user, isRequest }: IFriendCardProps) {
         dispatch(addChatInState(dataResponse));
       }
     }
-    dispatch(setUserOfActiveChat(user));
-    dispatch(setActiveChat(user.id));
     navigate(`${RoutePath.messages}/${user.id}`);
   };
 

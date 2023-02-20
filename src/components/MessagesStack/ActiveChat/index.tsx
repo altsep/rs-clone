@@ -1,26 +1,23 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Box, Card, CardActions, CardHeader, Divider, IconButton, List, TextField } from '@mui/material';
-import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
+import { Box, Card, CardHeader, Divider, List } from '@mui/material';
+
 import ClickableAvatar from '../../ClickableAvatar';
 import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
 import Message from './Message';
 import { setUserOfActiveChat } from '../../../store/reducers/usersState';
 import { setActiveChat } from '../../../store/reducers/chatsState';
+import MessageCreator from './MessageCreator';
 
 export default function ActiveChat() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [valueMessage, setValueMessage] = useState('');
-
   const endRef = useRef<HTMLDivElement | null>(null);
 
   const dispatch = useAppDispatch();
-  const { messagesWs, idAuthorizedUser, authorizedUser, userOfActiveChat, usersOfExistingChats } = useAppSelector(
-    (state) => state.users
-  );
-  const { activeChat, activeChatMessages, activeChatIndex } = useAppSelector((state) => state.chats);
+  const { authorizedUser, userOfActiveChat, usersOfExistingChats } = useAppSelector((state) => state.users);
+  const { activeChatMessages, activeChatIndex } = useAppSelector((state) => state.chats);
 
   useEffect(() => {
     if (id) {
@@ -46,27 +43,6 @@ export default function ActiveChat() {
       endRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [activeChatMessages]);
-
-  const handleClickSend = (): void => {
-    if (messagesWs && userOfActiveChat && activeChat) {
-      const msg = {
-        type: 'send',
-        payload: { chatId: activeChat.id, userId: idAuthorizedUser, description: valueMessage },
-      };
-      messagesWs.send(JSON.stringify(msg));
-      setValueMessage('');
-    }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
-    setValueMessage(e.target.value);
-  };
-
-  const handleKeyDownSend = (e: React.KeyboardEvent<HTMLDivElement>): void => {
-    if (e.key === 'Enter') {
-      handleClickSend();
-    }
-  };
 
   return (
     <Card
@@ -103,19 +79,7 @@ export default function ActiveChat() {
         <Box ref={endRef} />
       </List>
       <Divider />
-      <CardActions sx={{ display: 'flex', justifyContent: 'space-between', p: 2 }}>
-        <TextField
-          label="Type something here..."
-          value={valueMessage}
-          onKeyDown={handleKeyDownSend}
-          onChange={handleChange}
-          size="small"
-          sx={{ flexGrow: 1 }}
-        />
-        <IconButton onClick={handleClickSend} disabled={!valueMessage}>
-          <SendOutlinedIcon />
-        </IconButton>
-      </CardActions>
+      <MessageCreator />
     </Card>
   );
 }

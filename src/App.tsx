@@ -28,14 +28,17 @@ import { commentsLoadingSuccess } from './store/reducers/commentsState';
 import NotAuthRoute from './hoc/NotAuthRoute';
 import useMessagesWs from './hooks/useMessagesWs';
 import useUserChats from './hooks/useUserChats';
-import { setChats } from './store/reducers/chatsState';
+import { resetActiveChat, setChats, setNumberOfNewMessagesInChats } from './store/reducers/chatsState';
+import { TNumberOfNewMessagesInChat } from './types/state';
 
 function App() {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const theme = useAppSelector((state) => state.theme.mode);
-  const { idAuthorizedUser } = useAppSelector((state) => state.users);
-  const { chats } = useAppSelector((state) => state.chats);
+  const { idAuthorizedUser, users: usersInState } = useAppSelector((state) => state.users);
+  const { chats, activeChat, numberOfNewMessagesInChats, totalNumberOfNewMessages } = useAppSelector(
+    (state) => state.chats
+  );
 
   const { users, isLoadingUsers, isValidatingUsers } = useUsers();
   const { posts, isLoadingPosts, isValidatingPosts } = usePosts();
@@ -113,10 +116,36 @@ function App() {
   }, [dispatch, userChats, idAuthorizedUser, isErrorUserChats]);
 
   useEffect(() => {
-    if (chats.length > 0 && idAuthorizedUser && users && users.length > 0) {
+    if (chats.length > 0 && idAuthorizedUser && usersInState.length > 0) {
       dispatch(setUsersOfExistingChats(chats));
     }
-  }, [dispatch, chats, idAuthorizedUser, users]);
+  }, [dispatch, chats, idAuthorizedUser, usersInState]);
+
+  useEffect(() => {
+    if (activeChat && `${location.pathname.split('/').slice(0, 2).join('/')}` !== `${RoutePath.messages}`) {
+      dispatch(resetActiveChat());
+    } else if (
+      activeChat &&
+      `${location.pathname.split('/').slice(0, 2).join('/')}` === `${RoutePath.messages}` &&
+      !location.pathname.split('/')[2]
+    ) {
+      dispatch(resetActiveChat());
+    }
+  }, [dispatch, activeChat, location]);
+
+  useEffect(() => {
+    localStorage.setItem(
+      `${LSKeys.totalNumberOfNewMessages}_${KEY_LOCAL_STORAGE}`,
+      JSON.stringify(totalNumberOfNewMessages)
+    );
+  }, [totalNumberOfNewMessages]);
+
+  useEffect(() => {
+    localStorage.setItem(
+      `${LSKeys.numberOfNewMessagesInChats}_${KEY_LOCAL_STORAGE}`,
+      JSON.stringify(numberOfNewMessagesInChats)
+    );
+  }, [numberOfNewMessagesInChats]);
 
   return (
     <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
