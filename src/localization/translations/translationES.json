@@ -83,7 +83,7 @@
     "security": {
       "title": "Seguridad",
       "closeProfile": "Cerrar perfil",
-      "password": "Contraseña",
+      "changePassword": "Cambiar la contraseña",
       "changeSuccess": "Contraseña cambiada exitosamente",
       "changeError": "Intento fallido de cambio de contraseña. Intentar otra vez"
     },
@@ -153,6 +153,9 @@
     "notFound": "Usuario no encontrado",
     "intro": "introducción",
     "hiddenUser": "Este usuario optó por ocultar sus datos",
-    "hiddenInfo": "la información está oculta"
+    "hiddenInfo": "la información está oculta",
+    "lastSeen": "Ultima vez visto",
+    "online": "En línea",
+    "offline": "Fuera de línea"
   }
 }

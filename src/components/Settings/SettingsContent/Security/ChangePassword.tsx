@@ -86,7 +86,7 @@ export default function ChangePassword() {
             name="password"
             control={control}
           >
-            {t('settings.security.password')}
+            {t('settings.security.changePassword')}
           </EditProfileInput>
           {successChange && (
             <FormHelperText sx={{ color: 'green' }}>{t('settings.security.changeSuccess')}</FormHelperText>

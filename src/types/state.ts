@@ -45,6 +45,8 @@ type TCommentsState = {
   comments: IComment[];
 };
 
+type TChangeStatus = Pick<IUser, 'isOnline' | 'lastSeen'>;
+
 export type {
   IInputsState,
   ILeftSideBarState,
@@ -54,4 +56,5 @@ export type {
   TThemeState,
   TAuthState,
   TLoginFormState,
+  TChangeStatus,
 };

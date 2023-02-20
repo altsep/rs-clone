@@ -12,7 +12,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { closeLeftSideBar } from '../../store/reducers/leftSideBarState';
 import { logoutUser } from '../../api/usersApi';
 import { setAuth, setLoading } from '../../store/reducers/authSlice';
-import { removeToken } from '../../utils/common';
+import { getActionString, removeToken } from '../../utils/common';
 import Search from '../Search/Search';
 
 export default function LeftSideBar() {
@@ -23,11 +23,19 @@ export default function LeftSideBar() {
   const dispatch = useAppDispatch();
   const { isOpen } = useAppSelector((state) => state.leftSideBar);
   const { idAuthorizedUser, authorizedUser } = useAppSelector((state) => state.users);
+  const { messagesWs } = useAppSelector((state) => state.users);
+
+  const sendOfflineStatus = (): void => {
+    const isOnline = false;
+    const userStatusMsg = getActionString('userStatus', { userId: idAuthorizedUser, isOnline });
+    messagesWs?.send(userStatusMsg);
+  };
 
   const logout = async (): Promise<void> => {
     dispatch(setLoading(true));
     const res = await logoutUser(`${API_BASE_URL}${ApiPath.logout}`);
     if (res.ok) {
+      sendOfflineStatus();
       removeToken();
       dispatch(setAuth(false));
       dispatch(setLoading(false));
@@ -35,7 +43,6 @@ export default function LeftSideBar() {
       navigate('/');
     }
   };
-
   const sideBarButtonsInfo: TSideBarButtonsInfo = [
     {
       text: t('sideBar.profile'),

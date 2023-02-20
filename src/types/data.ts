@@ -33,6 +33,8 @@ interface IUser {
   friendsIds?: number[];
   isActivated?: boolean;
   pendingFriendsIds?: number[];
+  isOnline: boolean;
+  lastSeen?: string;
 }
 
 interface ILogin {

@@ -83,7 +83,7 @@
     "security": {
       "title": "Security",
       "closeProfile": "Сlose profile",
-      "password": "Password",
+      "changePassword": "Change password",
       "changeSuccess": "Password changed successfully",
       "changeError": "Unsuccessful attempt to change password. Try again"
     },
@@ -153,6 +153,9 @@
     "notFound": "User not found",
     "intro": "Intro",
     "hiddenUser": "This user chose to hide their data",
-    "hiddenInfo": "Information is hidden"
+    "hiddenInfo": "Information is hidden",
+    "lastSeen": "Last seen",
+    "online": "Online",
+    "offline": "Offline"
   }
 }
