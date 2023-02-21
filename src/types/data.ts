@@ -54,4 +54,16 @@ interface IChat {
   messages: IMessage[];
 }
 
-export type { IComment, IPost, IUser, ILogin, IMessage, IChat };
+type TNumberOfUnreadMessages = {
+  chatId: string;
+  userId: number;
+  counter: number;
+};
+
+type TLastMessage = {
+  chatId: string;
+  userId: number;
+  idLastMessage: string;
+};
+
+export type { IComment, IPost, IUser, ILogin, IMessage, IChat, TNumberOfUnreadMessages, TLastMessage };

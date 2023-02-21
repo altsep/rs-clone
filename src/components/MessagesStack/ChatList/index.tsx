@@ -8,7 +8,7 @@ import { RoutePath } from '../../../constants';
 export default function ChatList() {
   const location = useLocation();
 
-  const { chats, numberOfNewMessagesInChats } = useAppSelector((state) => state.chats);
+  const { chats, numberOfUnreadMessagesInChats } = useAppSelector((state) => state.chats);
   const { usersOfExistingChats, idAuthorizedUser } = useAppSelector((state) => state.users);
 
   return (
@@ -27,10 +27,13 @@ export default function ChatList() {
           key={chat.id}
           chat={chat}
           user={usersOfExistingChats[i]}
-          numberOfNewMessagesInChat={numberOfNewMessagesInChats.find(
-            (numberOfNewMessagesInChat) =>
-              numberOfNewMessagesInChat.userId === +chat.userIds.filter((userId) => userId !== idAuthorizedUser).join()
-          )}
+          numberOfUnreadMessages={
+            numberOfUnreadMessagesInChats &&
+            numberOfUnreadMessagesInChats.find(
+              (numberOfUnreadMessages) =>
+                numberOfUnreadMessages.userId === +chat.userIds.filter((userId) => userId !== idAuthorizedUser).join()
+            )?.counter
+          }
         />
       ))}
     </List>

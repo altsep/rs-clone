@@ -62,7 +62,6 @@ export default function useMessagesWs() {
       dispatch(setMessagesWs(messagesWs));
 
       window.addEventListener('beforeunload', () => {
-        localStorage.setItem('123', '1234');
         const isOnline = false;
         const msg = getActionString('userStatus', { userId, isOnline });
         messagesWs?.send(msg);

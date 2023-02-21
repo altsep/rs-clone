@@ -1,4 +1,4 @@
-import { IChat, IComment, IMessage, IPost, IUser } from './data';
+import { IChat, IComment, IMessage, IPost, IUser, TLastMessage, TNumberOfUnreadMessages } from './data';
 
 interface IInputsState {
   valueCreatePost: string;
@@ -46,20 +46,14 @@ type TCommentsState = {
   comments: IComment[];
 };
 
-// CHANGE_NAME
-type TNumberOfNewMessagesInChat = {
-  userId: number;
-  counter: number;
-};
-
 type TChatsState = {
   chats: IChat[];
   activeChat: IChat | null;
   activeChatIndex: number;
   activeChatMessages: IMessage[];
-  // CHANGE_NAME
-  numberOfNewMessagesInChats: TNumberOfNewMessagesInChat[];
-  totalNumberOfNewMessages: number;
+  numberOfUnreadMessagesInChats: TNumberOfUnreadMessages[] | null;
+  totalNumberOfUnreadMessages: number | null;
+  lastMessagesInChats: TLastMessage[] | null;
 };
 
 export type {
@@ -71,6 +65,5 @@ export type {
   TThemeState,
   TAuthState,
   TLoginFormState,
-  TNumberOfNewMessagesInChat,
   TChatsState,
 };

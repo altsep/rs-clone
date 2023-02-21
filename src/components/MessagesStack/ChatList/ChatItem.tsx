@@ -3,17 +3,16 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { RoutePath } from '../../../constants';
 import { currentLocales } from '../../../mock-data/data';
 import { IChat, IUser } from '../../../types/data';
-import { TNumberOfNewMessagesInChat } from '../../../types/state';
 import ClickableAvatar from '../../ClickableAvatar';
 
 interface IChatItemProps {
   chat: IChat;
   user: IUser | undefined;
   // CHANGE_NAME
-  numberOfNewMessagesInChat: TNumberOfNewMessagesInChat | undefined;
+  numberOfUnreadMessages: number | null | undefined;
 }
 
-export default function ChatItem({ chat, user, numberOfNewMessagesInChat }: IChatItemProps) {
+export default function ChatItem({ chat, user, numberOfUnreadMessages }: IChatItemProps) {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -59,7 +58,22 @@ export default function ChatItem({ chat, user, numberOfNewMessagesInChat }: ICha
           >
             {chat.messages[chat.messages.length - 1] && chat.messages[chat.messages.length - 1].description}
           </Typography>
-          {numberOfNewMessagesInChat && <Box>{numberOfNewMessagesInChat.counter}</Box>}
+          {numberOfUnreadMessages && (
+            <Box
+              sx={{
+                display: 'flex',
+                ml: 1,
+                width: 25,
+                height: 25,
+                backgroundColor: 'primary.main',
+                borderRadius: '50%',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              {numberOfUnreadMessages < 10 ? numberOfUnreadMessages : '9+'}
+            </Box>
+          )}
         </Stack>
       </Stack>
     </ListItemButton>

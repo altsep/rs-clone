@@ -4,7 +4,7 @@ interface ISideBarButtonInfo {
   text: string;
   icon: ReactNode;
   counter: number | null;
-  to: string;
+  to: string[] | string;
   handleClick: () => void;
 }
 

@@ -1,22 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { KEY_LOCAL_STORAGE, LSKeys, ReducerNames } from '../../constants';
-import { IChat, IMessage } from '../../types/data';
-import { TChatsState, TNumberOfNewMessagesInChat } from '../../types/state';
-
-const getNumberOfNewMessagesInChats = localStorage.getItem(`${LSKeys.numberOfNewMessagesInChats}_${KEY_LOCAL_STORAGE}`);
-const getTotalNumberOfNewMessages = localStorage.getItem(`${LSKeys.totalNumberOfNewMessages}_${KEY_LOCAL_STORAGE}`);
+import { IChat, IMessage, TLastMessage, TNumberOfUnreadMessages } from '../../types/data';
+import { TChatsState } from '../../types/state';
 
 const initialState: TChatsState = {
   chats: [],
   activeChat: null,
   activeChatIndex: -1,
   activeChatMessages: [],
-  // CHANGE_NAME
-
-  numberOfNewMessagesInChats: getNumberOfNewMessagesInChats
-    ? (JSON.parse(getNumberOfNewMessagesInChats) as TNumberOfNewMessagesInChat[])
-    : [],
-  totalNumberOfNewMessages: getTotalNumberOfNewMessages ? (JSON.parse(getTotalNumberOfNewMessages) as number) : 0,
+  numberOfUnreadMessagesInChats: null,
+  totalNumberOfUnreadMessages: null,
+  lastMessagesInChats: null,
 };
 
 const chatsStateSlice = createSlice({
@@ -35,14 +29,19 @@ const chatsStateSlice = createSlice({
 
       if (state.chats.length > 0 && state.activeChatIndex !== -1) {
         state.activeChatMessages = state.chats[state.activeChatIndex].messages;
-      }
-      state.numberOfNewMessagesInChats = state.numberOfNewMessagesInChats.filter((numberOfNewMessagesInChat) => {
-        if (numberOfNewMessagesInChat.userId === action.payload) {
-          state.totalNumberOfNewMessages -= numberOfNewMessagesInChat.counter;
-          return false;
+        if (state.activeChatMessages.length > 0 && state.lastMessagesInChats) {
+          state.lastMessagesInChats = state.lastMessagesInChats.map((lastMessage) => {
+            if (lastMessage.chatId === state.activeChat?.id) {
+              return {
+                chatId: lastMessage.chatId,
+                idLastMessage: state.activeChatMessages[state.activeChatMessages.length - 1].id,
+                userId: lastMessage.userId,
+              };
+            }
+            return lastMessage;
+          });
         }
-        return true;
-      });
+      }
     },
     resetActiveChat(state) {
       state.activeChat = null;
@@ -54,14 +53,14 @@ const chatsStateSlice = createSlice({
       if (state.activeChat?.userIds.includes(action.payload.userId)) {
         state.activeChat.messages.push(action.payload);
         state.activeChatMessages.push(action.payload);
-      } else {
-        const index = state.numberOfNewMessagesInChats.findIndex((obj) => obj.userId === action.payload.userId);
-        if (index !== -1) {
-          state.numberOfNewMessagesInChats[index].counter += 1;
-        } else {
-          state.numberOfNewMessagesInChats.push({ userId: action.payload.userId, counter: 1 });
+        if (state.lastMessagesInChats) {
+          state.lastMessagesInChats = state.lastMessagesInChats.map((lastMessage) => {
+            if (lastMessage.chatId === state.activeChat?.id) {
+              return { chatId: lastMessage.chatId, idLastMessage: action.payload.id, userId: lastMessage.userId };
+            }
+            return lastMessage;
+          });
         }
-        state.totalNumberOfNewMessages += 1;
       }
     },
     addMessageSend(state, action: PayloadAction<IMessage>) {
@@ -69,14 +68,50 @@ const chatsStateSlice = createSlice({
         state.chats[state.activeChatIndex].messages.push(action.payload);
         state.activeChat.messages.push(action.payload);
         state.activeChatMessages.push(action.payload);
+
+        if (state.lastMessagesInChats) {
+          state.lastMessagesInChats = state.lastMessagesInChats.map((lastMessage) => {
+            if (lastMessage.chatId === state.activeChat?.id) {
+              return { chatId: lastMessage.chatId, idLastMessage: action.payload.id, userId: lastMessage.userId };
+            }
+            return lastMessage;
+          });
+        }
       }
     },
     addChatInState(state, action: PayloadAction<IChat>) {
       state.chats.push(action.payload);
     },
-    // CHANGE_NAME
-    setNumberOfNewMessagesInChats(state, action: PayloadAction<TNumberOfNewMessagesInChat[]>) {
-      state.numberOfNewMessagesInChats = action.payload;
+    setLastMessagesInChats(state, action: PayloadAction<number>) {
+      const getLastMessagesInChats = localStorage.getItem(
+        `${LSKeys.lastMessages}_${action.payload}_${KEY_LOCAL_STORAGE}`
+      );
+      state.lastMessagesInChats = getLastMessagesInChats ? (JSON.parse(getLastMessagesInChats) as TLastMessage[]) : [];
+    },
+    setNumberOfUnreadMessagesInChats(state, action: PayloadAction<TLastMessage[]>) {
+      state.numberOfUnreadMessagesInChats = action.payload.reduce<TNumberOfUnreadMessages[]>((acc, lastMessage) => {
+        const currentChat = state.chats.find((chat) => chat.id === lastMessage.chatId);
+        if (currentChat) {
+          // FIX_ME see why findLastIndex doesn't work
+
+          const indexOfLastStoredMessage = currentChat.messages.findIndex(
+            (message) => message.id === lastMessage.idLastMessage
+          );
+          if (indexOfLastStoredMessage < currentChat.messages.length - 1) {
+            const arg: TNumberOfUnreadMessages = {
+              chatId: currentChat.id,
+              userId: lastMessage.userId,
+              counter: currentChat.messages.length - 1 - indexOfLastStoredMessage,
+            };
+            acc.push(arg);
+          }
+        }
+        return acc;
+      }, []);
+      state.totalNumberOfUnreadMessages = state.numberOfUnreadMessagesInChats.reduce((acc, numberOfUnreadMessages) => {
+        acc += numberOfUnreadMessages.counter;
+        return acc;
+      }, 0);
     },
   },
 });
@@ -88,7 +123,8 @@ export const {
   setActiveChat,
   addChatInState,
   resetActiveChat,
-  setNumberOfNewMessagesInChats,
+  setNumberOfUnreadMessagesInChats,
+  setLastMessagesInChats,
 } = chatsStateSlice.actions;
 
 export const chatsState = chatsStateSlice.reducer;

@@ -7,9 +7,9 @@ import { updateUser } from '../../api/usersApi';
 import { TUpdateUserArg } from '../../types/usersApi';
 import temporary from '../../assets/temporary-2.webp';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { setUserOfActiveChat, updateUserInState } from '../../store/reducers/usersState';
+import { updateUserInState } from '../../store/reducers/usersState';
 import { addChat } from '../../api/chatsApi';
-import { addChatInState, setActiveChat } from '../../store/reducers/chatsState';
+import { addChatInState } from '../../store/reducers/chatsState';
 import { isChat } from '../../types/predicates';
 
 export default function ProfileHeader() {
