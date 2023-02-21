@@ -47,8 +47,7 @@ export default function EditProfileForm() {
       .string()
       .nullable()
       .transform((value: string, origin: string) => (origin === '' ? null : value))
-      .min(5)
-      .test('alias', (value: string | null | undefined): boolean => (value === null ? true : !value?.includes(' '))),
+      .matches(/^[a-z0-9_-]{5,}$/i),
   });
 
   const defaultValues: Partial<IEditFormValues> = {

@@ -4,16 +4,17 @@ import { Box, Button, Typography, Badge, Avatar, IconButton, Skeleton, Stack } f
 import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import { useTranslation } from 'react-i18next';
-import { MutableRefObject, useEffect, useRef } from 'react';
+import { MutableRefObject, useRef } from 'react';
 import { ApiPath, API_BASE_URL, RoutePath } from '../../constants';
 import { updateUser } from '../../api/usersApi';
 import { TUpdateUserArg } from '../../types/usersApi';
 import temporary from '../../assets/temporary-2.webp';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { setOnlineStatus, updateUserInState } from '../../store/reducers/usersState';
-import useUser from '../../hooks/useUser';
+import { updateUserInState } from '../../store/reducers/usersState';
+import useStatus from '../../hooks/useStatus';
 
 export default function ProfileHeader() {
+  useStatus();
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -23,15 +24,6 @@ export default function ProfileHeader() {
 
   const avatarPicker = useRef<HTMLInputElement | null>(null);
   const coverPicker = useRef<HTMLInputElement | null>(null);
-
-  const { user } = useUser(idCurrentProfile);
-
-  useEffect(() => {
-    if (user) {
-      const { isOnline, lastSeen } = user;
-      dispatch(setOnlineStatus({ isOnline, lastSeen }));
-    }
-  }, [user, dispatch]);
 
   const { trigger: triggerUpdateAuthorizedUser } = useSWRMutation(
     `${API_BASE_URL}${ApiPath.users}/${idAuthorizedUser}`,
