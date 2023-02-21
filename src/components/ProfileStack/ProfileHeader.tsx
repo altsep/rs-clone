@@ -152,7 +152,6 @@ export default function ProfileHeader() {
           </Box>
         </Box>
       </Box>
-
       <Box
         sx={{
           display: 'flex',

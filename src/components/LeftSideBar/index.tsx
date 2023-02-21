@@ -41,6 +41,8 @@ export default function LeftSideBar() {
       dispatch(setLoading(false));
       localStorage.removeItem(`${LSKeys.path}_${KEY_LOCAL_STORAGE}`);
       navigate('/');
+    } else {
+      dispatch(setLoading(false));
     }
   };
   const sideBarButtonsInfo: TSideBarButtonsInfo = [

@@ -151,9 +151,9 @@
       "placeholder": "Escribe un comentario..."
     },
     "notFound": "Usuario no encontrado",
-    "intro": "introducción",
+    "intro": "Información",
     "hiddenUser": "Este usuario optó por ocultar sus datos",
-    "hiddenInfo": "la información está oculta",
+    "hiddenInfo": "La información está oculta",
     "lastSeen": "Ultima vez visto",
     "online": "En línea",
     "offline": "Fuera de línea"
