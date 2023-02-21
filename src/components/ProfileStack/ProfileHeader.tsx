@@ -105,13 +105,15 @@ export default function ProfileHeader() {
                 overlap="circular"
                 sx={{ position: 'relative' }}
                 badgeContent={
-                  <IconButton
-                    sx={{ background: 'white', p: 0.5, borderRadius: '50%', minWidth: '0' }}
-                    onClick={() => handlePicker(avatarPicker)}
-                  >
-                    <input hidden accept=".jpg, .png" type="file" ref={avatarPicker} />
-                    <CloudDownloadOutlinedIcon />
-                  </IconButton>
+                  idCurrentProfile === idAuthorizedUser ? (
+                    <IconButton
+                      sx={{ background: 'white', p: 0.5, borderRadius: '50%', minWidth: '0' }}
+                      onClick={() => handlePicker(avatarPicker)}
+                    >
+                      <input hidden accept=".jpg, .png" type="file" ref={avatarPicker} />
+                      <CloudDownloadOutlinedIcon />
+                    </IconButton>
+                  ) : null
                 }
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
               >
