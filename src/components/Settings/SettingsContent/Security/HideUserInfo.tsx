@@ -1,11 +1,11 @@
-import { Box, FormControlLabel, Switch } from '@mui/material';
+import { Box, Divider, FormControlLabel, Switch } from '@mui/material';
 import { useState } from 'react';
 import useSWRMutation from 'swr/mutation';
 import { useTranslation } from 'react-i18next';
-import { ApiPath, API_BASE_URL } from '../../constants';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { updateUser } from '../../api/usersApi';
-import { setUser, updateUserInState } from '../../store/reducers/usersState';
+import { ApiPath, API_BASE_URL } from '../../../../constants';
+import { useAppDispatch, useAppSelector } from '../../../../hooks/redux';
+import { updateUser } from '../../../../api/usersApi';
+import { setUser, updateUserInState } from '../../../../store/reducers/usersState';
 
 export default function HideUserInfo() {
   const { t } = useTranslation();
@@ -28,11 +28,13 @@ export default function HideUserInfo() {
     }
   };
   return (
-    <Box sx={{ mb: '20px' }}>
+    <Box sx={{ minWidth: '100%' }}>
       <FormControlLabel
+        sx={{ mb: '20px' }}
         label={t('settings.security.closeProfile')}
         control={<Switch checked={switchChecked} onChange={handleChange} />}
       />
+      <Divider />
     </Box>
   );
 }

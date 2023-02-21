@@ -1,4 +1,4 @@
-import { Box, Button, FormHelperText, Grid } from '@mui/material';
+import { Box, Button, Divider, FormHelperText, Grid } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -79,7 +79,7 @@ export default function ChangePassword() {
 
   return (
     <Box component="form" onSubmit={handleSubmit(updatePassword)} sx={{ minWidth: '100%', mt: '20px' }}>
-      <Grid container direction="column" sx={{ width: '50%' }}>
+      <Grid container direction="column" sx={{ width: '50%', mb: '20px' }}>
         <Grid item sx={{ mb: '20px' }}>
           <EditProfileInput
             helperText={errors.password ? t('registration.errors.password.validation') : ''}
@@ -102,6 +102,7 @@ export default function ChangePassword() {
           </Button>
         </Grid>
       </Grid>
+      <Divider />
     </Box>
   );
 }
