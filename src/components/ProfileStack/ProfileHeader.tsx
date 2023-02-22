@@ -1,10 +1,11 @@
+import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Typography, Badge, Avatar, IconButton, Skeleton, Stack } from '@mui/material';
 import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import { useTranslation } from 'react-i18next';
-import { MutableRefObject, useRef } from 'react';
+import { MutableRefObject, useEffect, useRef } from 'react';
 import { ApiPath, API_BASE_URL, RoutePath } from '../../constants';
 import { updateUser } from '../../api/usersApi';
 import { TUpdateUserArg } from '../../types/usersApi';
@@ -12,6 +13,8 @@ import temporary from '../../assets/temporary-2.webp';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { updateUserInState } from '../../store/reducers/usersState';
 import useStatus from '../../hooks/useStatus';
+import { fetcher } from '../../utils/fetcher';
+import { IUser } from '../../types/data';
 
 export default function ProfileHeader() {
   useStatus();
@@ -33,6 +36,10 @@ export default function ProfileHeader() {
     `${API_BASE_URL}${ApiPath.users}/${idCurrentProfile}`,
     updateUser
   );
+  const { data: userData } = useSWR<IUser>(`${API_BASE_URL}${ApiPath.users}/id${idCurrentProfile}`, fetcher, {
+    refreshInterval: 10000,
+    revalidateOnMount: true,
+  });
 
   const handleClickAddFriend = async (): Promise<void> => {
     if (currentProfile) {
@@ -77,6 +84,12 @@ export default function ProfileHeader() {
       ref.current.click();
     }
   };
+
+  useEffect(() => {
+    if (userData) {
+      dispatch(updateUserInState(userData));
+    }
+  }, [userData, dispatch]);
 
   return (
     <Box sx={{ borderRadius: 4, boxShadow: 4, overflow: 'hidden' }}>
