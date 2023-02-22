@@ -1,20 +1,27 @@
 import { useEffect } from 'react';
 import { WS_BASE_URL } from '../constants';
-import { setMessagesWs } from '../store/reducers/usersState';
+import { setMessagesWs, updateUserInState } from '../store/reducers/usersState';
 import { getActionString, getToken } from '../utils/common';
 import { useAppDispatch, useAppSelector } from './redux';
 
 export default function useMessagesWs() {
   const dispatch = useAppDispatch();
-  const { idAuthorizedUser: userId } = useAppSelector((state) => state.users);
+  const { idAuthorizedUser: userId, authorizedUser: userData } = useAppSelector((state) => state.users);
 
   useEffect(() => {
     let messagesWs: WebSocket | undefined;
     let timeoutId: NodeJS.Timeout | undefined;
 
+    const modifyAuthorizedUserStatus = (isOnline: boolean) => {
+      if (userData) {
+        dispatch(updateUserInState({ ...userData, isOnline }));
+      }
+    };
+
     const sendStatusMsg = (isOnline: boolean) => {
       const userStatusMsg = getActionString('userStatus', { userId, isOnline });
       messagesWs?.send(userStatusMsg);
+      modifyAuthorizedUserStatus(isOnline);
     };
 
     const handleOpen = () => {
