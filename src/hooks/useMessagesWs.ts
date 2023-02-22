@@ -10,6 +10,12 @@ export default function useMessagesWs() {
 
   useEffect(() => {
     let messagesWs: WebSocket | undefined;
+    let timeoutId: NodeJS.Timeout | undefined;
+
+    const sendStatusMsg = (isOnline: boolean) => {
+      const userStatusMsg = getActionString('userStatus', { userId, isOnline });
+      messagesWs?.send(userStatusMsg);
+    };
 
     const handleOpen = () => {
       console.log('WS (messages): %s', 'WS connection established.');
@@ -19,9 +25,7 @@ export default function useMessagesWs() {
 
       messagesWs?.send(JSON.stringify(watchMsg));
 
-      const isOnline = true;
-      const userStatusMsg = getActionString('userStatus', { userId, isOnline });
-      messagesWs?.send(userStatusMsg);
+      sendStatusMsg(true);
     };
 
     const handleMessage = (e: MessageEvent) => {
@@ -39,6 +43,15 @@ export default function useMessagesWs() {
       }
     };
 
+    const handleFocus = () => {
+      clearTimeout(timeoutId);
+      sendStatusMsg(true);
+    };
+
+    const handleBlur = () => {
+      timeoutId = setTimeout(() => sendStatusMsg(false), 10000);
+    };
+
     if (userId) {
       const wsUrl = new URL('messages', WS_BASE_URL);
       messagesWs = new WebSocket(wsUrl);
@@ -48,15 +61,9 @@ export default function useMessagesWs() {
 
       dispatch(setMessagesWs(messagesWs));
 
-      window.addEventListener('beforeunload', () => {
-        const isOnline = false;
-        const msg = getActionString('userStatus', { userId, isOnline });
-        messagesWs?.send(msg);
-      });
+      window.addEventListener('focus', handleFocus);
+      window.addEventListener('blur', handleBlur);
+      window.addEventListener('beforeunload', () => sendStatusMsg(false));
     }
-
-    return () => {
-      messagesWs?.close();
-    };
   }, [dispatch, userId]);
 }
