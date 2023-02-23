@@ -4,23 +4,34 @@ import { Box, Button, Typography, Badge, Avatar, IconButton, Skeleton, Stack } f
 import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import { useTranslation } from 'react-i18next';
-import { MutableRefObject, useRef } from 'react';
+import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { ApiPath, API_BASE_URL, RoutePath } from '../../constants';
 import { updateUser } from '../../api/usersApi';
 import { TUpdateUserArg } from '../../types/usersApi';
-import temporary from '../../assets/temporary-2.webp';
+import coverBackground from '../../assets/cover-background.webp';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { updateUserInState } from '../../store/reducers/usersState';
+import { setAvatar, updateUserInState } from '../../store/reducers/usersState';
 import useStatus from '../../hooks/useStatus';
+import { sendImage } from '../../api/imagesApi';
+import useImage from '../../hooks/useImage';
+import ImageAlert from '../ImageAlert/ImageAlert';
 
 export default function ProfileHeader() {
   useStatus();
   const { t } = useTranslation();
   const navigate = useNavigate();
-
   const dispatch = useAppDispatch();
+
   const currentLocale = useAppSelector((state) => state.language.lang);
-  const { idCurrentProfile, idAuthorizedUser, currentProfile, authorizedUser } = useAppSelector((state) => state.users);
+  const { idCurrentProfile, idAuthorizedUser, currentProfile, authorizedUser, avatarUrl } = useAppSelector(
+    (state) => state.users
+  );
+
+  const { data: avatar, isLoading: avatarLoading } = useImage(idCurrentProfile, 'user-avatar');
+  const { data: cover, isLoading: coverLoading, mutate } = useImage(idCurrentProfile, 'user-cover');
+
+  const [userAvatarUrl, setUserAvatarUrl] = useState<string>('');
+  const [imageError, setImageError] = useState<boolean>(false);
 
   const avatarPicker = useRef<HTMLInputElement | null>(null);
   const coverPicker = useRef<HTMLInputElement | null>(null);
@@ -32,6 +43,16 @@ export default function ProfileHeader() {
   const { trigger: triggerUpdateCurrentProfileUser } = useSWRMutation(
     `${API_BASE_URL}${ApiPath.users}/${idCurrentProfile}`,
     updateUser
+  );
+
+  const { trigger: triggerAvatarChange } = useSWRMutation(
+    `${API_BASE_URL}${ApiPath.images}/user-avatar/${idAuthorizedUser}`,
+    sendImage
+  );
+
+  const { trigger: triggerCoverChange } = useSWRMutation(
+    `${API_BASE_URL}${ApiPath.images}/user-cover/${idAuthorizedUser}`,
+    sendImage
   );
 
   const handleClickAddFriend = async (): Promise<void> => {
@@ -68,6 +89,38 @@ export default function ProfileHeader() {
     }
   };
 
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
+    if (e.target.files) {
+      const formData: FormData = new FormData();
+      formData.append('user-avatar', e.target.files[0]);
+      const res: Response | undefined = await triggerAvatarChange(formData);
+
+      if (res?.ok) {
+        const blob: Blob = await res.blob();
+        const url: string = URL.createObjectURL(blob);
+        dispatch(setAvatar(url));
+      } else {
+        setImageError(true);
+      }
+    }
+  };
+
+  const handleCoverChange = async (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
+    if (e.target.files) {
+      const formData: FormData = new FormData();
+      formData.append('user-cover', e.target.files[0]);
+      const res: Response | undefined = await triggerCoverChange(formData);
+
+      if (res?.ok) {
+        const blob: Blob = await res.blob();
+        const url: string = URL.createObjectURL(blob);
+        mutate(url).catch((err: Error) => err);
+      } else {
+        setImageError(true);
+      }
+    }
+  };
+
   const handleClickEditBasicInfo = () => {
     navigate(`${RoutePath.settings}`);
   };
@@ -78,141 +131,170 @@ export default function ProfileHeader() {
     }
   };
 
+  const handleCloseError = () => setImageError(false);
+
+  useEffect(() => {
+    if (avatar) {
+      if (idCurrentProfile !== idAuthorizedUser) {
+        setUserAvatarUrl(avatar);
+      } else {
+        setUserAvatarUrl(avatarUrl);
+      }
+    } else {
+      setUserAvatarUrl('');
+    }
+
+    return () => setUserAvatarUrl('');
+  }, [avatar, idCurrentProfile, avatarUrl, idAuthorizedUser]);
+
   return (
-    <Box sx={{ borderRadius: 4, boxShadow: 4, overflow: 'hidden' }}>
-      <Box
-        component="img"
-        src={temporary}
-        alt="Background image"
-        sx={{ width: '100%', height: '300px', objectFit: 'cover' }}
-      />
-      <Box sx={{ px: 2 }}>
-        <Box sx={{ position: 'relative' }}>
+    <>
+      <Box sx={{ borderRadius: 4, boxShadow: 4, overflow: 'hidden' }}>
+        {!coverLoading ? (
           <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              position: 'absolute',
-              bottom: -20,
-              left: 0,
-              width: '100%',
-              gap: 1,
-            }}
-          >
-            {currentProfile ? (
-              <Badge
-                overlap="circular"
-                sx={{ position: 'relative' }}
-                badgeContent={
-                  idCurrentProfile === idAuthorizedUser ? (
-                    <IconButton
-                      sx={{ background: 'white', p: 0.5, borderRadius: '50%', minWidth: '0' }}
-                      onClick={() => handlePicker(avatarPicker)}
-                    >
-                      <input hidden accept=".jpg, .png" type="file" ref={avatarPicker} />
-                      <CloudDownloadOutlinedIcon />
-                    </IconButton>
-                  ) : null
-                }
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-              >
-                <Avatar
-                  src={idCurrentProfile !== idAuthorizedUser && currentProfile.hidden ? '' : currentProfile.avatarURL}
-                  alt="Avatar"
-                  sx={{ width: 150, height: 150, border: 3, borderColor: 'common.white' }}
-                >
-                  {idCurrentProfile !== idAuthorizedUser && currentProfile.hidden && currentProfile.avatarURL !== '' ? (
-                    <VisibilityOffOutlinedIcon fontSize="large" />
-                  ) : null}
-                </Avatar>
-                <Box
-                  sx={{
-                    width: '15px',
-                    bgcolor: currentProfile.isOnline ? 'green' : '#78909c',
-                    height: '15px',
-                    borderRadius: '50%',
-                    position: 'absolute',
-                    top: '60%',
-                    right: 0,
-                    transform: 'translateX(20%)',
-                  }}
-                />
-              </Badge>
-            ) : (
-              <Skeleton variant="circular">
-                <Avatar sx={{ width: 150, height: 150 }} />
-              </Skeleton>
-            )}
-            {idCurrentProfile === idAuthorizedUser && (
-              <Button variant="contained" sx={{ gap: 1 }} onClick={() => handlePicker(coverPicker)}>
-                <input hidden accept=".jpg, .png" type="file" ref={coverPicker} />
-                <CloudDownloadOutlinedIcon />
-                <Typography sx={{ display: { xs: 'none', md: 'block' } }}>{t('profile.header.editCover')}</Typography>
-              </Button>
-            )}
-          </Box>
-        </Box>
-      </Box>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          px: 2,
-          pb: 3,
-          pt: 5,
-          minHeight: '36.5px',
-        }}
-      >
-        <Stack>
-          <Typography variant="h5">{currentProfile && currentProfile.name}</Typography>
-          {currentProfile && currentProfile.isOnline ? (
-            <Typography variant="body2">{t('profile.online')}</Typography>
-          ) : null}
-          {currentProfile && !currentProfile.isOnline ? (
-            <Typography variant="body2">
-              {currentProfile.lastSeen
-                ? `${t('profile.lastSeen')} ${new Date(currentProfile.lastSeen).toLocaleString(currentLocale, {
-                    day: 'numeric',
-                    month: 'short',
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}`
-                : t('profile.offline')}
-            </Typography>
-          ) : null}
-        </Stack>
-        {idCurrentProfile === idAuthorizedUser && (
-          <Button variant="outlined" onClick={handleClickEditBasicInfo} sx={{ background: 'secondary.main' }}>
-            {t('profile.header.editInfo')}
-          </Button>
+            component="img"
+            src={cover || coverBackground}
+            alt="Background image"
+            sx={{ width: '100%', height: '300px', objectFit: 'cover' }}
+          />
+        ) : (
+          <Skeleton variant="rectangular" animation={false} sx={{ width: '100%', height: '300px' }} />
         )}
-        {idCurrentProfile !== idAuthorizedUser && (
-          <Box>
-            {(authorizedUser?.pendingFriendsIds?.includes(idCurrentProfile) && (
-              <Button variant="outlined" onClick={handleClickFollow}>
-                {t('profile.header.acceptRequest')}
-              </Button>
-            )) ||
-              (currentProfile?.friendsIds?.includes(idAuthorizedUser) && (
-                <Button variant="contained" sx={{ flexGrow: 1 }}>
-                  {t('profile.header.message')}
-                </Button>
-              )) ||
-              (currentProfile?.pendingFriendsIds?.includes(idAuthorizedUser) && (
-                <Button variant="outlined" disabled>
-                  {t('profile.header.sentRequest')}
-                </Button>
-              )) || (
-                <Button variant="outlined" onClick={handleClickAddFriend}>
-                  {t('profile.header.addFriend')}
+        <Box sx={{ px: 2 }}>
+          <Box sx={{ position: 'relative' }}>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                position: 'absolute',
+                bottom: -20,
+                left: 0,
+                width: '100%',
+                gap: 1,
+              }}
+            >
+              {currentProfile && !avatarLoading ? (
+                <Badge
+                  overlap="circular"
+                  sx={{ position: 'relative' }}
+                  badgeContent={
+                    idCurrentProfile === idAuthorizedUser ? (
+                      <IconButton
+                        sx={{ background: 'white', p: 0.5, borderRadius: '50%', minWidth: '0' }}
+                        onClick={() => handlePicker(avatarPicker)}
+                      >
+                        <input
+                          hidden
+                          accept=".jpg, .png"
+                          type="file"
+                          ref={avatarPicker}
+                          onChange={handleAvatarChange}
+                        />
+                        <CloudDownloadOutlinedIcon />
+                      </IconButton>
+                    ) : null
+                  }
+                  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                >
+                  <Avatar
+                    src={idCurrentProfile !== idAuthorizedUser && currentProfile.hidden ? '' : userAvatarUrl}
+                    alt="Avatar"
+                    sx={{ width: 150, height: 150, border: 3, borderColor: 'common.white' }}
+                  >
+                    {idCurrentProfile !== idAuthorizedUser && currentProfile.hidden && userAvatarUrl !== '' ? (
+                      <VisibilityOffOutlinedIcon fontSize="large" />
+                    ) : null}
+                  </Avatar>
+                  <Box
+                    sx={{
+                      width: '15px',
+                      bgcolor: currentProfile.isOnline ? 'green' : '#78909c',
+                      height: '15px',
+                      borderRadius: '50%',
+                      position: 'absolute',
+                      top: '60%',
+                      right: 0,
+                      transform: 'translateX(20%)',
+                    }}
+                  />
+                </Badge>
+              ) : (
+                <Skeleton variant="circular">
+                  <Avatar sx={{ width: 150, height: 150 }} />
+                </Skeleton>
+              )}
+              {idCurrentProfile === idAuthorizedUser && (
+                <Button variant="contained" sx={{ gap: 1 }} onClick={() => handlePicker(coverPicker)}>
+                  <input hidden accept=".jpg, .png" type="file" ref={coverPicker} onChange={handleCoverChange} />
+                  <CloudDownloadOutlinedIcon />
+                  <Typography sx={{ display: { xs: 'none', md: 'block' } }}>{t('profile.header.editCover')}</Typography>
                 </Button>
               )}
+            </Box>
           </Box>
-        )}
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            px: 2,
+            pb: 3,
+            pt: 5,
+            minHeight: '36.5px',
+          }}
+        >
+          <Stack>
+            <Typography variant="h5">{currentProfile && currentProfile.name}</Typography>
+            {currentProfile && currentProfile.isOnline ? (
+              <Typography variant="body2">{t('profile.online')}</Typography>
+            ) : null}
+            {currentProfile && !currentProfile.isOnline ? (
+              <Typography variant="body2">
+                {currentProfile.lastSeen
+                  ? `${t('profile.lastSeen')} ${new Date(currentProfile.lastSeen).toLocaleString(currentLocale, {
+                      day: 'numeric',
+                      month: 'short',
+                      year: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}`
+                  : t('profile.offline')}
+              </Typography>
+            ) : null}
+          </Stack>
+          {idCurrentProfile === idAuthorizedUser && (
+            <Button variant="outlined" onClick={handleClickEditBasicInfo} sx={{ background: 'secondary.main' }}>
+              {t('profile.header.editInfo')}
+            </Button>
+          )}
+          {idCurrentProfile !== idAuthorizedUser && (
+            <Box>
+              {(authorizedUser?.pendingFriendsIds?.includes(idCurrentProfile) && (
+                <Button variant="outlined" onClick={handleClickFollow}>
+                  {t('profile.header.acceptRequest')}
+                </Button>
+              )) ||
+                (currentProfile?.friendsIds?.includes(idAuthorizedUser) && (
+                  <Button variant="contained" sx={{ flexGrow: 1 }}>
+                    {t('profile.header.message')}
+                  </Button>
+                )) ||
+                (currentProfile?.pendingFriendsIds?.includes(idAuthorizedUser) && (
+                  <Button variant="outlined" disabled>
+                    {t('profile.header.sentRequest')}
+                  </Button>
+                )) || (
+                  <Button variant="outlined" onClick={handleClickAddFriend}>
+                    {t('profile.header.addFriend')}
+                  </Button>
+                )}
+            </Box>
+          )}
+        </Box>
       </Box>
-    </Box>
+      <ImageAlert open={imageError} handleCloseError={handleCloseError} />
+    </>
   );
 }

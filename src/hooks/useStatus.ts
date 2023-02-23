@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import useUser from './useUser';
 import { useAppDispatch, useAppSelector } from './redux';
-import { setOnlineStatus } from '../store/reducers/usersState';
+import { updateUserInState } from '../store/reducers/usersState';
 
 export default function useStatus() {
   const dispatch = useAppDispatch();
@@ -10,8 +10,7 @@ export default function useStatus() {
 
   useEffect(() => {
     if (user) {
-      const { isOnline, lastSeen } = user;
-      dispatch(setOnlineStatus({ isOnline, lastSeen }));
+      dispatch(updateUserInState(user));
     }
   }, [user, dispatch]);
 }

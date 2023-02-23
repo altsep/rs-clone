@@ -17,6 +17,7 @@ import { setAuth, setAuthError, setConfirmError } from '../../../store/reducers/
 import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
 import { getActionString, setToken } from '../../../utils/common';
 import { setUser } from '../../../store/reducers/usersState';
+import useAvatar from '../../../hooks/useImage';
 
 export default function LoginForm() {
   const { t } = useTranslation();

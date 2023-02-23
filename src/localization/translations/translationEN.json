@@ -157,5 +157,6 @@
     "lastSeen": "Last seen",
     "online": "Online",
     "offline": "Offline"
-  }
+  },
+  "imageAlert": "Max file size 5MB"
 }

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ReducerNames } from '../../constants';
-import { TChangeStatus, TUsersState } from '../../types/state';
+import { TUsersState } from '../../types/state';
 import { IUser } from '../../types/data';
 
 const initialState: TUsersState = {
@@ -13,6 +13,7 @@ const initialState: TUsersState = {
   authorizedUserFriends: [],
   authorizedUserPendingFriends: [],
   messagesWs: null,
+  avatarUrl: '',
 };
 
 const usersStateSlice = createSlice({
@@ -64,15 +65,8 @@ const usersStateSlice = createSlice({
     setMessagesWs: (state, action: PayloadAction<WebSocket>) => {
       state.messagesWs = action.payload;
     },
-    setOnlineStatus: (state, action: PayloadAction<Partial<TChangeStatus>>) => {
-      if (state.currentProfile) {
-        if (action.payload.isOnline) {
-          state.currentProfile.isOnline = action.payload.isOnline;
-        }
-        if (action.payload.lastSeen) {
-          state.currentProfile.lastSeen = action.payload.lastSeen;
-        }
-      }
+    setAvatar: (state, action: PayloadAction<string>) => {
+      state.avatarUrl = action.payload;
     },
   },
 });
@@ -85,7 +79,7 @@ export const {
   definePendingFriends,
   defineFriends,
   setMessagesWs,
-  setOnlineStatus,
+  setAvatar,
 } = usersStateSlice.actions;
 
 export const usersState = usersStateSlice.reducer;

@@ -1,6 +1,7 @@
 import { Avatar } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../hooks/redux';
+import useImage from '../../hooks/useImage';
 import { IUser } from '../../types/data';
 import { getFirstLetter } from '../../utils/common';
 
@@ -15,6 +16,8 @@ export default function ClickableAvatar({ user, width, height }: IClickableAvata
 
   const { idCurrentProfile } = useAppSelector((state) => state.users);
 
+  const { data: avatar } = useImage(user.id, 'user-avatar');
+
   const handleClickAvatar = (id: number): void => {
     if (idCurrentProfile !== id) {
       if (user?.alias) {
@@ -24,10 +27,11 @@ export default function ClickableAvatar({ user, width, height }: IClickableAvata
       }
     }
   };
+
   if (width === '20px' && height === '20px') {
     return (
       <Avatar
-        src={idCurrentProfile !== user.id && user.hidden ? '' : user.avatarURL}
+        src={idCurrentProfile !== user.id && user.hidden ? '' : avatar}
         onClick={() => handleClickAvatar(user.id)}
         sx={{ textTransform: 'capitalize', cursor: 'pointer', width, height, fontSize: 'small' }}
       >
@@ -38,7 +42,7 @@ export default function ClickableAvatar({ user, width, height }: IClickableAvata
 
   return (
     <Avatar
-      src={idCurrentProfile !== user.id && user.hidden ? '' : user.avatarURL}
+      src={idCurrentProfile !== user.id && user.hidden ? '' : avatar}
       onClick={() => handleClickAvatar(user.id)}
       sx={{ textTransform: 'capitalize', cursor: 'pointer', width, height }}
     >

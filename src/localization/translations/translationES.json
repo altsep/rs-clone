@@ -157,5 +157,6 @@
     "lastSeen": "Ultima vez visto",
     "online": "En línea",
     "offline": "Fuera de línea"
-  }
+  },
+  "imageAlert": "Tamaño máximo de archivo 5 MB"
 }

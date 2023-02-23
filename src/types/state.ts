@@ -18,6 +18,7 @@ type TUsersState = {
   authorizedUserFriends: IUser[];
   authorizedUserPendingFriends: IUser[];
   messagesWs: WebSocket | null;
+  avatarUrl: string;
 };
 
 type TThemeState = {

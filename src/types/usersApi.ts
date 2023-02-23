@@ -12,11 +12,11 @@ type TUpdateUserArg = Partial<
     | 'country'
     | 'birthDate'
     | 'alias'
-    | 'avatarURL'
     | 'postsIds'
     | 'friendsIds'
     | 'pendingFriendsIds'
     | 'hidden'
+    | 'images'
   >
 >;
 
