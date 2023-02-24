@@ -16,6 +16,7 @@ interface IPost {
   likes: number;
   likedUserIds?: number[];
   commentsIds?: number[];
+  images: string[];
 }
 
 interface IUser {
@@ -35,8 +36,8 @@ interface IUser {
   isOnline: boolean;
   lastSeen?: string;
   images: {
-    avatar?: string;
-    cover?: string;
+    avatar: string;
+    cover: string;
   };
 }
 

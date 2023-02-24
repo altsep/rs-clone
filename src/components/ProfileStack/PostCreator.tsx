@@ -27,14 +27,15 @@ import ClickableAvatar from '../ClickableAvatar';
 import { addPostInState } from '../../store/reducers/postsState';
 import { updateUserInState } from '../../store/reducers/usersState';
 import ImageAlert from '../ImageAlert/ImageAlert';
+import { sendPostImage } from '../../api/imagesApi';
 
 export default function PostCreator() {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   const [isLoading, setLoading] = useState(false);
-  const [postPhoto, setPostPhoto] = useState<File | null>(null);
   const [photoError, setPhotoError] = useState(false);
+  const [postPhoto, setPostPhoto] = useState<File | null>(null);
 
   const { idCurrentProfile, currentProfile, authorizedUser, idAuthorizedUser } = useAppSelector((state) => state.users);
   const { valueCreatePost } = useAppSelector((state) => state.inputs);
@@ -49,10 +50,14 @@ export default function PostCreator() {
 
   const handleClickCreatePost = async (): Promise<void> => {
     setLoading(true);
+
+    let imageUrl: string | undefined;
+
     const argAddPost: TAddPostArg = {
       description: valueCreatePost,
       userId: idAuthorizedUser,
     };
+
     const responseDataAppPost = await triggerAddPost(argAddPost);
     if (responseDataAppPost && currentProfile) {
       const argUpdateUser: TUpdateUserArg = {
@@ -60,12 +65,37 @@ export default function PostCreator() {
           ? [...currentProfile.postsIds, responseDataAppPost.id]
           : [responseDataAppPost.id],
       };
+
+      if (postPhoto) {
+        const formData: FormData = new FormData();
+        formData.append('post-img', postPhoto);
+        const resImage = await sendPostImage(
+          `${API_BASE_URL}${ApiPath.images}/post/${responseDataAppPost.id}`,
+          formData
+        );
+        if (resImage.ok) {
+          const blob: Blob = await resImage.blob();
+          const fileReader = new FileReader();
+          fileReader.readAsDataURL(blob);
+          fileReader.onloadend = () => {
+            if (typeof fileReader.result === 'string') {
+              imageUrl = fileReader.result.replace('data:image/webp;base64,', '');
+            }
+          };
+        } else {
+          setLoading(false);
+        }
+      }
+
       const responseDataUpdateUser = await triggerUpdateUser(argUpdateUser);
       if (responseDataUpdateUser) {
-        dispatch(addPostInState(responseDataAppPost));
+        dispatch(
+          addPostInState({ ...responseDataAppPost, images: imageUrl ? [imageUrl] : responseDataAppPost.images })
+        );
         dispatch(updateUserInState(responseDataUpdateUser));
       }
     }
+    setPostPhoto(null);
     dispatch(changeCreatePost(''));
     setLoading(false);
   };
@@ -76,9 +106,9 @@ export default function PostCreator() {
 
   const handleChangePhoto = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (e.target.files) {
-      const file = e.target.files[0];
+      const file: File = e.target.files[0];
       if (file) {
-        const fileSize = file.size / 1000000;
+        const fileSize: number = file.size / 1000000;
         if (fileSize > 5) {
           setPhotoError(true);
         } else {

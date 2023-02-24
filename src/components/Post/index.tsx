@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useSWRMutation from 'swr/mutation';
 import { TransitionGroup } from 'react-transition-group';
 import {
@@ -26,7 +26,6 @@ import { TUpdatePostArg } from '../../types/postsApi';
 import { updatePost } from '../../api/postsApi';
 import ClickableAvatar from '../ClickableAvatar';
 import PostHeader from './PostHeader';
-import temporary from '../../assets/temporary-1.jpg';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { updatePostInState } from '../../store/reducers/postsState';
 import Comment from '../Comment';
@@ -42,9 +41,11 @@ export default function Post({ postData }: IPostProps) {
   const [isOpenComments, setIsOpenComments] = useState(false);
 
   const [valueInputDescription, setValueInputDescription] = useState(postData.description);
+  const [postImage, setPostImage] = useState('');
 
   const dispatch = useAppDispatch();
   const { users, idAuthorizedUser } = useAppSelector((state) => state.users);
+  const { currentProfilePosts } = useAppSelector((state) => state.posts);
   const { comments } = useAppSelector((state) => state.comments);
 
   const { trigger: triggerUpdatePost } = useSWRMutation<IPost, Error>(
@@ -96,6 +97,20 @@ export default function Post({ postData }: IPostProps) {
     setIsOpenComments(!isOpenComments);
   };
 
+  useEffect(() => {
+    const post = currentProfilePosts?.find((el) => el.id === postData.id);
+    if (post && post.images.length > 0) {
+      const imgUrl = post.images[0];
+      fetch(`data:image/webp;base64,${imgUrl}`)
+        .then((data) => data.blob())
+        .then((blob) => URL.createObjectURL(blob))
+        .then((url) => setPostImage(url))
+        .catch((err: Error) => err);
+    } else {
+      setPostImage('');
+    }
+  }, [currentProfilePosts, postData.id]);
+
   return (
     <Card sx={{ borderRadius: 4, boxShadow: { xs: 4, md: 0 }, mb: 2 }}>
       <PostHeader postData={postData} setIsEdit={setIsEdit} />
@@ -115,12 +130,12 @@ export default function Post({ postData }: IPostProps) {
               sx={{ flexGrow: 1, width: '100%' }}
             />
             <Button onClick={handleClickSaveButton} sx={{ ml: 'auto' }}>
-              Save
+              {t('settings.buttons.save')}
             </Button>
           </Box>
         )}
       </CardContent>
-      <CardMedia component="img" height="200" image={temporary} />
+      {postImage && <CardMedia component="img" height="200" image={postImage} />}
       <Box
         sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', px: 2, py: 1, height: '44px' }}
       >

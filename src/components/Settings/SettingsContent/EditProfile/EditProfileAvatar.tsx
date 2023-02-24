@@ -14,7 +14,10 @@ export default function EditProfileAvatar() {
   const [avatarError, setAvatarError] = useState<boolean>(false);
   const avatarPicker = useRef<HTMLInputElement | null>(null);
 
-  const { trigger } = useSWRMutation(`${API_BASE_URL}${ApiPath.images}/user-avatar/${idAuthorizedUser}`, sendImage);
+  const { trigger } = useSWRMutation<Promise<Response>>(
+    `${API_BASE_URL}${ApiPath.images}/user-avatar/${idAuthorizedUser}`,
+    sendImage
+  );
 
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
     if (e.target.files) {
