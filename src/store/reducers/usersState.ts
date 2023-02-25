@@ -79,13 +79,23 @@ const usersStateSlice = createSlice({
     },
     updateUserStatusInState: (state, action: PayloadAction<{ id: number; isOnline: boolean }>) => {
       state.users = state.users.map((user) =>
-        user.id === action.payload.id ? { ...user, isOnline: action.payload.isOnline } : user
+        user.id === action.payload.id
+          ? { ...user, isOnline: action.payload.isOnline, lastSeen: new Date(Date.now()).toISOString() }
+          : user
       );
       if (action.payload.id === state.idAuthorizedUser && state.authorizedUser) {
-        state.authorizedUser = { ...state.authorizedUser, isOnline: action.payload.isOnline };
+        state.authorizedUser = {
+          ...state.authorizedUser,
+          isOnline: action.payload.isOnline,
+          lastSeen: new Date(Date.now()).toISOString(),
+        };
       }
       if (action.payload.id === state.idCurrentProfile && state.currentProfile) {
-        state.currentProfile = { ...state.currentProfile, isOnline: action.payload.isOnline };
+        state.currentProfile = {
+          ...state.currentProfile,
+          isOnline: action.payload.isOnline,
+          lastSeen: new Date(Date.now()).toISOString(),
+        };
       }
     },
   },
