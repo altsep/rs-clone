@@ -1,18 +1,18 @@
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { Badge, Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined';
 import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
 import Diversity3OutlinedIcon from '@mui/icons-material/Diversity3Outlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import { TSideBarButtonsInfo } from '../../types/sideBar';
-import { ApiPath, API_BASE_URL, KEY_LOCAL_STORAGE, LSKeys, RoutePath } from '../../constants';
+import { ApiPath, API_BASE_URL, RoutePath } from '../../constants';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { closeLeftSideBar } from '../../store/reducers/leftSideBarState';
 import { logoutUser } from '../../api/usersApi';
 import { setAuth, setLoading } from '../../store/reducers/authSlice';
-import { removeToken } from '../../utils/common';
-import { TLastMessage } from '../../types/data';
+import { removeToken, setLastMessages } from '../../utils/common';
+
 import NotificationCounter from '../NotificationCounter';
 
 export default function LeftSideBar() {
@@ -30,33 +30,7 @@ export default function LeftSideBar() {
     dispatch(setLoading(true));
     const res = await logoutUser(`${API_BASE_URL}${ApiPath.logout}`);
     if (res.ok) {
-      const lastMessages = chats.reduce<TLastMessage[]>((acc, chat) => {
-        if (numberOfUnreadMessagesInChats && lastMessagesInChats) {
-          // CHANGE_NAME
-          const data = numberOfUnreadMessagesInChats.find((val) => val.chatId === chat.id);
-          if (data) {
-            const dataLastMessage = lastMessagesInChats.find((lastMessage) => lastMessage.chatId === data.chatId);
-            if (dataLastMessage) {
-              acc.push(dataLastMessage);
-              return acc;
-            }
-          }
-        }
-        if (chat.messages.length > 0) {
-          acc.push({
-            chatId: chat.id,
-            userId: +chat.userIds.filter((userId) => userId !== idAuthorizedUser).join(),
-            idLastMessage: chat.messages[chat.messages.length - 1].id,
-          });
-        }
-
-        return acc;
-      }, []);
-
-      localStorage.setItem(
-        `${LSKeys.lastMessages}_${idAuthorizedUser}_${KEY_LOCAL_STORAGE}`,
-        JSON.stringify(lastMessages)
-      );
+      setLastMessages({ chats, numberOfUnreadMessagesInChats, lastMessagesInChats, idAuthorizedUser });
 
       removeToken();
       dispatch(setAuth(false));

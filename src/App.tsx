@@ -11,10 +11,10 @@ import Header from './components/Header/Header';
 import Profile from './pages/Profile';
 import { ApiPath, API_BASE_URL, KEY_LOCAL_STORAGE, LSKeys, RoutePath } from './constants';
 import { refreshToken } from './api/usersApi';
-import { ILogin, TLastMessage } from './types/data';
+import { ILogin } from './types/data';
 import { getToken, setToken } from './utils/common';
 import { setAuth, setAuthError, setLoading } from './store/reducers/authSlice';
-import { setUser, setUsersOfExistingChats, usersLoadingSuccess } from './store/reducers/usersState';
+import { setUser, usersLoadingSuccess } from './store/reducers/usersState';
 import Messages from './pages/Messages';
 import Friends from './pages/Friends';
 import NotFound from './pages/NotFound';
@@ -28,22 +28,14 @@ import { commentsLoadingSuccess } from './store/reducers/commentsState';
 import NotAuthRoute from './hoc/NotAuthRoute';
 import useMessagesWs from './hooks/useMessagesWs';
 import useUserChats from './hooks/useUserChats';
-import {
-  resetActiveChat,
-  setChats,
-  setLastMessagesInChats,
-  // setNumberOfUnread,
-  setNumberOfUnreadMessagesInChats,
-} from './store/reducers/chatsState';
+import { setChats } from './store/reducers/chatsState';
+import useChats from './hooks/useChats';
 
 function App() {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const theme = useAppSelector((state) => state.theme.mode);
-  const { idAuthorizedUser, users: usersInState } = useAppSelector((state) => state.users);
-  const { chats, activeChat, numberOfUnreadMessagesInChats, lastMessagesInChats } = useAppSelector(
-    (state) => state.chats
-  );
+  const { idAuthorizedUser } = useAppSelector((state) => state.users);
 
   const { users, isLoadingUsers, isValidatingUsers } = useUsers();
   const { posts, isLoadingPosts, isValidatingPosts } = usePosts();
@@ -86,33 +78,22 @@ function App() {
   useMessagesWs();
 
   useEffect(() => {
-    if (
-      users &&
-      posts &&
-      comments &&
-      !isLoadingUsers &&
-      !isLoadingPosts &&
-      !isLoadingComments &&
-      !isValidatingUsers &&
-      !isValidatingPosts &&
-      !isValidatingComments
-    ) {
+    if (users && !isLoadingUsers && !isValidatingUsers) {
       dispatch(usersLoadingSuccess(users));
+    }
+  }, [users, isLoadingUsers, isValidatingUsers, dispatch]);
+
+  useEffect(() => {
+    if (posts && !isLoadingPosts && !isValidatingPosts) {
       dispatch(postsLoadingSuccess(posts));
+    }
+  }, [posts, isLoadingPosts, isValidatingPosts, dispatch]);
+
+  useEffect(() => {
+    if (comments && !isLoadingComments && !isValidatingComments) {
       dispatch(commentsLoadingSuccess(comments));
     }
-  }, [
-    users,
-    posts,
-    comments,
-    isLoadingUsers,
-    isLoadingPosts,
-    isLoadingComments,
-    isValidatingUsers,
-    isValidatingPosts,
-    isValidatingComments,
-    dispatch,
-  ]);
+  }, [comments, isLoadingComments, isValidatingComments, dispatch]);
 
   useEffect(() => {
     if (userChats && idAuthorizedUser && !isErrorUserChats) {
@@ -120,70 +101,7 @@ function App() {
     }
   }, [dispatch, userChats, idAuthorizedUser, isErrorUserChats]);
 
-  useEffect(() => {
-    if (chats.length > 0 && idAuthorizedUser && usersInState.length > 0) {
-      dispatch(setUsersOfExistingChats(chats));
-    }
-  }, [dispatch, chats, idAuthorizedUser, usersInState]);
-
-  useEffect(() => {
-    if (activeChat && `${location.pathname.split('/').slice(0, 2).join('/')}` !== `${RoutePath.messages}`) {
-      dispatch(resetActiveChat());
-    } else if (
-      activeChat &&
-      `${location.pathname.split('/').slice(0, 2).join('/')}` === `${RoutePath.messages}` &&
-      !location.pathname.split('/')[2]
-    ) {
-      dispatch(resetActiveChat());
-    }
-  }, [dispatch, activeChat, location]);
-
-  useEffect(() => {
-    if (idAuthorizedUser && chats.length > 0) {
-      window.addEventListener('beforeunload', () => {
-        const lastMessages = chats.reduce<TLastMessage[]>((acc, chat) => {
-          if (numberOfUnreadMessagesInChats && lastMessagesInChats) {
-            const numberOfUnreadMessage = numberOfUnreadMessagesInChats.find((val) => val.chatId === chat.id);
-            if (numberOfUnreadMessage) {
-              const dataLastMessage = lastMessagesInChats.find(
-                (lastMessage) => lastMessage.chatId === numberOfUnreadMessage.chatId
-              );
-              if (dataLastMessage) {
-                acc.push(dataLastMessage);
-                return acc;
-              }
-            }
-          }
-          if (chat.messages.length > 0) {
-            acc.push({
-              chatId: chat.id,
-              userId: +chat.userIds.filter((userId) => userId !== idAuthorizedUser).join(),
-              idLastMessage: chat.messages[chat.messages.length - 1].id,
-            });
-          }
-
-          return acc;
-        }, []);
-
-        localStorage.setItem(
-          `${LSKeys.lastMessages}_${idAuthorizedUser}_${KEY_LOCAL_STORAGE}`,
-          JSON.stringify(lastMessages)
-        );
-      });
-    }
-  }, [idAuthorizedUser, userChats, chats, numberOfUnreadMessagesInChats, lastMessagesInChats]);
-
-  useEffect(() => {
-    if (idAuthorizedUser) {
-      dispatch(setLastMessagesInChats(idAuthorizedUser));
-    }
-  }, [dispatch, idAuthorizedUser]);
-
-  useEffect(() => {
-    if (lastMessagesInChats && chats) {
-      dispatch(setNumberOfUnreadMessagesInChats(lastMessagesInChats));
-    }
-  }, [dispatch, lastMessagesInChats, chats]);
+  useChats();
 
   return (
     <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
