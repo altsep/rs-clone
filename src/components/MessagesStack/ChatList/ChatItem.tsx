@@ -31,7 +31,7 @@ export default function ChatItem({ chat, user, numberOfUnreadMessages }: IChatIt
     <ListItemButton
       selected={location.pathname === `${RoutePath.messages}/${user.id}`}
       onClick={handleClick}
-      sx={{ borderRadius: 2, alignItems: 'flex-start' }}
+      sx={{ alignItems: 'flex-start' }}
     >
       <ListItemAvatar>
         <ClickableAvatar user={user} />
