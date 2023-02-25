@@ -17,8 +17,7 @@ const getImage = async (url: string): Promise<string> => {
   if (!res.ok) {
     return '';
   }
-  const blob: Blob = await res.blob();
-  const avatar: string = URL.createObjectURL(blob);
+  const avatar = await res.text();
   return avatar;
 };
 
