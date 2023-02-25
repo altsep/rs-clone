@@ -30,6 +30,7 @@ type TAuthState = {
   isAuth: boolean;
   isLoading: boolean;
   authError: boolean;
+  confirmError: boolean;
 };
 
 type TLoginFormState = {

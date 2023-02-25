@@ -2,6 +2,7 @@ import useSWRMutation from 'swr/mutation';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Typography, Badge, Avatar, IconButton, Skeleton } from '@mui/material';
 import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined';
+import { useTranslation } from 'react-i18next';
 import { ApiPath, API_BASE_URL, RoutePath } from '../../constants';
 import { updateUser } from '../../api/usersApi';
 import { TUpdateUserArg } from '../../types/usersApi';
@@ -13,6 +14,7 @@ import { addChatInState } from '../../store/reducers/chatsState';
 import { isChat } from '../../types/predicates';
 
 export default function ProfileHeader() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
@@ -132,7 +134,7 @@ export default function ProfileHeader() {
             {idCurrentProfile === idAuthorizedUser && (
               <Button variant="contained" sx={{ gap: 1 }}>
                 <CloudDownloadOutlinedIcon />
-                <Typography sx={{ display: { xs: 'none', sm: 'block' } }}>Edit Cover</Typography>
+                <Typography sx={{ display: { xs: 'none', md: 'block' } }}>{t('profile.header.editCover')}</Typography>
               </Button>
             )}
           </Box>
@@ -144,28 +146,28 @@ export default function ProfileHeader() {
 
         {idCurrentProfile === idAuthorizedUser && (
           <Button variant="outlined" onClick={handleClickEditBasicInfo} sx={{ background: 'secondary.main' }}>
-            Edit basic info
+            {t('profile.header.editInfo')}
           </Button>
         )}
         {idCurrentProfile !== idAuthorizedUser && (
           <Box>
             {(authorizedUser?.pendingFriendsIds?.includes(idCurrentProfile) && (
               <Button variant="outlined" onClick={handleClickFollow}>
-                Accept friend request
+                {t('profile.header.acceptRequest')}
               </Button>
             )) ||
               (currentProfile?.friendsIds?.includes(idAuthorizedUser) && (
                 <Button variant="contained" onClick={handleClickWriteMessage} sx={{ flexGrow: 1 }}>
-                  Write message
+                  {t('profile.header.message')}
                 </Button>
               )) ||
               (currentProfile?.pendingFriendsIds?.includes(idAuthorizedUser) && (
                 <Button variant="outlined" disabled>
-                  Friend request sent
+                  {t('profile.header.sentRequest')}
                 </Button>
               )) || (
                 <Button variant="outlined" onClick={handleClickAddFriend}>
-                  Add friend
+                  {t('profile.header.addFriend')}
                 </Button>
               )}
           </Box>

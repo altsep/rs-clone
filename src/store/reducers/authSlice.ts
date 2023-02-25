@@ -5,6 +5,7 @@ const initialState: TAuthState = {
   isAuth: false,
   isLoading: false,
   authError: false,
+  confirmError: false,
 };
 
 const authSlice = createSlice({
@@ -20,8 +21,11 @@ const authSlice = createSlice({
     setAuthError(state, action: PayloadAction<boolean>) {
       state.authError = action.payload;
     },
+    setConfirmError(state, action: PayloadAction<boolean>) {
+      state.confirmError = action.payload;
+    },
   },
 });
 
-export const { setAuth, setLoading, setAuthError } = authSlice.actions;
+export const { setAuth, setLoading, setAuthError, setConfirmError } = authSlice.actions;
 export const authState = authSlice.reducer;

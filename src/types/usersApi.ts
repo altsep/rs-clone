@@ -1,5 +1,5 @@
 import { IUser } from './data';
-import { IFormValues, TLoginValues } from './formValues';
+import { IEditFormValues, IFormValues, TLoginValues } from './formValues';
 
 type TAddUserArg = Pick<IUser, 'name' | 'email' | 'password' | 'country' | 'birthDate' | 'createdAt' | 'alias'>;
 
@@ -29,6 +29,10 @@ interface IUpdateUserProps {
   arg: TUpdateUserArg;
 }
 
+interface IEditUserProps {
+  arg: Partial<IEditFormValues>;
+}
+
 interface IHideUserProps {
   arg: THideUserArg;
 }
@@ -50,4 +54,5 @@ export type {
   IHideUserProps,
   ILoginUser,
   IRegistrationUser,
+  IEditUserProps,
 };

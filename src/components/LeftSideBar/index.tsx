@@ -5,17 +5,19 @@ import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
 import Diversity3OutlinedIcon from '@mui/icons-material/Diversity3Outlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import { useTranslation } from 'react-i18next';
 import { TSideBarButtonsInfo } from '../../types/sideBar';
-import { ApiPath, API_BASE_URL, RoutePath } from '../../constants';
+import { ApiPath, API_BASE_URL, KEY_LOCAL_STORAGE, LSKeys, RoutePath } from '../../constants';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { closeLeftSideBar } from '../../store/reducers/leftSideBarState';
 import { logoutUser } from '../../api/usersApi';
 import { setAuth, setLoading } from '../../store/reducers/authSlice';
 import { removeToken, setLastMessages } from '../../utils/common';
-
+import Search from '../Search/Search';
 import NotificationCounter from '../NotificationCounter';
 
 export default function LeftSideBar() {
+  const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -35,13 +37,14 @@ export default function LeftSideBar() {
       removeToken();
       dispatch(setAuth(false));
       dispatch(setLoading(false));
+      localStorage.removeItem(`${LSKeys.path}_${KEY_LOCAL_STORAGE}`);
       navigate('/');
     }
   };
 
   const sideBarButtonsInfo: TSideBarButtonsInfo = [
     {
-      text: 'Profile',
+      text: t('sideBar.profile'),
       icon: <AccountBoxOutlinedIcon />,
       counter: null,
       to: `${
@@ -58,7 +61,7 @@ export default function LeftSideBar() {
       },
     },
     {
-      text: 'Messages',
+      text: t('sideBar.messages'),
       icon: <ChatOutlinedIcon />,
       counter: totalNumberOfUnreadMessages,
       to: `${RoutePath.messages}`,
@@ -67,7 +70,7 @@ export default function LeftSideBar() {
       },
     },
     {
-      text: 'Friends',
+      text: t('sideBar.friends'),
       icon: <Diversity3OutlinedIcon />,
       counter: null,
       to: `${RoutePath.friends}`,
@@ -76,7 +79,7 @@ export default function LeftSideBar() {
       },
     },
     {
-      text: 'Settings',
+      text: t('sideBar.settings'),
       icon: <SettingsOutlinedIcon />,
       counter: null,
       to: `${RoutePath.settings}`,
@@ -85,7 +88,7 @@ export default function LeftSideBar() {
       },
     },
     {
-      text: 'Logout',
+      text: t('sideBar.logout'),
       icon: <LogoutOutlinedIcon />,
       counter: null,
       to: '/',
@@ -146,7 +149,12 @@ export default function LeftSideBar() {
           display: { xs: 'block', sm: 'none' },
         }}
       >
-        <Box>{drawer}</Box>
+        <Box>
+          <Box sx={{ m: '16px' }}>
+            <Search />
+          </Box>
+          <Box>{drawer}</Box>
+        </Box>
       </Drawer>
 
       <Box

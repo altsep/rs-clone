@@ -11,7 +11,8 @@
       "password": "Se requiere contraseña"
     },
     "loginError": "Contraseña o dirección de correo electrónico incorrecta",
-    "authError": "Error de autorizacion se requiere volver a iniciar sesión"
+    "authError": "Error de autorizacion se requiere volver a iniciar sesión",
+    "confirmError": "Error de autorización. Se requiere confirmación por correo electrónico"
   },
   "registration": {
     "title": "Registro",
@@ -52,7 +53,7 @@
         "validation": "Fecha no válida. La edad no puede ser inferior a 14"
       },
       "alias": {
-        "validation": "Es demasiado corto. El alias debe tener al menos 3 caracteres"
+        "validation": "El alias debe tener al menos 5 caracteres. No se permiten espacios en blanco"
       }
     },
     "registrationErrors": {
@@ -87,11 +88,62 @@
         "country": "País",
         "birthDate": "Fecha de nacimiento",
         "password": "Contraseña"
-      }
+      },
+      "aliasError": "El valor no es válido o el usuario {{ alias }} ya existe"
     },
     "buttons": {
       "save": "Guardar",
       "cancel": "Cancelar"
     }
+  },
+  "search": "Usuarios no encontrados",
+  "searchPlaceholder": "Encontrar amigos",
+  "sideBar": {
+    "profile": "Perfil",
+    "messages": "Mensajes",
+    "friends": "Amigos",
+    "settings": "Configuraciones",
+    "logout": "Cerrar sesión"
+  },
+  "friends": {
+    "friends": "Amigos",
+    "friendRequests": "Solicitudes de amistad",
+    "friendsEmpty": "Vacío. Primero agrega a alguien como amigo.",
+    "requestsEmpty": "Vacío. No tienes solicitudes de amistad.",
+    "friendCard": {
+      "message": "Escribir mensaje",
+      "remove": "Eliminar amigo",
+      "accept": "Aceptar",
+      "ignore": "Ignorar"
+    }
+  },
+  "profile": {
+    "header": {
+      "editCover": "Editar Portada",
+      "editInfo": "Editar perfil",
+      "acceptRequest": "Aceptar solicitud de amistad",
+      "message": "Escribir mensaje",
+      "sentRequest": "Solicitud de amistad enviada",
+      "addFriend": "Agregar amigo"
+    },
+    "addPost": {
+      "label": "¿Qué está pasando?",
+      "button": "Publicar",
+      "photo": "Foto"
+    },
+    "friends": {
+      "title": "Amigos",
+      "content": "Vacío. Primero agrega a alguien como amigo"
+    },
+    "post": {
+      "delete": "Eliminar publicación",
+      "edit": "Editar",
+      "like": "Like",
+      "comments": "Comentarios",
+      "share": "Comparte",
+      "placeholder": "Escribe un comentario..."
+    },
+    "notFound": "Usuario no encontrado",
+    "intro": "introducción"
   }
 }

@@ -1,6 +1,7 @@
 import useSWRMutation from 'swr/mutation';
 import { useNavigate } from 'react-router-dom';
 import { Button, Card, CardActionArea, CardActions, CardHeader, Grid } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { IUser } from '../../types/data';
 import ClickableAvatar from '../ClickableAvatar';
@@ -18,6 +19,7 @@ interface IFriendCardProps {
 }
 
 export default function FriendCard({ user, isRequest }: IFriendCardProps) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
@@ -134,19 +136,19 @@ export default function FriendCard({ user, isRequest }: IFriendCardProps) {
           {isRequest ? (
             <>
               <Button variant="outlined" onClick={handleClickIgnore} sx={{ flexGrow: 1 }}>
-                Ignore
+                {t('friends.friendCard.ignore')}
               </Button>
               <Button variant="contained" onClick={handleClickFollow} sx={{ flexGrow: 1, ml: '0!important' }}>
-                Accept
+                {t('friends.friendCard.accept')}
               </Button>
             </>
           ) : (
             <>
               <Button variant="contained" onClick={handleClickWriteMessage} sx={{ flexGrow: 1 }}>
-                Write message
+                {t('friends.friendCard.message')}
               </Button>
               <Button variant="outlined" onClick={handleClickRemoveFriend} sx={{ flexGrow: 1, ml: '0!important' }}>
-                Remove friend
+                {t('friends.friendCard.remove')}
               </Button>
             </>
           )}
