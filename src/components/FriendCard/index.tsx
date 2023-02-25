@@ -8,9 +8,9 @@ import ClickableAvatar from '../ClickableAvatar';
 import { ApiPath, API_BASE_URL, RoutePath } from '../../constants';
 import { updateUser } from '../../api/usersApi';
 import { TUpdateUserArg } from '../../types/usersApi';
-import { setUserOfActiveChat, updateUserInState } from '../../store/reducers/usersState';
+import { updateUserInState } from '../../store/reducers/usersState';
 import { addChat } from '../../api/chatsApi';
-import { addChatInState, setActiveChat } from '../../store/reducers/chatsState';
+import { addChatInState } from '../../store/reducers/chatsState';
 import { isChat } from '../../types/predicates';
 
 interface IFriendCardProps {

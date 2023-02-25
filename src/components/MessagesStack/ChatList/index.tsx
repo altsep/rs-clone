@@ -1,11 +1,13 @@
 import { useLocation } from 'react-router-dom';
 import { List, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import ChatItem from './ChatItem';
 import { useAppSelector } from '../../../hooks/redux';
 import { RoutePath } from '../../../constants';
 
 export default function ChatList() {
   const location = useLocation();
+  const { t } = useTranslation();
 
   const { chats, numberOfUnreadMessagesInChats } = useAppSelector((state) => state.chats);
   const { usersOfExistingChats, idAuthorizedUser } = useAppSelector((state) => state.users);
@@ -22,7 +24,7 @@ export default function ChatList() {
       }}
     >
       <Typography variant="h5" sx={{ textAlign: 'center', mb: 2 }}>
-        Messages
+        {t('messages.title')}
       </Typography>
       {chats.map((chat, i) => (
         <ChatItem
