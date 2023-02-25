@@ -1,7 +1,7 @@
 import { ListItemAvatar, ListItemButton, Stack, Typography } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { RoutePath } from '../../../constants';
-import { currentLocales } from '../../../mock-data/data';
+import { useAppSelector } from '../../../hooks/redux';
 import { IChat, IUser } from '../../../types/data';
 import ClickableAvatar from '../../ClickableAvatar';
 import NotificationCounter from '../../NotificationCounter';
@@ -15,6 +15,8 @@ interface IChatItemProps {
 export default function ChatItem({ chat, user, numberOfUnreadMessages }: IChatItemProps) {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const currentLocale = useAppSelector((state) => state.language.lang);
 
   const handleClick = () => {
     if (user) {
@@ -50,7 +52,7 @@ export default function ChatItem({ chat, user, numberOfUnreadMessages }: IChatIt
           </Typography>
           <Typography variant="caption" sx={{ flexShrink: 0 }}>
             {chat.messages[chat.messages.length - 1] &&
-              new Date(chat.messages[chat.messages.length - 1].createdAt).toLocaleString(currentLocales, {
+              new Date(chat.messages[chat.messages.length - 1].createdAt).toLocaleString(currentLocale, {
                 hour: '2-digit',
                 minute: '2-digit',
               })}
