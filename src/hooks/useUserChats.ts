@@ -7,7 +7,7 @@ import { fetcher } from '../utils/fetcher';
 export default function useUserChats(userId: number) {
   const {
     data,
-    isLoading,
+    isLoading: isLoadingChats,
     error: isErrorUserChats,
     mutate,
     isValidating,
@@ -24,7 +24,7 @@ export default function useUserChats(userId: number) {
 
   return {
     userChats: data,
-    isLoading,
+    isLoadingChats,
     isErrorUserChats,
     mutate,
     isValidating,
