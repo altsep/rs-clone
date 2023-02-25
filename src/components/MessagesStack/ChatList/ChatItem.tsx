@@ -1,14 +1,14 @@
-import { Box, ListItemAvatar, ListItemButton, Stack, Typography } from '@mui/material';
+import { ListItemAvatar, ListItemButton, Stack, Typography } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { RoutePath } from '../../../constants';
 import { currentLocales } from '../../../mock-data/data';
 import { IChat, IUser } from '../../../types/data';
 import ClickableAvatar from '../../ClickableAvatar';
+import NotificationCounter from '../../NotificationCounter';
 
 interface IChatItemProps {
   chat: IChat;
   user: IUser | undefined;
-  // CHANGE_NAME
   numberOfUnreadMessages: number | null | undefined;
 }
 
@@ -58,22 +58,7 @@ export default function ChatItem({ chat, user, numberOfUnreadMessages }: IChatIt
           >
             {chat.messages[chat.messages.length - 1] && chat.messages[chat.messages.length - 1].description}
           </Typography>
-          {numberOfUnreadMessages && (
-            <Box
-              sx={{
-                display: 'flex',
-                ml: 1,
-                width: 25,
-                height: 25,
-                backgroundColor: 'primary.main',
-                borderRadius: '50%',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              {numberOfUnreadMessages < 10 ? numberOfUnreadMessages : '9+'}
-            </Box>
-          )}
+          {!!numberOfUnreadMessages && <NotificationCounter counter={numberOfUnreadMessages} />}
         </Stack>
       </Stack>
     </ListItemButton>

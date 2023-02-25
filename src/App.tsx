@@ -139,15 +139,15 @@ function App() {
   }, [dispatch, activeChat, location]);
 
   useEffect(() => {
-    // FIX_ME either change chats to userChats or assign chats to null first
     if (idAuthorizedUser && chats.length > 0) {
       window.addEventListener('beforeunload', () => {
         const lastMessages = chats.reduce<TLastMessage[]>((acc, chat) => {
           if (numberOfUnreadMessagesInChats && lastMessagesInChats) {
-            // CHANGE_NAME
-            const data = numberOfUnreadMessagesInChats.find((val) => val.chatId === chat.id);
-            if (data) {
-              const dataLastMessage = lastMessagesInChats.find((lastMessage) => lastMessage.chatId === data.chatId);
+            const numberOfUnreadMessage = numberOfUnreadMessagesInChats.find((val) => val.chatId === chat.id);
+            if (numberOfUnreadMessage) {
+              const dataLastMessage = lastMessagesInChats.find(
+                (lastMessage) => lastMessage.chatId === numberOfUnreadMessage.chatId
+              );
               if (dataLastMessage) {
                 acc.push(dataLastMessage);
                 return acc;

@@ -13,6 +13,7 @@ import { logoutUser } from '../../api/usersApi';
 import { setAuth, setLoading } from '../../store/reducers/authSlice';
 import { removeToken } from '../../utils/common';
 import { TLastMessage } from '../../types/data';
+import NotificationCounter from '../NotificationCounter';
 
 export default function LeftSideBar() {
   const location = useLocation();
@@ -142,22 +143,7 @@ export default function LeftSideBar() {
               >
                 <ListItemIcon>{sideBarButtonInfo.icon}</ListItemIcon>
                 <ListItemText primary={sideBarButtonInfo.text} />
-                {sideBarButtonInfo.counter !== null && sideBarButtonInfo.counter !== 0 && (
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      ml: 1,
-                      width: 25,
-                      height: 25,
-                      backgroundColor: 'primary.main',
-                      borderRadius: '50%',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}
-                  >
-                    {sideBarButtonInfo.counter < 10 ? sideBarButtonInfo.counter : '9+'}
-                  </Box>
-                )}
+                {!!sideBarButtonInfo.counter && <NotificationCounter counter={sideBarButtonInfo.counter} />}
               </ListItemButton>
             </ListItem>
           ))}
