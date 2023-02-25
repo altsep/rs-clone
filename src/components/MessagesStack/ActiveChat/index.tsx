@@ -26,8 +26,6 @@ export default function ActiveChat() {
       if (foundUser) {
         dispatch(setUserOfActiveChat(foundUser));
         dispatch(setActiveChat(foundUser.id));
-      } else {
-        // LOOK_AGAIN
       }
     }
   }, [dispatch, id, usersOfExistingChats, navigate]);
@@ -55,14 +53,15 @@ export default function ActiveChat() {
         minHeight: '100%',
       }}
     >
-      {userOfActiveChat && (
+      {userOfActiveChat ? (
         <CardHeader
           avatar={<ClickableAvatar user={userOfActiveChat} />}
           title={userOfActiveChat.name}
           subheader="Active now"
         />
+      ) : (
+        <CardHeader sx={{ minHeight: '72px' }} />
       )}
-
       <Divider />
       <List sx={{ flexGrow: 1, maxHeight: '63vh', overflowY: 'auto' }}>
         {activeChatMessages &&

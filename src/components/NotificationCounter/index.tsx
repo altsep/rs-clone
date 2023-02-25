@@ -16,6 +16,7 @@ export default function NotificationCounter({ counter }: INotificationCounterPro
         borderRadius: '50%',
         justifyContent: 'center',
         alignItems: 'center',
+        flexShrink: 0,
       }}
     >
       {counter < 10 ? counter : '9+'}

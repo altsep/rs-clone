@@ -1,6 +1,5 @@
 import { useLocation } from 'react-router-dom';
-import { grey } from '@mui/material/colors';
-import { List } from '@mui/material';
+import { List, Typography } from '@mui/material';
 import ChatItem from './ChatItem';
 import { useAppSelector } from '../../../hooks/redux';
 import { RoutePath } from '../../../constants';
@@ -14,7 +13,7 @@ export default function ChatList() {
   return (
     <List
       sx={{
-        background: grey[50],
+        backgroundColor: 'background.paper',
         p: 2,
         borderRadius: 4,
         minHeight: '100%',
@@ -22,6 +21,9 @@ export default function ChatList() {
         display: { xs: location.pathname === `${RoutePath.messages}` ? 'block' : 'none', md: 'block' },
       }}
     >
+      <Typography variant="h5" sx={{ textAlign: 'center', mb: 2 }}>
+        Messages
+      </Typography>
       {chats.map((chat, i) => (
         <ChatItem
           key={chat.id}

@@ -13,7 +13,7 @@ export default function MessagesStack() {
         boxShadow: 4,
         bgcolor: 'secondary.main',
         width: '100%',
-        p: 3,
+        p: { xs: 0, sm: 3 },
       }}
     >
       <ChatList />

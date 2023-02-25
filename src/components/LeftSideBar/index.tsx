@@ -115,9 +115,16 @@ export default function LeftSideBar() {
                 }
                 sx={{ borderRadius: 4 }}
               >
-                <ListItemIcon>{sideBarButtonInfo.icon}</ListItemIcon>
+                <ListItemIcon>
+                  {sideBarButtonInfo.counter ? (
+                    <Badge badgeContent={<NotificationCounter counter={sideBarButtonInfo.counter} />}>
+                      {sideBarButtonInfo.icon}
+                    </Badge>
+                  ) : (
+                    sideBarButtonInfo.icon
+                  )}
+                </ListItemIcon>
                 <ListItemText primary={sideBarButtonInfo.text} />
-                {!!sideBarButtonInfo.counter && <NotificationCounter counter={sideBarButtonInfo.counter} />}
               </ListItemButton>
             </ListItem>
           ))}
