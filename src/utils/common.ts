@@ -41,5 +41,13 @@ const setLastMessages = ({
 
   localStorage.setItem(`${LSKeys.lastMessages}_${idAuthorizedUser}_${KEY_LOCAL_STORAGE}`, JSON.stringify(lastMessages));
 };
+const findLastIndex = <T>(array: Array<T>, predicate: (value: T, index: number, obj: T[]) => boolean): number => {
+  let l = array.length;
+  while (l) {
+    l -= 1;
+    if (predicate(array[l], l, array)) return l;
+  }
+  return -1;
+};
 
-export { getFirstLetter, setToken, removeToken, getToken, getActionString, setLastMessages };
+export { getFirstLetter, setToken, removeToken, getToken, getActionString, setLastMessages, findLastIndex };

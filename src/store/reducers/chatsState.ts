@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { KEY_LOCAL_STORAGE, LSKeys, ReducerNames } from '../../constants';
 import { IChat, IMessage, TLastMessage, TNumberOfUnreadMessages } from '../../types/data';
 import { TChatsState } from '../../types/state';
+import { findLastIndex } from '../../utils/common';
 
 const initialState: TChatsState = {
   chats: [],
@@ -92,9 +93,8 @@ const chatsStateSlice = createSlice({
       state.numberOfUnreadMessagesInChats = action.payload.reduce<TNumberOfUnreadMessages[]>((acc, lastMessage) => {
         const currentChat = state.chats.find((chat) => chat.id === lastMessage.chatId);
         if (currentChat) {
-          // FIX_ME see why findLastIndex doesn't work
-
-          const indexOfLastStoredMessage = currentChat.messages.findIndex(
+          const indexOfLastStoredMessage = findLastIndex(
+            currentChat.messages,
             (message) => message.id === lastMessage.idLastMessage
           );
           if (indexOfLastStoredMessage < currentChat.messages.length - 1) {

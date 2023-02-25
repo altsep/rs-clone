@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom';
-import { Divider, List, Typography } from '@mui/material';
+import { List, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import ChatItem from './ChatItem';
 import { useAppSelector } from '../../../hooks/redux';
@@ -27,21 +27,18 @@ export default function ChatList() {
         {t('messages.title')}
       </Typography>
       {chats.map((chat, i) => (
-        <>
-          <ChatItem
-            key={chat.id}
-            chat={chat}
-            user={usersOfExistingChats[i]}
-            numberOfUnreadMessages={
-              numberOfUnreadMessagesInChats &&
-              numberOfUnreadMessagesInChats.find(
-                (numberOfUnreadMessages) =>
-                  numberOfUnreadMessages.userId === +chat.userIds.filter((userId) => userId !== idAuthorizedUser).join()
-              )?.counter
-            }
-          />
-          <Divider />
-        </>
+        <ChatItem
+          key={chat.id}
+          chat={chat}
+          user={usersOfExistingChats[i]}
+          numberOfUnreadMessages={
+            numberOfUnreadMessagesInChats &&
+            numberOfUnreadMessagesInChats.find(
+              (numberOfUnreadMessages) =>
+                numberOfUnreadMessages.userId === +chat.userIds.filter((userId) => userId !== idAuthorizedUser).join()
+            )?.counter
+          }
+        />
       ))}
     </List>
   );
