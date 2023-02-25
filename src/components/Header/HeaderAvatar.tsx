@@ -1,21 +1,11 @@
 import { Avatar, Box } from '@mui/material';
-import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { useAppSelector } from '../../hooks/redux';
 import useImage from '../../hooks/useImage';
-import { setAvatar } from '../../store/reducers/usersState';
 
 export default function HeaderAvatar() {
-  const dispatch = useAppDispatch();
-  const { authorizedUser, idAuthorizedUser, avatarUrl } = useAppSelector((state) => state.users);
-  const { data: avatar } = useImage(idAuthorizedUser, 'user-avatar');
-
-  useEffect(() => {
-    if (avatar) {
-      dispatch(setAvatar(avatar));
-    }
-  }, [avatar, dispatch]);
-
+  const { authorizedUser: user, idAuthorizedUser: userId } = useAppSelector((state) => state.users);
+  const { data: avatar } = useImage(userId, 'user-avatar');
   return (
     <Box
       sx={{
@@ -24,9 +14,9 @@ export default function HeaderAvatar() {
         display: { xs: 'none', sm: 'flex', mr: '10px' },
       }}
     >
-      <Link to={`/${authorizedUser?.alias ? authorizedUser.alias : `id${idAuthorizedUser}`}`}>
+      <Link to={`/${user?.alias ? user.alias : `id${userId}`}`}>
         <Avatar
-          src={avatarUrl}
+          src={avatar}
           alt="User Avatar"
           sx={{
             width: '50px',

@@ -72,5 +72,9 @@ export default function useMessagesWs() {
       window.addEventListener('blur', handleBlur);
       window.addEventListener('beforeunload', () => sendStatusMsg(false));
     }
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
   }, [dispatch, userId]);
 }

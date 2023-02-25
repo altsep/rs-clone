@@ -101,11 +101,7 @@ export default function Post({ postData }: IPostProps) {
     const post = currentProfilePosts?.find((el) => el.id === postData.id);
     if (post && post.images.length > 0) {
       const imgUrl = post.images[0];
-      fetch(`data:image/webp;base64,${imgUrl}`)
-        .then((data) => data.blob())
-        .then((blob) => URL.createObjectURL(blob))
-        .then((url) => setPostImage(url))
-        .catch((err: Error) => err);
+      setPostImage(imgUrl);
     } else {
       setPostImage('');
     }
