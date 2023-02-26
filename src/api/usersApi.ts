@@ -108,4 +108,27 @@ const changePassword = async (url: string, { arg }: IChangePassword): Promise<Re
   return response;
 };
 
-export { addUser, updateUser, hideUser, loginUser, registerUser, refreshToken, logoutUser, editUser, changePassword };
+const deleteUser = async (id: number, url: string, data: Pick<IUser, 'password'>) => {
+  const res = await fetch(url, {
+    method: 'DELETE',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  return res;
+};
+
+export {
+  addUser,
+  updateUser,
+  hideUser,
+  loginUser,
+  registerUser,
+  refreshToken,
+  logoutUser,
+  editUser,
+  changePassword,
+  deleteUser,
+};

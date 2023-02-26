@@ -158,5 +158,15 @@
     "online": "Online",
     "offline": "Offline"
   },
-  "imageAlert": "Max file size 5MB"
+  "imageAlert": "Max file size 5MB", 
+  "deletedAccount": "Deleted account",
+  "delete": {
+    "title": "Delete account",
+    "content1": "Are you sure you want to delete your account? This action is irreversible.",
+    "content2": "To confirm, enter the password and click the 'delete' button.",
+    "cancelBtn": "Cancel",
+    "deleteBtn": "Delete",
+    "placeholder": "Enter password",
+    "error": "Invalid password"
+  }
 }
