@@ -4,7 +4,7 @@ import { Box, Button, Typography, Badge, Avatar, IconButton, Skeleton, Stack } f
 import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import { useTranslation } from 'react-i18next';
-import { MutableRefObject, useRef, useState } from 'react';
+import { MutableRefObject, useMemo, useRef, useState } from 'react';
 import { ApiPath, API_BASE_URL, RoutePath } from '../../constants';
 import { updateUser } from '../../api/usersApi';
 import { TUpdateUserArg } from '../../types/usersApi';
@@ -132,6 +132,11 @@ export default function ProfileHeader() {
 
   const handleCloseError = () => setImageError(false);
 
+  const isAvatarHidden = useMemo(
+    () => idCurrentProfile !== idAuthorizedUser && currentProfile?.hidden,
+    [idCurrentProfile, idAuthorizedUser, currentProfile]
+  );
+
   return (
     <>
       <Box sx={{ borderRadius: 4, boxShadow: 4, overflow: 'hidden' }}>
@@ -180,11 +185,11 @@ export default function ProfileHeader() {
                   anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                 >
                   <Avatar
-                    src={idCurrentProfile !== idAuthorizedUser && currentProfile?.hidden ? '' : avatar}
+                    src={isAvatarHidden ? '' : avatar}
                     alt="Avatar"
                     sx={{ width: 150, height: 150, border: 3, borderColor: 'common.white' }}
                   >
-                    <VisibilityOffOutlinedIcon fontSize="large" />
+                    {isAvatarHidden ? <VisibilityOffOutlinedIcon fontSize="large" /> : null}
                   </Avatar>
                   <Box
                     sx={{
