@@ -54,11 +54,7 @@ export default function ActiveChat() {
       }}
     >
       {userOfActiveChat ? (
-        <CardHeader
-          avatar={<ClickableAvatar user={userOfActiveChat} />}
-          title={userOfActiveChat.name}
-          subheader="Active now"
-        />
+        <CardHeader avatar={<ClickableAvatar user={userOfActiveChat} />} title={userOfActiveChat.name} />
       ) : (
         <CardHeader sx={{ minHeight: '72px' }} />
       )}

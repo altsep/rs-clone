@@ -1,6 +1,5 @@
 import { Avatar } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useAppSelector } from '../../hooks/redux';
 import { IUser } from '../../types/data';
 import { getFirstLetter } from '../../utils/common';
 
@@ -13,15 +12,11 @@ interface IClickableAvatarProps {
 export default function ClickableAvatar({ user, width, height }: IClickableAvatarProps) {
   const navigate = useNavigate();
 
-  const { idCurrentProfile } = useAppSelector((state) => state.users);
-
   const handleClickAvatar = (id: number): void => {
-    if (idCurrentProfile !== id) {
-      if (user?.alias) {
-        navigate(`/${user.alias}`);
-      } else {
-        navigate(`/id${id}`);
-      }
+    if (user?.alias) {
+      navigate(`/${user.alias}`);
+    } else {
+      navigate(`/id${id}`);
     }
   };
   if (width === '20px' && height === '20px') {
