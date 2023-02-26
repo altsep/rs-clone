@@ -9,6 +9,7 @@ export default function useUser(id: number, refreshInterval = 10000) {
 
   const { data } = useSWR<IUser>(id !== idAuthorizedUser && `${API_BASE_URL}${ApiPath.users}/id${id}`, fetcher, {
     refreshInterval,
+  });
 
   return {
     user: data,
