@@ -54,44 +54,47 @@ export default function PostCreator() {
   const photoPicker = useRef<HTMLInputElement | null>(null);
 
   const handleClickCreatePost = async (): Promise<void> => {
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    const argAddPost: TAddPostArg = {
-      description: valueCreatePost,
-      userId: idAuthorizedUser,
-    };
-
-    const responseDataAppPost = await triggerAddPost(argAddPost);
-
-    if (currentProfile && responseDataAppPost) {
-      const { id: newPostId } = responseDataAppPost;
-
-      const formData: FormData = new FormData();
-
-      postPhotos.forEach((ph) => formData.append('post-img', ph));
-
-      const resImage = await sendPostImage(`${API_BASE_URL}${ApiPath.images}/post/${newPostId}`, formData);
-
-      if (resImage.ok) {
-        const newImages = (await resImage.json()) as string[];
-        responseDataAppPost.images = newImages;
-      }
-
-      const argUpdateUser: TUpdateUserArg = {
-        postsIds: currentProfile.postsIds ? [...currentProfile.postsIds, newPostId] : [newPostId],
+      const argAddPost: TAddPostArg = {
+        description: valueCreatePost,
+        userId: idAuthorizedUser,
       };
 
-      const responseDataUpdateUser = await triggerUpdateUser(argUpdateUser);
+      const responseDataAppPost = await triggerAddPost(argAddPost);
 
-      if (responseDataUpdateUser) {
-        dispatch(addPostInState(responseDataAppPost));
-        dispatch(updateUserInState(responseDataUpdateUser));
+      if (currentProfile && responseDataAppPost) {
+        const { id: newPostId } = responseDataAppPost;
+
+        const formData: FormData = new FormData();
+
+        postPhotos.forEach((ph) => formData.append('post-img', ph));
+
+        const resImage = await sendPostImage(`${API_BASE_URL}${ApiPath.images}/post/${newPostId}`, formData);
+
+        if (resImage.ok) {
+          const newImages = (await resImage.json()) as string[];
+          responseDataAppPost.images = newImages;
+          responseDataAppPost.hasImages = true;
+        }
+
+        const argUpdateUser: TUpdateUserArg = {
+          postsIds: currentProfile.postsIds ? [...currentProfile.postsIds, newPostId] : [newPostId],
+        };
+
+        const responseDataUpdateUser = await triggerUpdateUser(argUpdateUser);
+
+        if (responseDataUpdateUser) {
+          dispatch(addPostInState(responseDataAppPost));
+          dispatch(updateUserInState(responseDataUpdateUser));
+        }
       }
+    } finally {
+      setPostPhotos([]);
+      setValueCreatePost('');
+      setLoading(false);
     }
-
-    setPostPhotos([]);
-    setValueCreatePost('');
-    setLoading(false);
   };
 
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void =>
