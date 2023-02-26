@@ -1,8 +1,8 @@
 import { TransitionGroup } from 'react-transition-group';
 import { Collapse, Stack } from '@mui/material';
+import { useAppSelector } from '../../hooks/redux';
 import Post from '../Post';
 import PostCreator from './PostCreator';
-import { useAppSelector } from '../../hooks/redux';
 
 export default function ProfileFeed() {
   const { currentProfilePosts } = useAppSelector((state) => state.posts);

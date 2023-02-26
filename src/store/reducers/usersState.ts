@@ -48,7 +48,10 @@ const usersStateSlice = createSlice({
       state.defineUserCompleted = true;
     },
     updateUserInState: (state, action: PayloadAction<IUser>) => {
-      state.users = state.users.map((user) => (user.id === action.payload.id ? action.payload : user));
+      const i = state.users.findIndex((u) => u.id === action.payload.id);
+      if (i !== -1) {
+        state.users.splice(i, 1, action.payload);
+      }
       if (action.payload.id === state.idAuthorizedUser) {
         state.authorizedUser = action.payload;
       }
