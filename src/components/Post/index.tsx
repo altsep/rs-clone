@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 import { TransitionGroup } from 'react-transition-group';

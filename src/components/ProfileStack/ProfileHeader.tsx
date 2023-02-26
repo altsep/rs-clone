@@ -30,6 +30,7 @@ export default function ProfileHeader() {
     isLoading: avatarLoading,
     mutate: mutateAvatar,
   } = useImage(idCurrentProfile, 'user-avatar');
+
   const { data: cover = '', isLoading: coverLoading, mutate: mutateCover } = useImage(idCurrentProfile, 'user-cover');
 
   const [imageError, setImageError] = useState<boolean>(false);
@@ -179,15 +180,11 @@ export default function ProfileHeader() {
                   anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                 >
                   <Avatar
-                    src={avatar}
+                    src={idCurrentProfile !== idAuthorizedUser && currentProfile?.hidden ? '' : avatar}
                     alt="Avatar"
                     sx={{ width: 150, height: 150, border: 3, borderColor: 'common.white' }}
                   >
-                    {idCurrentProfile !== idAuthorizedUser &&
-                    currentProfile?.hidden &&
-                    currentProfile?.images.avatar !== '' ? (
-                      <VisibilityOffOutlinedIcon fontSize="large" />
-                    ) : null}
+                    <VisibilityOffOutlinedIcon fontSize="large" />
                   </Avatar>
                   <Box
                     sx={{
