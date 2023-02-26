@@ -21,7 +21,7 @@ const usersStateSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action: PayloadAction<IUser>) => {
-      state.authorizedUser = action.payload;
+      state.authorizedUser = { ...action.payload, isOnline: true };
       state.idAuthorizedUser = action.payload.id;
     },
     usersLoadingSuccess: (state, action: PayloadAction<IUser[]>) => {
