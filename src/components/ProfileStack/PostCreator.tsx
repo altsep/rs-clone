@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Avatar,
   Box,
@@ -28,6 +28,11 @@ import { updateUserInState } from '../../store/reducers/usersState';
 import ImageAlert from '../ImageAlert/ImageAlert';
 import { sendPostImage } from '../../api/imagesApi';
 import { getHexStr } from '../../utils/common';
+
+interface IPreview {
+  name: string;
+  data: string;
+}
 
 export default function PostCreator() {
   const { t } = useTranslation();
@@ -96,13 +101,17 @@ export default function PostCreator() {
     const { files } = e.target;
 
     if (files?.length) {
-      const incorrectFileSize = [...files].some((f) => f.size / 1024 / 1024 > 5);
+      const newPhotos = [...files].filter((f) => !postPhotos.some((ph) => ph.name === f.name));
+
+      const incorrectFileSize = newPhotos.some((f) => f.size / 1024 / 1024 > 5);
 
       if (incorrectFileSize) {
         return setPhotoError(true);
       }
 
-      setPostPhotos([...postPhotos, ...files]);
+      if (newPhotos.length) {
+        setPostPhotos([...postPhotos, ...newPhotos]);
+      }
     }
 
     return undefined;
@@ -110,7 +119,18 @@ export default function PostCreator() {
 
   const removePhoto = (e: React.MouseEvent): void => {
     const { name } = e.currentTarget as HTMLInputElement;
+
     setPostPhotos((prev) => prev.filter((file) => file.name !== name));
+
+    if (photoPicker.current?.files != null) {
+      const dt = new DataTransfer();
+
+      [...photoPicker.current.files].forEach((f) => {
+        if (f.name !== name) dt.items.add(f);
+      });
+
+      photoPicker.current.files = dt.files;
+    }
   };
 
   const handlePhotoPicker = (): void => {
@@ -120,6 +140,32 @@ export default function PostCreator() {
   };
 
   const handleCloseError = (): void => setPhotoError(false);
+
+  const [postPhotoPreviews, setPostPhotoPreviews] = useState<IPreview[]>([]);
+
+  useEffect(() => {
+    const previews: IPreview[] = [];
+
+    if (!postPhotos.length) {
+      setPostPhotoPreviews(previews);
+    }
+
+    postPhotos.forEach((ph, i, arr) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(ph);
+      reader.onloadend = () => {
+        if (typeof reader.result === 'string') {
+          const { name } = ph;
+          const { result: data } = reader;
+          previews.push({ name, data });
+        }
+
+        if (i === arr.length - 1) {
+          setPostPhotoPreviews(previews);
+        }
+      };
+    });
+  }, [postPhotos]);
 
   return (
     <>
@@ -145,10 +191,10 @@ export default function PostCreator() {
               }}
             />
           </CardContent>
-          {postPhotos.map((postPhoto) => (
+          {postPhotoPreviews.map(({ name, data }) => (
             <Box key={getHexStr()} sx={{ maxWidth: '150px', p: '16px', position: 'relative' }}>
               <IconButton
-                name={postPhoto.name}
+                name={name}
                 size="small"
                 sx={{
                   position: 'absolute',
@@ -162,12 +208,7 @@ export default function PostCreator() {
               >
                 <CloseIcon fontSize="small" />
               </IconButton>
-              <Box
-                component="img"
-                src={URL.createObjectURL(postPhoto)}
-                alt="Post photo"
-                sx={{ width: '118px', height: '118px' }}
-              />
+              <Box component="img" src={data} alt="Post photo" sx={{ width: '118px', height: '118px' }} />
             </Box>
           ))}
         </Box>
