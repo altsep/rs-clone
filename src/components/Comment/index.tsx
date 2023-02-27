@@ -149,7 +149,7 @@ export default function Comment({ commentData }: ICommentProps) {
               multiline
               value={valueInputDescription}
               onChange={handleChangeCommentDescription}
-              sx={{ flexGrow: 1 }}
+              sx={{ maxHeight: '100px', overflowY: 'auto', flexGrow: 1 }}
             />
             <Button onClick={handleClickSaveButton} sx={{ ml: 'auto' }}>
               Save

@@ -122,7 +122,16 @@ export default function Post({ postData }: IPostProps) {
       <CardContent>
         {!isEdit ? (
           <Typography variant="body1" component="span">
-            <pre style={{ fontFamily: 'inherit', whiteSpace: 'pre-wrap', wordBreak: 'break-all', margin: 0 }}>
+            <pre
+              style={{
+                maxHeight: '200px',
+                overflowY: 'auto',
+                fontFamily: 'inherit',
+                whiteSpace: 'pre-wrap',
+                wordBreak: 'break-all',
+                margin: 0,
+              }}
+            >
               {postData.description}
             </pre>
           </Typography>
@@ -132,7 +141,7 @@ export default function Post({ postData }: IPostProps) {
               multiline
               value={valueInputDescription}
               onChange={handleChangeInputDescription}
-              sx={{ flexGrow: 1, width: '100%' }}
+              sx={{ maxHeight: '200px', overflowY: 'auto', flexGrow: 1, width: '100%' }}
             />
             <Button onClick={handleClickSaveButton} sx={{ ml: 'auto' }}>
               {t('settings.buttons.save')}

@@ -64,6 +64,7 @@ export default function ChatItem({ chat, user, numberOfUnreadMessages }: IChatIt
             <Typography
               variant="caption"
               sx={{
+                maxHeight: '100px',
                 display: 'block',
                 textOverflow: 'ellipsis',
                 overflow: 'hidden',
