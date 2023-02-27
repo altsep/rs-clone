@@ -1,6 +1,15 @@
 import * as yup from 'yup';
 import moment from 'moment';
-import { Box, Button, FormHelperText, Grid, InputLabel, TextField, TextFieldProps } from '@mui/material';
+import {
+  Box,
+  Button,
+  CircularProgress,
+  FormHelperText,
+  Grid,
+  InputLabel,
+  TextField,
+  TextFieldProps,
+} from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import useSWRMutation from 'swr/mutation';
@@ -15,6 +24,8 @@ import { editUser } from '../../../../api/usersApi';
 import { setUser, updateUserInState } from '../../../../store/reducers/usersState';
 import { IEditFormValues } from '../../../../types/formValues';
 import { IUser } from '../../../../types/data';
+
+let timeoutId: NodeJS.Timeout | undefined;
 
 export default function EditProfileForm() {
   const { t } = useTranslation();
@@ -69,10 +80,14 @@ export default function EditProfileForm() {
     resolver: yupResolver(schema),
   });
 
-  const { trigger } = useSWRMutation(`${API_BASE_URL}${ApiPath.users}/${userId}`, editUser);
+  const { trigger, isMutating } = useSWRMutation(`${API_BASE_URL}${ApiPath.users}/${userId}`, editUser);
+
+  const [submitFeedbackValue, setSubmitFeedbackValue] = useState<string | null>(null);
 
   const update = async (data: Partial<IEditFormValues>): Promise<void> => {
     setAlias('');
+
+    clearTimeout(timeoutId);
 
     const filteredData: Partial<IEditFormValues> = Object.fromEntries(Object.entries(data).filter((el) => el[1]));
 
@@ -86,11 +101,16 @@ export default function EditProfileForm() {
         const user = (await res.json()) as IUser;
         dispatch(setUser(user));
         dispatch(updateUserInState(user));
+        setSubmitFeedbackValue(t('settings.buttons.saved'));
+        timeoutId = setTimeout(() => {
+          setSubmitFeedbackValue(null);
+        }, 2000);
       } else {
         throw new Error('Invalid value');
       }
     } catch {
       setAlias(filteredData.alias);
+      setSubmitFeedbackValue(null);
     }
   };
 
@@ -185,8 +205,8 @@ export default function EditProfileForm() {
         <Button sx={{ mr: '10px', color: 'text.secondary' }} type="button" onClick={resetForm}>
           {t('settings.buttons.cancel')}
         </Button>
-        <Button variant="contained" sx={{ borderRadius: '8px' }} type="submit">
-          {t('settings.buttons.save')}
+        <Button disabled={isMutating} variant="contained" sx={{ borderRadius: '8px', width: 80 }} type="submit">
+          {isMutating ? <CircularProgress size={24.5} /> : submitFeedbackValue ?? t('settings.buttons.save')}
         </Button>
       </Box>
     </Box>
