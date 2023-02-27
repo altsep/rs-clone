@@ -10,8 +10,13 @@ export default function Settings() {
         <LeftSideBar />
         <Box
           sx={{
-            borderRadius: 4,
-            boxShadow: 4,
+            borderRadius: {
+              xs: 0,
+              sm: 4,
+            },
+            boxShadow: {
+              sm: 4,
+            },
             display: 'flex',
             bgcolor: 'secondary.main',
             flex: 1,
