@@ -24,6 +24,7 @@ export default function ProfileInner() {
         justifyContent: 'space-between',
         gap: 2,
         minHeight: '500px',
+        backgroundColor: { xs: 'secondary.main', sm: 'transparent' },
       }}
     >
       <Stack sx={{ flexGrow: '1' }}>

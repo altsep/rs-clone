@@ -112,11 +112,11 @@ export default function FriendCard({ user, isRequest }: IFriendCardProps) {
   };
 
   return (
-    <Grid item xs={12 / 1} sm={12 / 2} md={12 / 3} sx={{ minHeight: '100%' }}>
+    <Grid item xs={12 / 1} md={12 / 3} sx={{ minHeight: '100%' }}>
       <Card
         sx={{
           p: 1,
-          borderRadius: 4,
+          borderRadius: { xs: 0, sm: 4 },
           minHeight: '100%',
           display: 'flex',
           flexDirection: 'column',

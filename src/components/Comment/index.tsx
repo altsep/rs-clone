@@ -131,7 +131,15 @@ export default function Comment({ commentData }: ICommentProps) {
         </Box>
         {!isEdit ? (
           <Typography variant="body2" component="span">
-            <pre style={{ fontFamily: 'inherit', whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
+            <pre
+              style={{
+                maxHeight: '100px',
+                overflowY: 'auto',
+                fontFamily: 'inherit',
+                whiteSpace: 'pre-wrap',
+                wordBreak: 'break-all',
+              }}
+            >
               {commentData.description}
             </pre>
           </Typography>

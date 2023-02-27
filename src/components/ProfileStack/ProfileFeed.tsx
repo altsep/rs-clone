@@ -8,7 +8,15 @@ export default function ProfileFeed() {
   const { currentProfilePosts } = useAppSelector((state) => state.posts);
 
   return (
-    <Stack sx={{ flexDirection: 'column', gap: 2, flex: { xs: 0, md: '0 0 50%' }, order: { xs: 3, md: 2 } }}>
+    <Stack
+      sx={{
+        flexDirection: 'column',
+        gap: 2,
+        flex: { xs: 0, md: '0 0 40%' },
+        order: { xs: 3, md: 2 },
+        backgroundColor: { xs: 'secondary.main', sm: 'transparent' },
+      }}
+    >
       <PostCreator />
       <TransitionGroup>
         {currentProfilePosts &&
