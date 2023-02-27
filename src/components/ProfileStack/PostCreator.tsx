@@ -74,8 +74,6 @@ export default function PostCreator() {
         const resImage = await sendPostImage(`${API_BASE_URL}${ApiPath.images}/post/${newPostId}`, formData);
 
         if (resImage.ok) {
-          const newImages = (await resImage.json()) as string[];
-          responseDataAppPost.images = newImages;
           responseDataAppPost.hasImages = true;
         }
 
