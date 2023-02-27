@@ -2,15 +2,14 @@ import { Avatar, Badge, Box, IconButton } from '@mui/material';
 import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined';
 import { useRef, useState } from 'react';
 import useSWRMutation from 'swr/mutation';
-import { useAppDispatch, useAppSelector } from '../../../../hooks/redux';
+import { useAppSelector } from '../../../../hooks/redux';
 import { ApiPath, API_BASE_URL } from '../../../../constants';
 import { sendImage } from '../../../../api/imagesApi';
-import { setAvatar } from '../../../../store/reducers/usersState';
 import ImageAlert from '../../../ImageAlert/ImageAlert';
+import useImage from '../../../../hooks/useImage';
 
 export default function EditProfileAvatar() {
-  const dispatch = useAppDispatch();
-  const { idAuthorizedUser, avatarUrl } = useAppSelector((state) => state.users);
+  const { idAuthorizedUser } = useAppSelector((state) => state.users);
   const [avatarError, setAvatarError] = useState<boolean>(false);
   const avatarPicker = useRef<HTMLInputElement | null>(null);
 
@@ -19,19 +18,19 @@ export default function EditProfileAvatar() {
     sendImage
   );
 
+  const { data: avatar, mutate } = useImage(idAuthorizedUser, 'user-avatar');
+
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
     if (e.target.files) {
       const formData: FormData = new FormData();
       formData.append('user-avatar', e.target.files[0]);
       const res: Response | undefined = await trigger(formData);
 
-      if (res?.ok) {
-        const blob: Blob = await res.blob();
-        const url: string = URL.createObjectURL(blob);
-        dispatch(setAvatar(url));
-      } else {
+      if (!res?.ok) {
         setAvatarError(true);
       }
+
+      await mutate();
     }
   };
 
@@ -67,7 +66,7 @@ export default function EditProfileAvatar() {
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       >
         <Avatar
-          src={avatarUrl}
+          src={avatar}
           sx={{ width: '70px', height: '70px', mb: '30px', border: 2, borderColor: 'common.white' }}
           alt="user avatar"
         />

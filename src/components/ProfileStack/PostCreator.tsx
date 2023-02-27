@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Avatar,
   Box,
@@ -20,7 +20,6 @@ import { API_BASE_URL, ApiPath } from '../../constants';
 import { addPost } from '../../api/postsApi';
 import { TAddPostArg } from '../../types/postsApi';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { changeCreatePost } from '../../store/reducers/inputsState';
 import { updateUser } from '../../api/usersApi';
 import { TUpdateUserArg } from '../../types/usersApi';
 import ClickableAvatar from '../ClickableAvatar';
@@ -28,6 +27,12 @@ import { addPostInState } from '../../store/reducers/postsState';
 import { updateUserInState } from '../../store/reducers/usersState';
 import ImageAlert from '../ImageAlert/ImageAlert';
 import { sendPostImage } from '../../api/imagesApi';
+import { getHexStr } from '../../utils/common';
+
+interface IPreview {
+  name: string;
+  data: string;
+}
 
 export default function PostCreator() {
   const { t } = useTranslation();
@@ -35,12 +40,10 @@ export default function PostCreator() {
 
   const [isLoading, setLoading] = useState(false);
   const [photoError, setPhotoError] = useState(false);
-  const [postPhoto, setPostPhoto] = useState<File | null>(null);
+  const [postPhotos, setPostPhotos] = useState<File[]>([]);
+  const [valueCreatePost, setValueCreatePost] = useState<string>('');
 
   const { idCurrentProfile, currentProfile, authorizedUser, idAuthorizedUser } = useAppSelector((state) => state.users);
-  const { valueCreatePost } = useAppSelector((state) => state.inputs);
-
-  const photoPicker = useRef<HTMLInputElement | null>(null);
 
   const { trigger: triggerAddPost } = useSWRMutation(`${API_BASE_URL}${ApiPath.posts}`, addPost, { revalidate: false });
   const { trigger: triggerUpdateUser } = useSWRMutation(
@@ -48,78 +51,92 @@ export default function PostCreator() {
     updateUser
   );
 
+  const photoPicker = useRef<HTMLInputElement | null>(null);
+
   const handleClickCreatePost = async (): Promise<void> => {
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    let imageUrl: string | undefined;
-
-    const argAddPost: TAddPostArg = {
-      description: valueCreatePost,
-      userId: idAuthorizedUser,
-    };
-
-    const responseDataAppPost = await triggerAddPost(argAddPost);
-    if (responseDataAppPost && currentProfile) {
-      const argUpdateUser: TUpdateUserArg = {
-        postsIds: currentProfile.postsIds
-          ? [...currentProfile.postsIds, responseDataAppPost.id]
-          : [responseDataAppPost.id],
+      const argAddPost: TAddPostArg = {
+        description: valueCreatePost,
+        userId: idAuthorizedUser,
       };
 
-      if (postPhoto) {
+      const responseDataAppPost = await triggerAddPost(argAddPost);
+
+      if (currentProfile && responseDataAppPost) {
+        const { id: newPostId } = responseDataAppPost;
+
         const formData: FormData = new FormData();
-        formData.append('post-img', postPhoto);
-        const resImage = await sendPostImage(
-          `${API_BASE_URL}${ApiPath.images}/post/${responseDataAppPost.id}`,
-          formData
-        );
+
+        postPhotos.forEach((ph) => formData.append('post-img', ph));
+
+        const resImage = await sendPostImage(`${API_BASE_URL}${ApiPath.images}/post/${newPostId}`, formData);
+
         if (resImage.ok) {
-          const blob: Blob = await resImage.blob();
-          const fileReader = new FileReader();
-          fileReader.readAsDataURL(blob);
-          fileReader.onloadend = () => {
-            if (typeof fileReader.result === 'string') {
-              imageUrl = fileReader.result.replace('data:image/webp;base64,', '');
-            }
-          };
-        } else {
-          setLoading(false);
+          responseDataAppPost.hasImages = true;
+        }
+
+        const argUpdateUser: TUpdateUserArg = {
+          postsIds: currentProfile.postsIds ? [...currentProfile.postsIds, newPostId] : [newPostId],
+        };
+
+        const responseDataUpdateUser = await triggerUpdateUser(argUpdateUser);
+
+        if (responseDataUpdateUser) {
+          dispatch(addPostInState(responseDataAppPost));
+          dispatch(updateUserInState(responseDataUpdateUser));
         }
       }
+    } finally {
+      setPostPhotos([]);
+      setValueCreatePost('');
+      setLoading(false);
 
-      const responseDataUpdateUser = await triggerUpdateUser(argUpdateUser);
-      if (responseDataUpdateUser) {
-        dispatch(
-          addPostInState({ ...responseDataAppPost, images: imageUrl ? [imageUrl] : responseDataAppPost.images })
-        );
-        dispatch(updateUserInState(responseDataUpdateUser));
+      if (photoPicker.current) {
+        const dt = new DataTransfer();
+        photoPicker.current.files = dt.files;
       }
     }
-    setPostPhoto(null);
-    dispatch(changeCreatePost(''));
-    setLoading(false);
   };
 
-  const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
-    dispatch(changeCreatePost(e.target.value));
-  };
+  const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void =>
+    setValueCreatePost(e.target.value);
 
   const handleChangePhoto = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    if (e.target.files) {
-      const file: File = e.target.files[0];
-      if (file) {
-        const fileSize: number = file.size / 1000000;
-        if (fileSize > 5) {
-          setPhotoError(true);
-        } else {
-          setPostPhoto(file);
-        }
+    const { files } = e.target;
+
+    if (files?.length) {
+      const newPhotos = [...files].filter((f) => !postPhotos.some((ph) => ph.name === f.name));
+
+      const incorrectFileSize = newPhotos.some((f) => f.size / 1024 / 1024 > 5);
+
+      if (incorrectFileSize) {
+        return setPhotoError(true);
+      }
+
+      if (newPhotos.length) {
+        setPostPhotos([...postPhotos, ...newPhotos]);
       }
     }
+
+    return undefined;
   };
 
-  const removePhoto = (): void => {
-    setPostPhoto(null);
+  const removePhoto = (e: React.MouseEvent): void => {
+    const { name } = e.currentTarget as HTMLInputElement;
+
+    setPostPhotos((prev) => prev.filter((file) => file.name !== name));
+
+    if (photoPicker.current?.files != null) {
+      const dt = new DataTransfer();
+
+      [...photoPicker.current.files].forEach((f) => {
+        if (f.name !== name) dt.items.add(f);
+      });
+
+      photoPicker.current.files = dt.files;
+    }
   };
 
   const handlePhotoPicker = (): void => {
@@ -129,6 +146,32 @@ export default function PostCreator() {
   };
 
   const handleCloseError = (): void => setPhotoError(false);
+
+  const [postPhotoPreviews, setPostPhotoPreviews] = useState<IPreview[]>([]);
+
+  useEffect(() => {
+    const previews: IPreview[] = [];
+
+    if (!postPhotos.length) {
+      setPostPhotoPreviews(previews);
+    }
+
+    postPhotos.forEach((ph, i, arr) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(ph);
+      reader.onloadend = () => {
+        if (typeof reader.result === 'string') {
+          const { name } = ph;
+          const { result: data } = reader;
+          previews.push({ name, data });
+        }
+
+        if (i === arr.length - 1) {
+          setPostPhotoPreviews(previews);
+        }
+      };
+    });
+  }, [postPhotos]);
 
   return (
     <>
@@ -154,9 +197,10 @@ export default function PostCreator() {
               }}
             />
           </CardContent>
-          {postPhoto && (
-            <Box sx={{ maxWidth: '150px', p: '16px', position: 'relative' }}>
+          {postPhotoPreviews.map(({ name, data }) => (
+            <Box key={getHexStr()} sx={{ maxWidth: '150px', p: '16px', position: 'relative' }}>
               <IconButton
+                name={name}
                 size="small"
                 sx={{
                   position: 'absolute',
@@ -170,12 +214,19 @@ export default function PostCreator() {
               >
                 <CloseIcon fontSize="small" />
               </IconButton>
-              <Box component="img" src={URL.createObjectURL(postPhoto)} alt="Post photo" sx={{ width: '100%' }} />
+              <Box component="img" src={data} alt="Post photo" sx={{ width: '118px', height: '118px' }} />
             </Box>
-          )}
+          ))}
         </Box>
         <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <input hidden accept=".jpg, .png" type="file" ref={photoPicker} onChange={handleChangePhoto} />
+          <input
+            hidden
+            multiple
+            accept=".jpg, .jpeg, .png, .webp"
+            type="file"
+            ref={photoPicker}
+            onChange={handleChangePhoto}
+          />
           <Button aria-label="Upload photo" sx={{ gap: 1 }} onClick={handlePhotoPicker}>
             <AddPhotoAlternateOutlinedIcon />
             <Typography sx={{ display: { xs: 'none', md: 'block' } }}>{t('profile.addPost.photo')}</Typography>
@@ -187,7 +238,7 @@ export default function PostCreator() {
               variant="contained"
               aria-label="Create post"
               onClick={handleClickCreatePost}
-              disabled={Boolean(!valueCreatePost)}
+              disabled={[!valueCreatePost && !postPhotos.length, isLoading].some(Boolean)}
               sx={{ gap: 1 }}
             >
               <Typography>{t('profile.addPost.button')}</Typography>

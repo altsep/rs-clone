@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 import { TransitionGroup } from 'react-transition-group';
 import {
@@ -30,6 +31,8 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { updatePostInState } from '../../store/reducers/postsState';
 import Comment from '../Comment';
 import CommentCreator from './CommentCreator';
+import { getHexStr } from '../../utils/common';
+import { fetcher } from '../../utils/fetcher';
 
 interface IPostProps {
   postData: IPost;
@@ -41,11 +44,9 @@ export default function Post({ postData }: IPostProps) {
   const [isOpenComments, setIsOpenComments] = useState(false);
 
   const [valueInputDescription, setValueInputDescription] = useState(postData.description);
-  const [postImage, setPostImage] = useState('');
 
   const dispatch = useAppDispatch();
   const { users, idAuthorizedUser } = useAppSelector((state) => state.users);
-  const { currentProfilePosts } = useAppSelector((state) => state.posts);
   const { comments } = useAppSelector((state) => state.comments);
 
   const { trigger: triggerUpdatePost } = useSWRMutation<IPost, Error>(
@@ -53,25 +54,26 @@ export default function Post({ postData }: IPostProps) {
     updatePost
   );
 
+  const triggerAndUpdate = async (argUpdatePost: TUpdatePostArg): Promise<void> => {
+    const dataResponse = await triggerUpdatePost(argUpdatePost);
+    if (dataResponse) {
+      dispatch(updatePostInState(dataResponse));
+    }
+  };
+
   const handleClickLikeButton = async (): Promise<void> => {
     if (postData.likedUserIds && postData.likedUserIds.includes(idAuthorizedUser)) {
       const argUpdatePost: TUpdatePostArg = {
         likes: postData.likes - 1,
         likedUserIds: postData.likedUserIds.filter((likedUserId) => likedUserId !== idAuthorizedUser),
       };
-      const dataResponse = await triggerUpdatePost(argUpdatePost);
-      if (dataResponse) {
-        dispatch(updatePostInState(dataResponse));
-      }
+      await triggerAndUpdate(argUpdatePost);
     } else {
       const argUpdatePost: TUpdatePostArg = {
         likes: postData.likes + 1,
         likedUserIds: postData.likedUserIds ? [...postData.likedUserIds, idAuthorizedUser] : [idAuthorizedUser],
       };
-      const dataResponse = await triggerUpdatePost(argUpdatePost);
-      if (dataResponse) {
-        dispatch(updatePostInState(dataResponse));
-      }
+      await triggerAndUpdate(argUpdatePost);
     }
   };
 
@@ -79,10 +81,8 @@ export default function Post({ postData }: IPostProps) {
     const argUpdatePost: TUpdatePostArg = {
       description: valueInputDescription,
     };
-    const dataResponse = await triggerUpdatePost(argUpdatePost);
-    if (dataResponse) {
-      dispatch(updatePostInState(dataResponse));
-    }
+
+    await triggerAndUpdate(argUpdatePost);
 
     setIsEdit(false);
   };
@@ -97,19 +97,11 @@ export default function Post({ postData }: IPostProps) {
     setIsOpenComments(!isOpenComments);
   };
 
-  useEffect(() => {
-    const post = currentProfilePosts?.find((el) => el.id === postData.id);
-    if (post && post.images.length > 0) {
-      const imgUrl = post.images[0];
-      fetch(`data:image/webp;base64,${imgUrl}`)
-        .then((data) => data.blob())
-        .then((blob) => URL.createObjectURL(blob))
-        .then((url) => setPostImage(url))
-        .catch((err: Error) => err);
-    } else {
-      setPostImage('');
-    }
-  }, [currentProfilePosts, postData.id]);
+  const { data: images = [] } = useSWR<string[], Error>(
+    postData.hasImages ? `${API_BASE_URL}${ApiPath.images}?name=post&id=${postData.id}` : null,
+    fetcher,
+    { revalidateOnFocus: false }
+  );
 
   return (
     <Card sx={{ borderRadius: 4, boxShadow: { xs: 4, md: 0 }, mb: 2 }}>
@@ -135,7 +127,9 @@ export default function Post({ postData }: IPostProps) {
           </Box>
         )}
       </CardContent>
-      {postImage && <CardMedia component="img" height="200" image={postImage} />}
+      {images.map((img) => (
+        <CardMedia key={getHexStr()} component="img" height="200" image={img} />
+      ))}
       <Box
         sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', px: 2, py: 1, height: '44px' }}
       >

@@ -18,12 +18,12 @@ export default function ClickableAvatar({ user, width, height }: IClickableAvata
 
   const { data: avatar } = useImage(user.id, 'user-avatar');
 
-  const handleClickAvatar = (id: number): void => {
-    if (idCurrentProfile !== id) {
+  const handleClickAvatar = (): void => {
+    if (idCurrentProfile !== user.id) {
       if (user?.alias) {
         navigate(`/${user.alias}`);
       } else {
-        navigate(`/id${id}`);
+        navigate(`/id${user.id}`);
       }
     }
   };
@@ -32,7 +32,7 @@ export default function ClickableAvatar({ user, width, height }: IClickableAvata
     return (
       <Avatar
         src={idCurrentProfile !== user.id && user.hidden ? '' : avatar}
-        onClick={() => handleClickAvatar(user.id)}
+        onClick={handleClickAvatar}
         sx={{ textTransform: 'capitalize', cursor: 'pointer', width, height, fontSize: 'small' }}
       >
         {getFirstLetter(user.name)}
@@ -43,7 +43,7 @@ export default function ClickableAvatar({ user, width, height }: IClickableAvata
   return (
     <Avatar
       src={idCurrentProfile !== user.id && user.hidden ? '' : avatar}
-      onClick={() => handleClickAvatar(user.id)}
+      onClick={handleClickAvatar}
       sx={{ textTransform: 'capitalize', cursor: 'pointer', width, height }}
     >
       {getFirstLetter(user.name)}

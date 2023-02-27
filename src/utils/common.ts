@@ -7,5 +7,6 @@ const setToken = (value: string): void => localStorage.setItem(accessTokenItemKe
 const removeToken = (): void => localStorage.removeItem(accessTokenItemKey);
 const getToken = (): string | null => localStorage.getItem(accessTokenItemKey);
 const getActionString = (type: string, payload: unknown): string => JSON.stringify({ type, payload });
+const getHexStr = (n = 32) => Array.from({ length: n }, () => Math.round(Math.random() * 0x10).toString(16)).join('');
 
-export { getFirstLetter, setToken, removeToken, getToken, getActionString };
+export { getFirstLetter, setToken, removeToken, getToken, getActionString, getHexStr };

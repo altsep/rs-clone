@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { WS_BASE_URL } from '../constants';
-import { setMessagesWs, updateUserInState } from '../store/reducers/usersState';
+import { setMessagesWs, updateUserStatusInState } from '../store/reducers/usersState';
 import { getActionString, getToken } from '../utils/common';
 import { useAppDispatch, useAppSelector } from './redux';
 
@@ -14,7 +14,7 @@ export default function useMessagesWs() {
 
     const modifyAuthorizedUserStatus = (isOnline: boolean) => {
       if (userData) {
-        dispatch(updateUserInState({ ...userData, isOnline }));
+        dispatch(updateUserStatusInState({ id: userId, isOnline }));
       }
     };
 
@@ -72,5 +72,9 @@ export default function useMessagesWs() {
       window.addEventListener('blur', handleBlur);
       window.addEventListener('beforeunload', () => sendStatusMsg(false));
     }
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
   }, [dispatch, userId]);
 }

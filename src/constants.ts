@@ -9,7 +9,6 @@ const KEY_LOCAL_STORAGE = 'rs-clone-krevetka87-altsep-metalknock';
 const enum ApiPath {
   posts = '/posts',
   users = '/users',
-  user = '/user',
   comments = '/comments',
   auth = '/posts-auth',
   refresh = '/refresh',

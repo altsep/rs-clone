@@ -4,13 +4,13 @@ import { Box, Button, Typography, Badge, Avatar, IconButton, Skeleton, Stack } f
 import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import { useTranslation } from 'react-i18next';
-import { MutableRefObject, useEffect, useRef, useState } from 'react';
+import { MutableRefObject, useMemo, useRef, useState } from 'react';
 import { ApiPath, API_BASE_URL, RoutePath } from '../../constants';
 import { updateUser } from '../../api/usersApi';
 import { TUpdateUserArg } from '../../types/usersApi';
 import coverBackground from '../../assets/cover-background.webp';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { setAvatar, updateUserInState } from '../../store/reducers/usersState';
+import { updateUserInState } from '../../store/reducers/usersState';
 import useStatus from '../../hooks/useStatus';
 import { sendImage } from '../../api/imagesApi';
 import useImage from '../../hooks/useImage';
@@ -23,14 +23,16 @@ export default function ProfileHeader() {
   const dispatch = useAppDispatch();
 
   const currentLocale = useAppSelector((state) => state.language.lang);
-  const { idCurrentProfile, idAuthorizedUser, currentProfile, authorizedUser, avatarUrl } = useAppSelector(
-    (state) => state.users
-  );
+  const { idCurrentProfile, idAuthorizedUser, currentProfile, authorizedUser } = useAppSelector((state) => state.users);
 
-  const { data: avatar, isLoading: avatarLoading } = useImage(idCurrentProfile, 'user-avatar');
-  const { data: cover, isLoading: coverLoading, mutate } = useImage(idCurrentProfile, 'user-cover');
+  const {
+    data: avatar = '',
+    isLoading: avatarLoading,
+    mutate: mutateAvatar,
+  } = useImage(idCurrentProfile, 'user-avatar');
 
-  const [userAvatarUrl, setUserAvatarUrl] = useState<string>('');
+  const { data: cover = '', isLoading: coverLoading, mutate: mutateCover } = useImage(idCurrentProfile, 'user-cover');
+
   const [imageError, setImageError] = useState<boolean>(false);
 
   const avatarPicker = useRef<HTMLInputElement | null>(null);
@@ -40,6 +42,7 @@ export default function ProfileHeader() {
     `${API_BASE_URL}${ApiPath.users}/${idAuthorizedUser}`,
     updateUser
   );
+
   const { trigger: triggerUpdateCurrentProfileUser } = useSWRMutation(
     `${API_BASE_URL}${ApiPath.users}/${idCurrentProfile}`,
     updateUser
@@ -95,13 +98,11 @@ export default function ProfileHeader() {
       formData.append('user-avatar', e.target.files[0]);
       const res: Response | undefined = await triggerAvatarChange(formData);
 
-      if (res?.ok) {
-        const blob: Blob = await res.blob();
-        const url: string = URL.createObjectURL(blob);
-        dispatch(setAvatar(url));
-      } else {
+      if (!res?.ok) {
         setImageError(true);
       }
+
+      await mutateAvatar();
     }
   };
 
@@ -111,13 +112,11 @@ export default function ProfileHeader() {
       formData.append('user-cover', e.target.files[0]);
       const res: Response | undefined = await triggerCoverChange(formData);
 
-      if (res?.ok) {
-        const blob: Blob = await res.blob();
-        const url: string = URL.createObjectURL(blob);
-        mutate(url).catch((err: Error) => err);
-      } else {
+      if (!res?.ok) {
         setImageError(true);
       }
+
+      await mutateCover();
     }
   };
 
@@ -133,33 +132,21 @@ export default function ProfileHeader() {
 
   const handleCloseError = () => setImageError(false);
 
-  useEffect(() => {
-    if (avatar) {
-      if (idCurrentProfile !== idAuthorizedUser) {
-        setUserAvatarUrl(avatar);
-      } else {
-        setUserAvatarUrl(avatarUrl);
-      }
-    } else {
-      setUserAvatarUrl('');
-    }
-
-    return () => setUserAvatarUrl('');
-  }, [avatar, idCurrentProfile, avatarUrl, idAuthorizedUser]);
+  const isAvatarHidden = useMemo(
+    () => idCurrentProfile !== idAuthorizedUser && currentProfile?.hidden,
+    [idCurrentProfile, idAuthorizedUser, currentProfile]
+  );
 
   return (
     <>
       <Box sx={{ borderRadius: 4, boxShadow: 4, overflow: 'hidden' }}>
-        {!coverLoading ? (
-          <Box
-            component="img"
-            src={cover || coverBackground}
-            alt="Background image"
-            sx={{ width: '100%', height: '300px', objectFit: 'cover' }}
-          />
-        ) : (
-          <Skeleton variant="rectangular" animation={false} sx={{ width: '100%', height: '300px' }} />
-        )}
+        <Box
+          component="img"
+          src={cover || coverBackground}
+          alt="Background image"
+          sx={{ width: '100%', height: '300px', objectFit: 'cover', display: coverLoading ? 'none' : '' }}
+        />
+        {coverLoading && <Skeleton variant="rectangular" animation={false} sx={{ width: '100%', height: '300px' }} />}
         <Box sx={{ px: 2 }}>
           <Box sx={{ position: 'relative' }}>
             <Box
@@ -174,10 +161,10 @@ export default function ProfileHeader() {
                 gap: 1,
               }}
             >
-              {currentProfile && !avatarLoading ? (
+              {currentProfile && (
                 <Badge
                   overlap="circular"
-                  sx={{ position: 'relative' }}
+                  sx={{ position: 'relative', display: avatarLoading ? 'none' : '' }}
                   badgeContent={
                     idCurrentProfile === idAuthorizedUser ? (
                       <IconButton
@@ -198,13 +185,11 @@ export default function ProfileHeader() {
                   anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                 >
                   <Avatar
-                    src={idCurrentProfile !== idAuthorizedUser && currentProfile.hidden ? '' : userAvatarUrl}
+                    src={isAvatarHidden ? '' : avatar}
                     alt="Avatar"
                     sx={{ width: 150, height: 150, border: 3, borderColor: 'common.white' }}
                   >
-                    {idCurrentProfile !== idAuthorizedUser && currentProfile.hidden && userAvatarUrl !== '' ? (
-                      <VisibilityOffOutlinedIcon fontSize="large" />
-                    ) : null}
+                    {isAvatarHidden ? <VisibilityOffOutlinedIcon fontSize="large" /> : null}
                   </Avatar>
                   <Box
                     sx={{
@@ -219,7 +204,8 @@ export default function ProfileHeader() {
                     }}
                   />
                 </Badge>
-              ) : (
+              )}
+              {avatarLoading && (
                 <Skeleton variant="circular">
                   <Avatar sx={{ width: 150, height: 150 }} />
                 </Skeleton>
