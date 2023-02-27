@@ -14,7 +14,8 @@ export default function Login() {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        marginTop: '5vh',
+        mt: '5vh',
+        mb: '5vh',
       }}
     >
       <Grid

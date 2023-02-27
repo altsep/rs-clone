@@ -1,9 +1,11 @@
-import { Box, Container, Divider, Typography } from '@mui/material';
+import { Box, Container, Divider, Typography, useMediaQuery } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import FooterGithubLinks from './FooterGithubLinks';
 import FooterRSLink from './FooterRSLink';
-import HeaderLogo from '../Header/HeaderLogo';
+import FooterLogo from './FooterLogo';
 
 export default function Footer() {
+  const { t } = useTranslation();
   return (
     <Box component="footer" sx={{ bgcolor: 'secondary.main' }}>
       <Container
@@ -16,17 +18,49 @@ export default function Footer() {
         }}
       >
         <Box sx={{ minWidth: '100%' }}>
-          <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', pb: '10px' }}>
-            <Box sx={{ justifySelf: 'start' }}>
-              <HeaderLogo />
-              <Typography variant="body2" sx={{ mt: '10px' }}>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem cum molestias consequuntur quae. Cumque,
-                consequatur dolores repudiandae quam nam eveniet.
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: {
+                sm: 'repeat(1, 1fr)',
+                md: 'repeat(3, 1fr)',
+              },
+              pb: '10px',
+              gap: '20px 40px',
+            }}
+          >
+            <Box
+              sx={{
+                justifySelf: {
+                  xs: 'center',
+                  md: 'start',
+                },
+                display: 'flex',
+                flexDirection: {
+                  xs: 'row',
+                  md: 'column',
+                },
+                alignItems: {
+                  xs: 'center',
+                  md: 'flex-start',
+                },
+              }}
+            >
+              <FooterLogo />
+              <Typography variant="body2" sx={{ mt: '10px', maxWidth: '300px' }}>
+                {t('footer.description')}
               </Typography>
             </Box>
             <FooterGithubLinks />
-            <Box sx={{ justifySelf: 'end' }}>
-              <Typography sx={{ mb: '10px', fontWeight: 700 }}>Courses:</Typography>
+            <Box
+              sx={{
+                justifySelf: {
+                  xs: 'center',
+                  md: 'end',
+                },
+              }}
+            >
+              <Typography sx={{ mb: '10px', fontWeight: 700 }}>{t('footer.courses')}</Typography>
               <FooterRSLink />
             </Box>
           </Box>

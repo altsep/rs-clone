@@ -168,5 +168,10 @@
     "deleteBtn": "Delete",
     "placeholder": "Enter password",
     "error": "Invalid password"
+  },
+  "footer": {
+    "description": "This social network for dating and chatting with friends was created by the students of the course RSSchool JavaScript/Front-end 2022Q3",  
+    "team": "Our team:",
+    "courses": "Courses:"
   }
 }

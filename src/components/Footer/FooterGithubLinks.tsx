@@ -1,4 +1,5 @@
 import { Link, Box, Stack, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import FooterGithubLogo from './FooterGithubLogo';
 
 type ILinks = {
@@ -22,13 +23,14 @@ const links: Array<ILinks> = [
 ];
 
 export default function FooterGithubLinks() {
+  const { t } = useTranslation();
   return (
-    <Box sx={{ justifySelf: 'center' }}>
+    <Box sx={{ justifySelf: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <Box sx={{ display: 'flex' }}>
         <FooterGithubLogo />
-        <Typography sx={{ mb: '10px', fontWeight: 700 }}>Our team: </Typography>
+        <Typography sx={{ mb: '10px', fontWeight: 700 }}>{t('footer.team')}</Typography>
       </Box>
-      <Stack>
+      <Stack direction="row" sx={{ gap: '15px ' }}>
         {links.map((link: ILinks) => (
           <Link
             target="_blank"
