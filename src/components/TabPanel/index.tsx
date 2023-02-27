@@ -21,7 +21,7 @@ export default function TabPanel({ children, index, value, isEmpty }: ITabPanelP
           alignItems: 'center',
         }}
       >
-        {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+        {value === index && <Box sx={{ py: 3, px: { xs: 0, sm: 3 } }}>{children}</Box>}
       </div>
     );
   }
@@ -36,7 +36,7 @@ export default function TabPanel({ children, index, value, isEmpty }: ITabPanelP
         minHeight: '78vh',
       }}
     >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      {value === index && <Box sx={{ py: 3, px: { xs: 0, sm: 3 } }}>{children}</Box>}
     </div>
   );
 }

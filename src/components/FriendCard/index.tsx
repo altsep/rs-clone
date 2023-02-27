@@ -98,7 +98,7 @@ export default function FriendCard({ user, isRequest }: IFriendCardProps) {
       <Card
         sx={{
           p: 1,
-          borderRadius: 4,
+          borderRadius: { xs: 0, sm: 4 },
           minHeight: '100%',
           display: 'flex',
           flexDirection: 'column',

@@ -31,7 +31,9 @@ export default function Friends() {
     <Container sx={{ mt: '5vh', mb: '5vh', display: 'flex' }}>
       <Stack direction="row" sx={{ gap: 2, minWidth: '100%' }}>
         <LeftSideBar />
-        <Box sx={{ borderRadius: 4, boxShadow: 4, bgcolor: 'secondary.main', width: '100%' }}>
+        <Box
+          sx={{ borderRadius: { xs: 0, sm: 4 }, boxShadow: { xs: 0, sm: 4 }, bgcolor: 'secondary.main', width: '100%' }}
+        >
           <Tabs variant="fullWidth" value={value} onChange={handleChangeTabs} aria-label="basic tabs example">
             <Tab label={t('friends.friends')} id="simple-tab-0" aria-controls="simple-tabpanel-0" />
             <Tab label={t('friends.friendRequests')} id="simple-tab-1" aria-controls="simple-tabpanel-1" />
