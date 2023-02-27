@@ -28,6 +28,8 @@ import { updateUserInState } from '../../store/reducers/usersState';
 import ImageAlert from '../ImageAlert/ImageAlert';
 import { sendPostImage } from '../../api/imagesApi';
 import { getHexStr } from '../../utils/common';
+import usePosts from '../../hooks/usePosts';
+import useUsers from '../../hooks/useUsers';
 
 interface IPreview {
   name: string;
@@ -44,6 +46,9 @@ export default function PostCreator() {
   const [valueCreatePost, setValueCreatePost] = useState<string>('');
 
   const { idCurrentProfile, currentProfile, authorizedUser, idAuthorizedUser } = useAppSelector((state) => state.users);
+
+  const { isLoadingPosts, isValidatingPosts } = usePosts();
+  const { isValidatingUsers } = useUsers();
 
   const { trigger: triggerAddPost } = useSWRMutation(`${API_BASE_URL}${ApiPath.posts}`, addPost, { revalidate: false });
   const { trigger: triggerUpdateUser } = useSWRMutation(
@@ -238,7 +243,13 @@ export default function PostCreator() {
               variant="contained"
               aria-label="Create post"
               onClick={handleClickCreatePost}
-              disabled={[!valueCreatePost && !postPhotos.length, isLoading].some(Boolean)}
+              disabled={[
+                !valueCreatePost && !postPhotos.length,
+                isLoading,
+                isLoadingPosts,
+                isValidatingPosts,
+                isValidatingUsers,
+              ].some(Boolean)}
               sx={{ gap: 1 }}
             >
               <Typography>{t('profile.addPost.button')}</Typography>
