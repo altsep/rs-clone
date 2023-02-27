@@ -42,7 +42,7 @@
       },
       "name": {
         "required": "El nombre es requerido",
-        "validation": "Las contraseñas deben coincidir"
+        "validation": "El nombre debe tener al menos 4 caracteres"
       },
       "country": {
         "required": "El país es requerido",

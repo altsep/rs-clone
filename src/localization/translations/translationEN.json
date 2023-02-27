@@ -42,7 +42,7 @@
       },
       "name": {
         "required": "Name is required",
-        "validation": "It's too short. The name must have at least 5 characters"
+        "validation": "It's too short. The name must have at least 4 characters"
       },
       "country": {
         "required": "Country is required",

@@ -17,6 +17,7 @@ interface IPost {
   likedUserIds?: number[];
   commentsIds?: number[];
   images: string[];
+  hasImages: boolean;
 }
 
 interface IUser {

@@ -30,7 +30,7 @@ export default function EditProfileForm() {
       .string()
       .nullable()
       .transform((value: string, origin: string) => (origin === '' ? null : value))
-      .min(5),
+      .min(4),
     country: yup
       .string()
       .nullable()

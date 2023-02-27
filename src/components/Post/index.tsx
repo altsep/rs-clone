@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 import { TransitionGroup } from 'react-transition-group';
 import {
@@ -31,6 +32,7 @@ import { updatePostInState } from '../../store/reducers/postsState';
 import Comment from '../Comment';
 import CommentCreator from './CommentCreator';
 import { getHexStr } from '../../utils/common';
+import { fetcher } from '../../utils/fetcher';
 
 interface IPostProps {
   postData: IPost;
@@ -95,6 +97,12 @@ export default function Post({ postData }: IPostProps) {
     setIsOpenComments(!isOpenComments);
   };
 
+  const { data: images = [] } = useSWR<string[], Error>(
+    postData.hasImages ? `${API_BASE_URL}${ApiPath.images}?name=post&id=${postData.id}` : null,
+    fetcher,
+    { revalidateOnFocus: false }
+  );
+
   return (
     <Card sx={{ borderRadius: 4, boxShadow: { xs: 4, md: 0 }, mb: 2 }}>
       <PostHeader postData={postData} setIsEdit={setIsEdit} />
@@ -119,7 +127,7 @@ export default function Post({ postData }: IPostProps) {
           </Box>
         )}
       </CardContent>
-      {postData.images.map((img) => (
+      {images.map((img) => (
         <CardMedia key={getHexStr()} component="img" height="200" image={img} />
       ))}
       <Box
