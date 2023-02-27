@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { RoutePath } from '../constants';
 import {
+  addMessageWatch,
   resetActiveChat,
   setLastMessagesInChats,
   setNumberOfUnreadMessagesInChats,
@@ -17,10 +18,10 @@ export default function useChats() {
   const dispatch = useAppDispatch();
 
   const { idAuthorizedUser, users: usersInState } = useAppSelector((state) => state.users);
-  const { chats, activeChat, numberOfUnreadMessagesInChats, lastMessagesInChats } = useAppSelector(
+  const { chats, activeChat, numberOfUnreadMessagesInChats, lastMessagesInChats, firstMessageInChat } = useAppSelector(
     (state) => state.chats
   );
-  const { userChats } = useUserChats(idAuthorizedUser);
+  const { userChats, mutate } = useUserChats(idAuthorizedUser);
 
   useEffect(() => {
     if (chats.length > 0 && idAuthorizedUser && usersInState.length > 0) {
@@ -59,4 +60,14 @@ export default function useChats() {
       dispatch(setNumberOfUnreadMessagesInChats(lastMessagesInChats));
     }
   }, [dispatch, lastMessagesInChats, chats]);
+
+  useEffect(() => {
+    if (firstMessageInChat) {
+      const asyncFunc = async () => {
+        await mutate();
+        dispatch(addMessageWatch(firstMessageInChat));
+      };
+      asyncFunc().catch(console.error);
+    }
+  }, [dispatch, firstMessageInChat, mutate]);
 }

@@ -8,6 +8,7 @@ import Message from './Message';
 import { setUserOfActiveChat } from '../../../store/reducers/usersState';
 import { setActiveChat } from '../../../store/reducers/chatsState';
 import MessageCreator from './MessageCreator';
+import { INIT_MESSAGE, RoutePath } from '../../../constants';
 
 export default function ActiveChat() {
   const { id } = useParams();
@@ -20,25 +21,27 @@ export default function ActiveChat() {
   const { activeChatMessages, activeChatIndex } = useAppSelector((state) => state.chats);
 
   useEffect(() => {
-    if (id) {
+    if (id && usersOfExistingChats.length !== 0) {
       const foundUser = usersOfExistingChats.find((user) => user && user.id === +id);
 
       if (foundUser) {
         dispatch(setUserOfActiveChat(foundUser));
         dispatch(setActiveChat(foundUser.id));
+      } else {
+        navigate(RoutePath.notFound);
       }
     }
   }, [dispatch, id, usersOfExistingChats, navigate]);
 
   useEffect(() => {
     if (endRef.current) {
-      endRef.current.scrollIntoView({ behavior: 'auto' });
+      endRef.current.scrollIntoView({ behavior: 'auto', block: 'nearest' });
     }
   }, [activeChatIndex]);
 
   useEffect(() => {
     if (endRef.current) {
-      endRef.current.scrollIntoView({ behavior: 'smooth' });
+      endRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
   }, [activeChatMessages]);
 
@@ -49,7 +52,8 @@ export default function ActiveChat() {
         display: 'flex',
         flexDirection: 'column',
         background: 'primary.main',
-        borderRadius: 4,
+        borderRadius: { xs: 0, sm: 4 },
+        boxShadow: { xs: 4, sm: 1 },
         minHeight: '100%',
       }}
     >
@@ -63,14 +67,16 @@ export default function ActiveChat() {
         {activeChatMessages &&
           userOfActiveChat &&
           authorizedUser &&
-          activeChatMessages.map((message) => (
-            <Message
-              key={message.id}
-              user={message.userId === userOfActiveChat.id ? userOfActiveChat : authorizedUser}
-              message={message}
-              isLeft={message.userId === userOfActiveChat.id}
-            />
-          ))}
+          activeChatMessages
+            .filter((message) => message.description !== INIT_MESSAGE)
+            .map((message) => (
+              <Message
+                key={message.id}
+                user={message.userId === userOfActiveChat.id ? userOfActiveChat : authorizedUser}
+                message={message}
+                isLeft={message.userId === userOfActiveChat.id}
+              />
+            ))}
         <Box ref={endRef} />
       </List>
       <Divider />

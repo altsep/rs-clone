@@ -5,7 +5,7 @@ import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import { useTranslation } from 'react-i18next';
 import { MutableRefObject, useMemo, useRef, useState } from 'react';
-import { ApiPath, API_BASE_URL, RoutePath } from '../../constants';
+import { ApiPath, API_BASE_URL, INIT_MESSAGE, RoutePath } from '../../constants';
 import { updateUser } from '../../api/usersApi';
 import { TUpdateUserArg } from '../../types/usersApi';
 import coverBackground from '../../assets/cover-background.webp';
@@ -24,9 +24,8 @@ export default function ProfileHeader() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { idCurrentProfile, idAuthorizedUser, currentProfile, authorizedUser, usersOfExistingChats } = useAppSelector(
-    (state) => state.users
-  );
+  const { idCurrentProfile, idAuthorizedUser, currentProfile, authorizedUser, usersOfExistingChats, messagesWs } =
+    useAppSelector((state) => state.users);
   const currentLocale = useAppSelector((state) => state.language.lang);
 
   const {
@@ -140,6 +139,11 @@ export default function ProfileHeader() {
         const dataResponse = await triggerAddChat(argAddChat);
         if (isChat(dataResponse)) {
           dispatch(addChatInState(dataResponse));
+          const msg = {
+            type: 'send',
+            payload: { chatId: dataResponse.id, userId: idAuthorizedUser, description: INIT_MESSAGE },
+          };
+          messagesWs?.send(JSON.stringify(msg));
         }
       }
       navigate(`${RoutePath.messages}/${idCurrentProfile}`);

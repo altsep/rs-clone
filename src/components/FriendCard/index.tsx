@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { IUser } from '../../types/data';
 import ClickableAvatar from '../ClickableAvatar';
-import { ApiPath, API_BASE_URL, RoutePath } from '../../constants';
+import { ApiPath, API_BASE_URL, INIT_MESSAGE, RoutePath } from '../../constants';
 import { updateUser } from '../../api/usersApi';
 import { TUpdateUserArg } from '../../types/usersApi';
 import { updateUserInState } from '../../store/reducers/usersState';
@@ -23,7 +23,7 @@ export default function FriendCard({ user, isRequest }: IFriendCardProps) {
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
-  const { idAuthorizedUser, authorizedUser, usersOfExistingChats } = useAppSelector((state) => state.users);
+  const { idAuthorizedUser, authorizedUser, usersOfExistingChats, messagesWs } = useAppSelector((state) => state.users);
 
   const { trigger: triggerUpdateAuthorizedUser } = useSWRMutation(
     `${API_BASE_URL}${ApiPath.users}/${idAuthorizedUser}`,
@@ -106,6 +106,11 @@ export default function FriendCard({ user, isRequest }: IFriendCardProps) {
       const dataResponse = await triggerAddChat(argAddChat);
       if (isChat(dataResponse)) {
         dispatch(addChatInState(dataResponse));
+        const msg = {
+          type: 'send',
+          payload: { chatId: dataResponse.id, userId: idAuthorizedUser, description: INIT_MESSAGE },
+        };
+        messagesWs?.send(JSON.stringify(msg));
       }
     }
     navigate(`${RoutePath.messages}/${user.id}`);

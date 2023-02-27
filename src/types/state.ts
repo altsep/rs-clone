@@ -56,6 +56,7 @@ type TChatsState = {
   numberOfUnreadMessagesInChats: TNumberOfUnreadMessages[] | null;
   totalNumberOfUnreadMessages: number | null;
   lastMessagesInChats: TLastMessage[] | null;
+  firstMessageInChat: IMessage | null;
 };
 
 type TChangeStatus = Pick<IUser, 'isOnline' | 'lastSeen'>;

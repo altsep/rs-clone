@@ -12,6 +12,7 @@ const initialState: TChatsState = {
   numberOfUnreadMessagesInChats: null,
   totalNumberOfUnreadMessages: null,
   lastMessagesInChats: null,
+  firstMessageInChat: null,
 };
 
 const chatsStateSlice = createSlice({
@@ -50,6 +51,10 @@ const chatsStateSlice = createSlice({
     },
     addMessageWatch(state, action: PayloadAction<IMessage>) {
       const chatIndex = state.chats.findIndex((chat) => chat.userIds.includes(action.payload.userId));
+      if (!state.chats[chatIndex]) {
+        state.firstMessageInChat = action.payload;
+        return;
+      }
       state.chats[chatIndex].messages.push(action.payload);
       if (state.activeChat?.userIds.includes(action.payload.userId)) {
         state.activeChat.messages.push(action.payload);
@@ -60,6 +65,22 @@ const chatsStateSlice = createSlice({
               return { chatId: lastMessage.chatId, idLastMessage: action.payload.id, userId: lastMessage.userId };
             }
             return lastMessage;
+          });
+        }
+      }
+      if (!state.lastMessagesInChats) {
+        state.lastMessagesInChats = [
+          { chatId: state.chats[chatIndex].id, idLastMessage: action.payload.id, userId: action.payload.userId },
+        ];
+      }
+      if (state.lastMessagesInChats) {
+        if (
+          state.lastMessagesInChats.findIndex((lastMessages) => lastMessages.userId === action.payload.userId) === -1
+        ) {
+          state.lastMessagesInChats.push({
+            chatId: state.chats[chatIndex].id,
+            idLastMessage: action.payload.id,
+            userId: action.payload.userId,
           });
         }
       }

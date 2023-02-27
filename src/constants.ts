@@ -6,6 +6,8 @@ const WS_BASE_URL =
 
 const KEY_LOCAL_STORAGE = 'rs-clone-krevetka87-altsep-metalknock';
 
+const INIT_MESSAGE = KEY_LOCAL_STORAGE;
+
 const enum ApiPath {
   posts = '/posts',
   users = '/users',
@@ -29,6 +31,7 @@ const enum RoutePath {
   editProfile = 'edit-profile',
   theme = 'theme',
   security = 'security',
+  notFound = '/404/404',
 }
 
 const enum ReducerNames {
@@ -75,6 +78,7 @@ export {
   WS_BASE_URL,
   API_BASE_URL,
   KEY_LOCAL_STORAGE,
+  INIT_MESSAGE,
   ApiPath,
   ReducerNames,
   Locales,

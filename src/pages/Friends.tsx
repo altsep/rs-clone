@@ -1,31 +1,37 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Container, Grid, Stack, Tab, Tabs, Typography } from '@mui/material';
+import { Box, CircularProgress, Container, Grid, Stack, Tab, Tabs, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import FriendCard from '../components/FriendCard';
 import LeftSideBar from '../components/LeftSideBar';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { defineFriends, definePendingFriends } from '../store/reducers/usersState';
 import TabPanel from '../components/TabPanel';
+import useUsers from '../hooks/useUsers';
 
 export default function Friends() {
   const { t } = useTranslation();
   const [value, setValue] = useState(0);
 
   const dispatch = useAppDispatch();
-  const { users, authorizedUser, authorizedUserFriends, authorizedUserPendingFriends } = useAppSelector(
+  const { users, idAuthorizedUser, authorizedUserFriends, authorizedUserPendingFriends } = useAppSelector(
     (state) => state.users
   );
+
+  const { isLoadingUsers } = useUsers();
 
   const handleChangeTabs = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
   useEffect(() => {
-    if (authorizedUser && users) {
-      dispatch(definePendingFriends(authorizedUser.pendingFriendsIds || []));
-      dispatch(defineFriends(authorizedUser.friendsIds || []));
+    if (idAuthorizedUser !== 0 && users) {
+      const authorizedUser = users.find((user) => user.id === idAuthorizedUser);
+      if (authorizedUser) {
+        dispatch(definePendingFriends(authorizedUser.pendingFriendsIds || []));
+        dispatch(defineFriends(authorizedUser.friendsIds || []));
+      }
     }
-  }, [dispatch, authorizedUser, users]);
+  }, [dispatch, idAuthorizedUser, users]);
 
   return (
     <Container sx={{ mt: '5vh', mb: '5vh', display: 'flex' }}>
@@ -38,7 +44,17 @@ export default function Friends() {
             <Tab label={t('friends.friends')} id="simple-tab-0" aria-controls="simple-tabpanel-0" />
             <Tab label={t('friends.friendRequests')} id="simple-tab-1" aria-controls="simple-tabpanel-1" />
           </Tabs>
-          {authorizedUserFriends.length !== 0 ? (
+          {isLoadingUsers && (
+            <TabPanel value={value} index={0} isEmpty>
+              <CircularProgress />
+            </TabPanel>
+          )}
+          {isLoadingUsers && (
+            <TabPanel value={value} index={1} isEmpty>
+              <CircularProgress />
+            </TabPanel>
+          )}
+          {!isLoadingUsers && authorizedUserFriends.length !== 0 ? (
             <TabPanel value={value} index={0}>
               <Grid container spacing={2}>
                 {authorizedUserFriends.map((friend) => (
@@ -57,7 +73,7 @@ export default function Friends() {
               </Grid>
             </TabPanel>
           )}
-          {authorizedUserPendingFriends.length !== 0 ? (
+          {!isLoadingUsers && authorizedUserPendingFriends.length !== 0 ? (
             <TabPanel value={value} index={1}>
               <Grid container spacing={2}>
                 {authorizedUserPendingFriends.map((pendingFriend) => (
