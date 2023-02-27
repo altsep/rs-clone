@@ -42,7 +42,7 @@ interface IPostProps {
 }
 
 export default function Post({ postData }: IPostProps) {
-  const Mobile = useMediaQuery('(min-width:600px)');
+  const MobileAndTablet = useMediaQuery('(min-width:900px)');
   const { t } = useTranslation();
   const [isEdit, setIsEdit] = useState(false);
   const [isOpenComments, setIsOpenComments] = useState(false);
@@ -143,26 +143,6 @@ export default function Post({ postData }: IPostProps) {
       {images.map((img) => (
         <CardMedia key={getHexStr()} component="img" height="200" image={img} />
       ))}
-      {/* <Box
-        sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', px: 2, py: 1, height: '44px' }}
-      >
-        {postData.likedUserIds && (
-          <AvatarGroup max={4}>
-            {postData.likedUserIds
-              .slice()
-              .reverse()
-              .map((likedUserId) => {
-                if (users) {
-                  const currentUser = users.find((val) => val.id === likedUserId);
-                  return (
-                    currentUser && <ClickableAvatar key={likedUserId} user={currentUser} width="20px" height="20px" />
-                  );
-                }
-                return '';
-              })}
-          </AvatarGroup>
-        )}
-      </Box> */}
       <Divider sx={{ width: '94%', mx: 'auto' }} />
       <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Button
@@ -182,7 +162,7 @@ export default function Post({ postData }: IPostProps) {
 
           <Typography sx={{ display: { xs: 'none', lg: 'block' } }}>{t('profile.post.like')}</Typography>
         </Button>
-        {Mobile && postData.likedUserIds && postData.likedUserIds.length !== 0 && (
+        {MobileAndTablet && postData.likedUserIds && postData.likedUserIds.length !== 0 && (
           <Popover
             id="mouse-over-popover"
             sx={{
@@ -200,6 +180,7 @@ export default function Post({ postData }: IPostProps) {
             }}
             onClose={handlePopoverClose}
             disableRestoreFocus
+            disableScrollLock
           >
             <Box>
               <AvatarGroup max={4}>

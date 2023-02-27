@@ -13,6 +13,8 @@ import { addCommentInState } from '../../store/reducers/commentsState';
 import { updatePost } from '../../api/postsApi';
 import { TUpdatePostArg } from '../../types/postsApi';
 import { updatePostInState } from '../../store/reducers/postsState';
+import usePosts from '../../hooks/usePosts';
+import useComments from '../../hooks/useComments';
 
 interface ICommentCreatorProps {
   postData: IPost;
@@ -26,6 +28,9 @@ export default function CommentCreator({ postData, setIsOpenComments }: IComment
 
   const dispatch = useAppDispatch();
   const { authorizedUser, idAuthorizedUser } = useAppSelector((state) => state.users);
+
+  const { isLoadingPosts, isValidatingPosts } = usePosts();
+  const { isLoadingComments, isValidatingComments } = useComments();
 
   const { trigger: triggerAddComment } = useSWRMutation(`${API_BASE_URL}${ApiPath.comments}`, addComment, {
     revalidate: false,
@@ -84,7 +89,13 @@ export default function CommentCreator({ postData, setIsOpenComments }: IComment
       {isLoading ? (
         <CircularProgress size={20} sx={{ mr: 3 }} />
       ) : (
-        <Button endIcon={<SendOutlinedIcon />} onClick={handleClickSendButton} disabled={!valueInputComment} />
+        <Button
+          endIcon={<SendOutlinedIcon />}
+          onClick={handleClickSendButton}
+          disabled={
+            !valueInputComment || isLoadingPosts || isValidatingPosts || isLoadingComments || isValidatingComments
+          }
+        />
       )}
     </CardContent>
   );
