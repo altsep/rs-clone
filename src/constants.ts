@@ -6,6 +6,8 @@ const WS_BASE_URL =
 
 const KEY_LOCAL_STORAGE = 'rs-clone-krevetka87-altsep-metalknock';
 
+const INIT_MESSAGE = KEY_LOCAL_STORAGE;
+
 const enum ApiPath {
   posts = '/posts',
   users = '/users',
@@ -75,6 +77,7 @@ export {
   WS_BASE_URL,
   API_BASE_URL,
   KEY_LOCAL_STORAGE,
+  INIT_MESSAGE,
   ApiPath,
   ReducerNames,
   Locales,

@@ -1,6 +1,6 @@
 import { Divider, ListItemAvatar, ListItemButton, Stack, Typography } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { RoutePath } from '../../../constants';
+import { INIT_MESSAGE, RoutePath } from '../../../constants';
 import { useAppSelector } from '../../../hooks/redux';
 import { IChat, IUser } from '../../../types/data';
 import ClickableAvatar from '../../ClickableAvatar';
@@ -53,6 +53,7 @@ export default function ChatItem({ chat, user, numberOfUnreadMessages }: IChatIt
             </Typography>
             <Typography variant="caption" sx={{ flexShrink: 0 }}>
               {chat.messages[chat.messages.length - 1] &&
+                chat.messages[chat.messages.length - 1].description !== INIT_MESSAGE &&
                 new Date(chat.messages[chat.messages.length - 1].createdAt).toLocaleString(currentLocale, {
                   hour: '2-digit',
                   minute: '2-digit',
@@ -71,7 +72,9 @@ export default function ChatItem({ chat, user, numberOfUnreadMessages }: IChatIt
                 maxWidth: location.pathname === `${RoutePath.messages}` ? 'calc(87%)' : '100px',
               }}
             >
-              {chat.messages[chat.messages.length - 1] && chat.messages[chat.messages.length - 1].description}
+              {chat.messages[chat.messages.length - 1] &&
+                chat.messages[chat.messages.length - 1].description !== INIT_MESSAGE &&
+                chat.messages[chat.messages.length - 1].description}
             </Typography>
 
             {!!numberOfUnreadMessages && <NotificationCounter counter={numberOfUnreadMessages} />}

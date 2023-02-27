@@ -8,6 +8,7 @@ import Message from './Message';
 import { setUserOfActiveChat } from '../../../store/reducers/usersState';
 import { setActiveChat } from '../../../store/reducers/chatsState';
 import MessageCreator from './MessageCreator';
+import { INIT_MESSAGE } from '../../../constants';
 
 export default function ActiveChat() {
   const { id } = useParams();
@@ -63,14 +64,16 @@ export default function ActiveChat() {
         {activeChatMessages &&
           userOfActiveChat &&
           authorizedUser &&
-          activeChatMessages.map((message) => (
-            <Message
-              key={message.id}
-              user={message.userId === userOfActiveChat.id ? userOfActiveChat : authorizedUser}
-              message={message}
-              isLeft={message.userId === userOfActiveChat.id}
-            />
-          ))}
+          activeChatMessages
+            .filter((message) => message.description !== INIT_MESSAGE)
+            .map((message) => (
+              <Message
+                key={message.id}
+                user={message.userId === userOfActiveChat.id ? userOfActiveChat : authorizedUser}
+                message={message}
+                isLeft={message.userId === userOfActiveChat.id}
+              />
+            ))}
         <Box ref={endRef} />
       </List>
       <Divider />
