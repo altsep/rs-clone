@@ -51,7 +51,7 @@ export default function ActiveChat() {
         flexDirection: 'column',
         background: 'primary.main',
         borderRadius: { xs: 0, sm: 4 },
-        boxShadow: { xs: 0, sm: 4 },
+        boxShadow: { xs: 0, sm: 1 },
         minHeight: '100%',
       }}
     >
