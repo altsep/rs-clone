@@ -1,4 +1,4 @@
-import { Box, Container, Divider, Typography, useMediaQuery } from '@mui/material';
+import { Box, Container, Divider, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import FooterGithubLinks from './FooterGithubLinks';
 import FooterRSLink from './FooterRSLink';
