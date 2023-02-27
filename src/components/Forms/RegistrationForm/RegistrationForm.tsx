@@ -49,7 +49,7 @@ export default function RegistrationForm() {
       .string()
       .required()
       .oneOf([yup.ref('password'), null]),
-    name: yup.string().required().min(5),
+    name: yup.string().required().min(4),
     country: yup.string().required().min(3),
     birthDate: yup
       .string()
