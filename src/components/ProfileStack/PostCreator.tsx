@@ -92,6 +92,11 @@ export default function PostCreator() {
       setPostPhotos([]);
       setValueCreatePost('');
       setLoading(false);
+
+      if (photoPicker.current) {
+        const dt = new DataTransfer();
+        photoPicker.current.files = dt.files;
+      }
     }
   };
 
