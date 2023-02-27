@@ -30,6 +30,7 @@ export default function useAuth() {
           throw new Error('Authorization error. Re-login required');
         }
       } catch {
+        localStorage.removeItem(`${LSKeys.path}_${KEY_LOCAL_STORAGE}`);
         dispatch(setAuthError(true));
       } finally {
         dispatch(setLoading(false));
