@@ -99,7 +99,8 @@
       "aliasError": "El valor no es válido o el usuario {{ alias }} ya existe"
     },
     "buttons": {
-      "save": "Guardar",
+      "save": "Salvar",
+      "saved": "¡Salvado!",
       "cancel": "Cancelar"
     }
   },
