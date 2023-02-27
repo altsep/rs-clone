@@ -1,4 +1,4 @@
-import { IComment, IPost, IUser } from './data';
+import { IChat, IComment, IMessage, IPost, IUser, TLastMessage, TNumberOfUnreadMessages } from './data';
 
 interface IInputsState {
   valueCreatePost: string;
@@ -18,6 +18,8 @@ type TUsersState = {
   authorizedUserFriends: IUser[];
   authorizedUserPendingFriends: IUser[];
   messagesWs: WebSocket | null;
+  usersOfExistingChats: (IUser | undefined)[];
+  userOfActiveChat: IUser | null;
 };
 
 type TThemeState = {
@@ -45,6 +47,16 @@ type TCommentsState = {
   comments: IComment[];
 };
 
+type TChatsState = {
+  chats: IChat[];
+  activeChat: IChat | null;
+  activeChatIndex: number;
+  activeChatMessages: IMessage[];
+  numberOfUnreadMessagesInChats: TNumberOfUnreadMessages[] | null;
+  totalNumberOfUnreadMessages: number | null;
+  lastMessagesInChats: TLastMessage[] | null;
+};
+
 export type {
   IInputsState,
   ILeftSideBarState,
@@ -54,4 +66,5 @@ export type {
   TThemeState,
   TAuthState,
   TLoginFormState,
+  TChatsState,
 };

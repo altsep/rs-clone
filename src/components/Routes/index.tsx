@@ -38,7 +38,7 @@ export default function Routes() {
         }
       />
       <Route
-        path={RoutePath.messages}
+        path={`${RoutePath.messages}/*`}
         element={
           <PrivateRoute>
             <Messages />

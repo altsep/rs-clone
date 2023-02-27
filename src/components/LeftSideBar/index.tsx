@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { Badge, Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined';
 import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
 import Diversity3OutlinedIcon from '@mui/icons-material/Diversity3Outlined';
@@ -12,8 +12,9 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { closeLeftSideBar } from '../../store/reducers/leftSideBarState';
 import { logoutUser } from '../../api/usersApi';
 import { setAuth, setLoading } from '../../store/reducers/authSlice';
-import { removeToken } from '../../utils/common';
+import { removeToken, setLastMessages } from '../../utils/common';
 import Search from '../Search/Search';
+import NotificationCounter from '../NotificationCounter';
 
 export default function LeftSideBar() {
   const { t } = useTranslation();
@@ -23,11 +24,16 @@ export default function LeftSideBar() {
   const dispatch = useAppDispatch();
   const { isOpen } = useAppSelector((state) => state.leftSideBar);
   const { idAuthorizedUser, authorizedUser } = useAppSelector((state) => state.users);
+  const { totalNumberOfUnreadMessages, numberOfUnreadMessagesInChats, lastMessagesInChats, chats } = useAppSelector(
+    (state) => state.chats
+  );
 
   const logout = async (): Promise<void> => {
     dispatch(setLoading(true));
     const res = await logoutUser(`${API_BASE_URL}${ApiPath.logout}`);
     if (res.ok) {
+      setLastMessages({ chats, numberOfUnreadMessagesInChats, lastMessagesInChats, idAuthorizedUser });
+
       removeToken();
       dispatch(setAuth(false));
       dispatch(setLoading(false));
@@ -40,6 +46,7 @@ export default function LeftSideBar() {
     {
       text: t('sideBar.profile'),
       icon: <AccountBoxOutlinedIcon />,
+      counter: null,
       to: `${
         authorizedUser?.alias && location.pathname !== `/id${idAuthorizedUser}`
           ? `/${authorizedUser.alias}`
@@ -56,6 +63,7 @@ export default function LeftSideBar() {
     {
       text: t('sideBar.messages'),
       icon: <ChatOutlinedIcon />,
+      counter: totalNumberOfUnreadMessages,
       to: `${RoutePath.messages}`,
       handleClick: (): void => {
         navigate(`${RoutePath.messages}`);
@@ -64,6 +72,7 @@ export default function LeftSideBar() {
     {
       text: t('sideBar.friends'),
       icon: <Diversity3OutlinedIcon />,
+      counter: null,
       to: `${RoutePath.friends}`,
       handleClick: (): void => {
         navigate(`${RoutePath.friends}`);
@@ -72,6 +81,7 @@ export default function LeftSideBar() {
     {
       text: t('sideBar.settings'),
       icon: <SettingsOutlinedIcon />,
+      counter: null,
       to: `${RoutePath.settings}`,
       handleClick: (): void => {
         navigate(`${RoutePath.settings}`);
@@ -80,6 +90,7 @@ export default function LeftSideBar() {
     {
       text: t('sideBar.logout'),
       icon: <LogoutOutlinedIcon />,
+      counter: null,
       to: '/',
       handleClick: () => {
         logout().catch((err: Error): Error => err);
@@ -101,10 +112,21 @@ export default function LeftSideBar() {
             <ListItem key={sideBarButtonInfo.text} disablePadding>
               <ListItemButton
                 onClick={sideBarButtonInfo.handleClick}
-                selected={sideBarButtonInfo.to === location.pathname}
+                selected={
+                  sideBarButtonInfo.to === location.pathname ||
+                  sideBarButtonInfo.to === `${location.pathname.split('/').slice(0, 2).join('/')}`
+                }
                 sx={{ borderRadius: 4 }}
               >
-                <ListItemIcon>{sideBarButtonInfo.icon}</ListItemIcon>
+                <ListItemIcon>
+                  {sideBarButtonInfo.counter ? (
+                    <Badge badgeContent={<NotificationCounter counter={sideBarButtonInfo.counter} />}>
+                      {sideBarButtonInfo.icon}
+                    </Badge>
+                  ) : (
+                    sideBarButtonInfo.icon
+                  )}
+                </ListItemIcon>
                 <ListItemText primary={sideBarButtonInfo.text} />
               </ListItemButton>
             </ListItem>

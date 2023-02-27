@@ -3,7 +3,8 @@ import { ReactNode } from 'react';
 interface ISideBarButtonInfo {
   text: string;
   icon: ReactNode;
-  to: string;
+  counter: number | null;
+  to: string[] | string;
   handleClick: () => void;
 }
 

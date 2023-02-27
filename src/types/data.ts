@@ -41,4 +41,30 @@ interface ILogin {
   user: IUser;
 }
 
-export type { IComment, IPost, IUser, ILogin };
+interface IMessage {
+  id: string;
+  userId: number;
+  description: string;
+  createdAt: string;
+}
+
+interface IChat {
+  id: string;
+  userIds: number[];
+  createdAt: string;
+  messages: IMessage[];
+}
+
+type TNumberOfUnreadMessages = {
+  chatId: string;
+  userId: number;
+  counter: number;
+};
+
+type TLastMessage = {
+  chatId: string;
+  userId: number;
+  idLastMessage: string;
+};
+
+export type { IComment, IPost, IUser, ILogin, IMessage, IChat, TNumberOfUnreadMessages, TLastMessage };

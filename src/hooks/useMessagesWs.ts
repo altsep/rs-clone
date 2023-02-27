@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { WS_BASE_URL } from '../constants';
+import { addMessageSend, addMessageWatch } from '../store/reducers/chatsState';
 import { setMessagesWs } from '../store/reducers/usersState';
+import { isMessage } from '../types/predicates';
 import { getActionString, getToken } from '../utils/common';
 import { useAppDispatch, useAppSelector } from './redux';
 
@@ -35,6 +37,17 @@ export default function useMessagesWs() {
         if (type === 'watch') {
           console.log('WS (messages): %s', 'Message received.');
           console.log(payload);
+
+          if (isMessage(payload)) {
+            dispatch(addMessageWatch(payload));
+          }
+        }
+
+        if (type === 'send') {
+          console.log(payload);
+          if (isMessage(payload)) {
+            dispatch(addMessageSend(payload));
+          }
         }
       }
     };

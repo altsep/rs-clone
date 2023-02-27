@@ -11,8 +11,8 @@
       "password": "Password is required"
     },
     "loginError": "Wrong password or email address",
-    "authError": "Authorisation error. Re-login required",
-    "confirmError": "Authorisation error. Email confirmation required"
+    "authError": "Authorization error. Re-login required",
+    "confirmError": "Authorization error. Email confirmation required"
   },
   "registration": {
     "title": "Sign Up",
@@ -145,5 +145,9 @@
     },
     "notFound": "User not found",
     "intro": "Intro"
+  },
+  "messages": {
+    "title": "Messages",
+    "message": "Type something here..."
   }
 }

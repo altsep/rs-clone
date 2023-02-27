@@ -9,13 +9,18 @@ import { TUpdateUserArg } from '../../types/usersApi';
 import temporary from '../../assets/temporary-2.webp';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { updateUserInState } from '../../store/reducers/usersState';
+import { addChat } from '../../api/chatsApi';
+import { addChatInState } from '../../store/reducers/chatsState';
+import { isChat } from '../../types/predicates';
 
 export default function ProfileHeader() {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
-  const { idCurrentProfile, idAuthorizedUser, currentProfile, authorizedUser } = useAppSelector((state) => state.users);
+  const { idCurrentProfile, idAuthorizedUser, currentProfile, authorizedUser, usersOfExistingChats } = useAppSelector(
+    (state) => state.users
+  );
 
   const { trigger: triggerUpdateAuthorizedUser } = useSWRMutation(
     `${API_BASE_URL}${ApiPath.users}/${idAuthorizedUser}`,
@@ -25,6 +30,7 @@ export default function ProfileHeader() {
     `${API_BASE_URL}${ApiPath.users}/${idCurrentProfile}`,
     updateUser
   );
+  const { trigger: triggerAddChat } = useSWRMutation(`${API_BASE_URL}${ApiPath.chats}`, addChat);
 
   const handleClickAddFriend = async (): Promise<void> => {
     if (currentProfile) {
@@ -62,6 +68,23 @@ export default function ProfileHeader() {
 
   const handleClickEditBasicInfo = () => {
     navigate(`${RoutePath.settings}`);
+  };
+
+  const handleClickWriteMessage = async () => {
+    if (currentProfile) {
+      if (
+        !usersOfExistingChats.find(
+          (userOfExistingChats) => userOfExistingChats && userOfExistingChats.id === currentProfile.id
+        )
+      ) {
+        const argAddChat = { userIds: [idAuthorizedUser, idCurrentProfile] };
+        const dataResponse = await triggerAddChat(argAddChat);
+        if (isChat(dataResponse)) {
+          dispatch(addChatInState(dataResponse));
+        }
+      }
+      navigate(`${RoutePath.messages}/${idCurrentProfile}`);
+    }
   };
 
   return (
@@ -134,7 +157,7 @@ export default function ProfileHeader() {
               </Button>
             )) ||
               (currentProfile?.friendsIds?.includes(idAuthorizedUser) && (
-                <Button variant="contained" sx={{ flexGrow: 1 }}>
+                <Button variant="contained" onClick={handleClickWriteMessage} sx={{ flexGrow: 1 }}>
                   {t('profile.header.message')}
                 </Button>
               )) ||

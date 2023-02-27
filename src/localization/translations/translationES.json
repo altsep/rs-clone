@@ -145,5 +145,9 @@
     },
     "notFound": "Usuario no encontrado",
     "intro": "introducción"
+  },
+  "messages": {
+    "title": "Mensajes",
+    "message": "Escribe algo aquí..."
   }
 }

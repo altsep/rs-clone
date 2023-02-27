@@ -16,6 +16,7 @@ const enum ApiPath {
   login = '/login',
   logout = '/logout',
   registration = '/registration',
+  chats = '/chats',
 }
 
 const enum RoutePath {
@@ -34,6 +35,7 @@ const enum ReducerNames {
   theme = 'theme',
   language = 'language',
   auth = 'auth',
+  chats = 'chats',
 }
 
 const enum Locales {
@@ -52,6 +54,8 @@ const enum LSKeys {
   token = 'token',
   path = 'path',
   locale = 'i18nextLng',
+  firstUnreadMessagesOfChats = 'firstUnreadMessagesOfChats',
+  lastMessages = 'lastMessages',
 }
 
 const locales: { [key: string]: string } = {

@@ -8,6 +8,7 @@ import { usersState } from './reducers/usersState';
 import { leftSideBarState } from './reducers/leftSideBarState';
 import { inputsState } from './reducers/inputsState';
 import { ReducerNames } from '../constants';
+import { chatsState } from './reducers/chatsState';
 
 const combinedReducers = combineReducers({
   [ReducerNames.inputs]: inputsState,
@@ -18,6 +19,7 @@ const combinedReducers = combineReducers({
   [ReducerNames.users]: usersState,
   [ReducerNames.posts]: postsState,
   [ReducerNames.comments]: commentsState,
+  [ReducerNames.chats]: chatsState,
 });
 
 const store = configureStore({

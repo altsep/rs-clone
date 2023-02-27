@@ -5,10 +5,13 @@ import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { IUser } from '../../types/data';
 import ClickableAvatar from '../ClickableAvatar';
-import { ApiPath, API_BASE_URL } from '../../constants';
+import { ApiPath, API_BASE_URL, RoutePath } from '../../constants';
 import { updateUser } from '../../api/usersApi';
 import { TUpdateUserArg } from '../../types/usersApi';
 import { updateUserInState } from '../../store/reducers/usersState';
+import { addChat } from '../../api/chatsApi';
+import { addChatInState } from '../../store/reducers/chatsState';
+import { isChat } from '../../types/predicates';
 
 interface IFriendCardProps {
   user: IUser;
@@ -20,7 +23,8 @@ export default function FriendCard({ user, isRequest }: IFriendCardProps) {
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
-  const { idAuthorizedUser, authorizedUser } = useAppSelector((state) => state.users);
+  const { idAuthorizedUser, authorizedUser, usersOfExistingChats } = useAppSelector((state) => state.users);
+
   const { trigger: triggerUpdateAuthorizedUser } = useSWRMutation(
     `${API_BASE_URL}${ApiPath.users}/${idAuthorizedUser}`,
     updateUser
@@ -29,6 +33,7 @@ export default function FriendCard({ user, isRequest }: IFriendCardProps) {
     `${API_BASE_URL}${ApiPath.users}/${user.id}`,
     updateUser
   );
+  const { trigger: triggerAddChat } = useSWRMutation(`${API_BASE_URL}${ApiPath.chats}`, addChat);
 
   const handleClickIgnore = async () => {
     if (authorizedUser) {
@@ -93,6 +98,19 @@ export default function FriendCard({ user, isRequest }: IFriendCardProps) {
     }
   };
 
+  const handleClickWriteMessage = async () => {
+    if (
+      !usersOfExistingChats.find((userOfExistingChats) => userOfExistingChats && userOfExistingChats.id === user.id)
+    ) {
+      const argAddChat = { userIds: [idAuthorizedUser, user.id] };
+      const dataResponse = await triggerAddChat(argAddChat);
+      if (isChat(dataResponse)) {
+        dispatch(addChatInState(dataResponse));
+      }
+    }
+    navigate(`${RoutePath.messages}/${user.id}`);
+  };
+
   return (
     <Grid item xs={12 / 1} sm={12 / 2} md={12 / 3} sx={{ minHeight: '100%' }}>
       <Card
@@ -126,7 +144,7 @@ export default function FriendCard({ user, isRequest }: IFriendCardProps) {
             </>
           ) : (
             <>
-              <Button variant="contained" sx={{ flexGrow: 1 }}>
+              <Button variant="contained" onClick={handleClickWriteMessage} sx={{ flexGrow: 1 }}>
                 {t('friends.friendCard.message')}
               </Button>
               <Button variant="outlined" onClick={handleClickRemoveFriend} sx={{ flexGrow: 1, ml: '0!important' }}>
