@@ -1,5 +1,6 @@
 import { Stack } from '@mui/material';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import { RoutePath } from '../../constants';
 import ActiveChat from './ActiveChat';
 import ChatList from './ChatList';
 
@@ -19,6 +20,7 @@ export default function MessagesStack() {
       <ChatList />
       <Routes>
         <Route path=":id" element={<ActiveChat />} />
+        <Route path=":id/*" element={<Navigate to={RoutePath.notFound} />} />
       </Routes>
     </Stack>
   );
