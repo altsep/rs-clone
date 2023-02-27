@@ -8,7 +8,7 @@ import Message from './Message';
 import { setUserOfActiveChat } from '../../../store/reducers/usersState';
 import { setActiveChat } from '../../../store/reducers/chatsState';
 import MessageCreator from './MessageCreator';
-import { INIT_MESSAGE } from '../../../constants';
+import { INIT_MESSAGE, RoutePath } from '../../../constants';
 
 export default function ActiveChat() {
   const { id } = useParams();
@@ -27,6 +27,8 @@ export default function ActiveChat() {
       if (foundUser) {
         dispatch(setUserOfActiveChat(foundUser));
         dispatch(setActiveChat(foundUser.id));
+      } else {
+        navigate(RoutePath.notFound);
       }
     }
   }, [dispatch, id, usersOfExistingChats, navigate]);

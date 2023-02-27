@@ -31,6 +31,7 @@ const enum RoutePath {
   editProfile = 'edit-profile',
   theme = 'theme',
   security = 'security',
+  notFound = '/404/404',
 }
 
 const enum ReducerNames {
