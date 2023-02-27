@@ -9,6 +9,8 @@ import { setUserOfActiveChat } from '../../../store/reducers/usersState';
 import { setActiveChat } from '../../../store/reducers/chatsState';
 import MessageCreator from './MessageCreator';
 import { INIT_MESSAGE, RoutePath } from '../../../constants';
+import useUsers from '../../../hooks/useUsers';
+import useUserChats from '../../../hooks/useUserChats';
 
 export default function ActiveChat() {
   const { id } = useParams();
@@ -17,8 +19,13 @@ export default function ActiveChat() {
   const endRef = useRef<HTMLDivElement | null>(null);
 
   const dispatch = useAppDispatch();
-  const { authorizedUser, userOfActiveChat, usersOfExistingChats } = useAppSelector((state) => state.users);
-  const { activeChatMessages, activeChatIndex } = useAppSelector((state) => state.chats);
+  const { authorizedUser, userOfActiveChat, usersOfExistingChats, idAuthorizedUser } = useAppSelector(
+    (state) => state.users
+  );
+  const { chats, activeChatMessages, activeChatIndex } = useAppSelector((state) => state.chats);
+
+  const { isLoadingUsers } = useUsers();
+  const { isLoadingChats } = useUserChats(idAuthorizedUser);
 
   useEffect(() => {
     if (id && usersOfExistingChats.length !== 0) {
@@ -44,6 +51,12 @@ export default function ActiveChat() {
       endRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
   }, [activeChatMessages]);
+
+  useEffect(() => {
+    if (!isLoadingChats && !isLoadingUsers && chats.length === 0) {
+      navigate(RoutePath.notFound);
+    }
+  }, [isLoadingChats, isLoadingUsers, chats, navigate]);
 
   return (
     <Card
