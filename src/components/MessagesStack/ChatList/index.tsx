@@ -18,10 +18,10 @@ export default function ChatList() {
   return (
     <List
       sx={{
-        boxShadow: 1,
+        boxShadow: { xs: 0, sm: 1 },
         backgroundColor: 'background.paper',
         p: 2,
-        borderRadius: 4,
+        borderRadius: { xs: 0, sm: 4 },
         minHeight: '100%',
         flex: location.pathname === `${RoutePath.messages}` ? '1 1 auto' : '0 0 30%',
         display: { xs: location.pathname === `${RoutePath.messages}` ? 'block' : 'none', md: 'block' },
