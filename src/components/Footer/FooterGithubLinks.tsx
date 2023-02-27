@@ -23,8 +23,11 @@ const links: Array<ILinks> = [
 
 export default function FooterGithubLinks() {
   return (
-    <Box>
-      <Typography sx={{ mb: '10px' }}>Our team: </Typography>
+    <Box sx={{ justifySelf: 'center' }}>
+      <Box sx={{ display: 'flex' }}>
+        <FooterGithubLogo />
+        <Typography sx={{ mb: '10px', fontWeight: 700 }}>Our team: </Typography>
+      </Box>
       <Stack>
         {links.map((link: ILinks) => (
           <Link
@@ -38,7 +41,6 @@ export default function FooterGithubLinks() {
               mb: '5px',
             }}
           >
-            <FooterGithubLogo />
             <Typography variant="body2">{link.name}</Typography>
           </Link>
         ))}

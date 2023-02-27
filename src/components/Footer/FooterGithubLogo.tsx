@@ -4,8 +4,8 @@ export default function FooterGithubLogo() {
   return (
     <Box sx={{ mr: '5px' }}>
       <svg
-        width="20px"
-        height="20px"
+        width="15px"
+        height="15px"
         viewBox="0 -3.5 256 256"
         xmlns="http://www.w3.org/2000/svg"
         preserveAspectRatio="xMinYMin meet"
