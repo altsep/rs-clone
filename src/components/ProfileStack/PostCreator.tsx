@@ -180,7 +180,7 @@ export default function PostCreator() {
 
   return (
     <>
-      <Card sx={{ borderRadius: 4, boxShadow: { xs: 4, md: 0 } }}>
+      <Card sx={{ borderRadius: { xs: 0, sm: 4 }, boxShadow: { xs: 0, sm: 4, md: 0 } }}>
         <Box>
           <CardContent sx={{ display: 'flex', gap: 2 }}>
             {authorizedUser ? (

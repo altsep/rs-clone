@@ -27,7 +27,7 @@ export default function Profile() {
 
   if (currentProfile === null && defineUserCompleted) {
     return (
-      <Container sx={{ mt: '5vh', mb: '5vh', display: 'flex' }}>
+      <Container sx={{ mt: { xs: 0, sm: '5vh' }, mb: { xs: 0, sm: '5vh' }, display: 'flex' }}>
         <Stack direction="row" sx={{ gap: 2, minWidth: '100%' }}>
           <LeftSideBar />
           <Typography
@@ -43,7 +43,7 @@ export default function Profile() {
 
   if (!defineUserCompleted) {
     return (
-      <Container sx={{ mt: '5vh', mb: '5vh', display: 'flex' }}>
+      <Container sx={{ mt: { xs: 0, sm: '5vh' }, mb: { xs: 0, sm: '5vh' }, display: 'flex' }}>
         <Stack direction="row" sx={{ gap: 2, minWidth: '100%' }}>
           <LeftSideBar />
           <Typography
@@ -60,7 +60,7 @@ export default function Profile() {
   }
 
   return (
-    <Container sx={{ mt: '5vh', mb: '5vh', display: 'flex' }}>
+    <Container sx={{ mt: { xs: 0, sm: '5vh' }, mb: { xs: 0, sm: '5vh' }, display: 'flex' }}>
       <Stack direction="row" sx={{ gap: 2, minWidth: '100%' }}>
         <LeftSideBar />
         <ProfileStack />
