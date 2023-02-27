@@ -24,6 +24,7 @@ export default function Message({ user, message, isLeft }: IMessageProps) {
             borderRadius: isLeft ? '8px 8px 8px 0 ' : '8px 8px 0 8px',
             wordWrap: 'break-word',
             wordBreak: 'break-all',
+            overflow: 'clip',
           }}
         >
           {message.description}
