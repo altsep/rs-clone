@@ -177,5 +177,10 @@
     "description": "This social network for dating and chatting with friends was created by the students of the course RSSchool JavaScript/Front-end 2022Q3",
     "team": "Our team:",
     "courses": "Courses:"
+  },
+  "404": {
+    "title": "Page not found",
+    "text": "This Page doesn`t exist or was removed! We suggest you back to home.",
+    "link": "Go to main page"
   }
 }

@@ -177,5 +177,10 @@
     "description": "Esta red social para ligar y chatear con amigos fue creada por los alumnos del curso RSSchool JavaScript/Front-end 2022Q3",
     "team": "Nuestro equipo:",
     "courses": "Cursos:"
+  },
+  "404": {
+    "title": "Página no encontrada",
+    "text": "¡Esta página no existe o fue eliminada! Te sugerimos que vuelvas a la página de inicio.",
+    "link": "Ir a la página principal"
   }
 }
