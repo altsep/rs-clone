@@ -5,6 +5,8 @@ import ClearIcon from '@mui/icons-material/Clear';
 import EditIcon from '@mui/icons-material/Edit';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
+import NoAccountsIcon from '@mui/icons-material/NoAccounts';
+import { useTranslation } from 'react-i18next';
 import ClickableAvatar from '../ClickableAvatar';
 import { IComment } from '../../types/data';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
@@ -21,6 +23,7 @@ interface ICommentProps {
 }
 
 export default function Comment({ commentData }: ICommentProps) {
+  const { t } = useTranslation();
   const currentLocale = useAppSelector((state) => state.language.lang);
   const [isEdit, setIsEdit] = useState(false);
   const [valueInputDescription, setValueInputDescription] = useState(commentData.description);
@@ -103,10 +106,18 @@ export default function Comment({ commentData }: ICommentProps) {
 
   return (
     <ListItem sx={{ gap: 2, alignItems: 'flex-start' }}>
-      {currentUser && <ClickableAvatar user={currentUser} width="30px" height="30px" />}
+      {currentUser ? (
+        <ClickableAvatar user={currentUser} width="30px" height="30px" />
+      ) : (
+        <NoAccountsIcon fontSize="large" />
+      )}
       <Stack sx={{ width: '100%' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          {currentUser && <Typography sx={{ fontSize: '16px' }}>{currentUser.name}</Typography>}
+          {currentUser ? (
+            <Typography sx={{ fontSize: '16px' }}>{currentUser.name}</Typography>
+          ) : (
+            <Typography sx={{ fontSize: '16px' }}>{t('deletedAccount')}</Typography>
+          )}
           {idAuthorizedUser === commentData.userId && (
             <Box>
               <IconButton onClick={handleClickEditComment} sx={{ p: 0 }}>

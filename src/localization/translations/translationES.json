@@ -158,5 +158,20 @@
     "online": "En línea",
     "offline": "Fuera de línea"
   },
-  "imageAlert": "Tamaño máximo de archivo 5 MB"
+  "imageAlert": "Tamaño máximo de archivo 5 MB",
+  "deletedAccount": "Сuenta eliminada",
+  "delete": {
+    "title": "Borrar cuenta",
+    "content1": "¿Está seguro de que desea eliminar su cuenta? Esta acción es irreversible.",
+    "content2": "Para confirmar, ingresa la contraseña y haz clic en el botón 'eliminar'",
+    "cancelBtn": "Cancelar",
+    "deleteBtn": "Eliminar",
+    "placeholder": "Ingrese la contraseña",
+    "error": "Contraseña invalida"
+  },
+  "footer": {
+    "description": "Esta red social para ligar y chatear con amigos fue creada por los alumnos del curso RSSchool JavaScript/Front-end 2022Q3",  
+    "team": "Nuestro equipo:",
+    "courses": "Cursos:"
+  }
 }
