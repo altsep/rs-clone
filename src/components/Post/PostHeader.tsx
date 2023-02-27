@@ -71,7 +71,9 @@ export default function PostHeader({ postData, setIsEdit }: IPostHeaderProps) {
   return (
     <>
       <CardHeader
-        avatar={currentUser ? <ClickableAvatar user={currentUser} /> : <NoAccountsIcon fontSize="large" />}
+        avatar={
+          currentUser ? <ClickableAvatar user={currentUser} /> : <NoAccountsIcon color="secondary" fontSize="large" />
+        }
         title={currentUser ? currentUser.name : t('deletedAccount')}
         subheader={new Date(postData.createdAt).toLocaleString(currentLocale, {
           day: 'numeric',

@@ -109,7 +109,7 @@ export default function Comment({ commentData }: ICommentProps) {
       {currentUser ? (
         <ClickableAvatar user={currentUser} width="30px" height="30px" />
       ) : (
-        <NoAccountsIcon fontSize="large" />
+        <NoAccountsIcon color="secondary" fontSize="large" />
       )}
       <Stack sx={{ width: '100%' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
