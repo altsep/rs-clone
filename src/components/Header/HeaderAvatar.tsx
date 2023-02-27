@@ -1,9 +1,11 @@
 import { Avatar, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../hooks/redux';
+import useImage from '../../hooks/useImage';
 
 export default function HeaderAvatar() {
-  const user = useAppSelector((state) => state.users.authorizedUser);
+  const { authorizedUser: user, idAuthorizedUser: userId } = useAppSelector((state) => state.users);
+  const { data: avatar } = useImage(userId, 'user-avatar');
   return (
     <Box
       sx={{
@@ -12,9 +14,9 @@ export default function HeaderAvatar() {
         display: { xs: 'none', sm: 'flex', mr: '10px' },
       }}
     >
-      <Link to={`/${user?.alias ? user.alias : `id${user?.id as number}`}`}>
+      <Link to={`/${user?.alias ? user.alias : `id${userId}`}`}>
         <Avatar
-          src={user?.avatarURL}
+          src={avatar}
           alt="User Avatar"
           sx={{
             width: '50px',

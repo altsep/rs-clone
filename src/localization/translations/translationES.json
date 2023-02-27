@@ -42,7 +42,7 @@
       },
       "name": {
         "required": "El nombre es requerido",
-        "validation": "Las contraseñas deben coincidir"
+        "validation": "El nombre debe tener al menos 4 caracteres"
       },
       "country": {
         "required": "El país es requerido",
@@ -53,7 +53,7 @@
         "validation": "Fecha no válida. La edad no puede ser inferior a 14"
       },
       "alias": {
-        "validation": "El alias debe tener al menos 5 caracteres. No se permiten espacios en blanco"
+        "validation": "El alias debe contener al menos 5 caracteres (a-z A-Z 0-9 _ -). No se permiten espacios en blanco"
       }
     },
     "registrationErrors": {
@@ -65,7 +65,8 @@
     "menu": {
       "language": "Idioma",
       "theme": "Tema",
-      "editProfile": "Editar perfil"
+      "editProfile": "Editar perfil",
+      "security": "Seguridad"
     },
     "language": {
       "title": "Idioma",
@@ -79,6 +80,13 @@
         "dark": "Oscuro"
       }
     },
+    "security": {
+      "title": "Seguridad",
+      "closeProfile": "Cerrar perfil",
+      "changePassword": "Cambiar la contraseña",
+      "changeSuccess": "Contraseña cambiada exitosamente",
+      "changeError": "Intento fallido de cambio de contraseña. Intentar otra vez"
+    },
     "editProfile": {
       "title": "Editar perfil",
       "form": {
@@ -86,8 +94,7 @@
         "email": "Correo electrónico",
         "alias": "Alias",
         "country": "País",
-        "birthDate": "Fecha de nacimiento",
-        "password": "Contraseña"
+        "birthDate": "Fecha de nacimiento"
       },
       "aliasError": "El valor no es válido o el usuario {{ alias }} ya existe"
     },
@@ -144,10 +151,31 @@
       "placeholder": "Escribe un comentario..."
     },
     "notFound": "Usuario no encontrado",
-    "intro": "introducción"
+    "intro": "Información",
+    "hiddenUser": "Este usuario optó por ocultar sus datos",
+    "hiddenInfo": "La información está oculta",
+    "lastSeen": "Ultima vez visto",
+    "online": "En línea",
+    "offline": "Fuera de línea"
   },
   "messages": {
     "title": "Mensajes",
     "message": "Escribe algo aquí..."
+  },
+  "imageAlert": "Tamaño máximo de archivo 5 MB",
+  "deletedAccount": "Сuenta eliminada",
+  "delete": {
+    "title": "Borrar cuenta",
+    "content1": "¿Está seguro de que desea eliminar su cuenta? Esta acción es irreversible.",
+    "content2": "Para confirmar, ingresa la contraseña y haz clic en el botón 'eliminar'",
+    "cancelBtn": "Cancelar",
+    "deleteBtn": "Eliminar",
+    "placeholder": "Ingrese la contraseña",
+    "error": "Contraseña invalida"
+  },
+  "footer": {
+    "description": "Esta red social para ligar y chatear con amigos fue creada por los alumnos del curso RSSchool JavaScript/Front-end 2022Q3",
+    "team": "Nuestro equipo:",
+    "courses": "Cursos:"
   }
 }

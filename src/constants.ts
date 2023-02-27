@@ -9,7 +9,6 @@ const KEY_LOCAL_STORAGE = 'rs-clone-krevetka87-altsep-metalknock';
 const enum ApiPath {
   posts = '/posts',
   users = '/users',
-  user = '/user',
   comments = '/comments',
   auth = '/posts-auth',
   refresh = '/refresh',
@@ -17,6 +16,8 @@ const enum ApiPath {
   logout = '/logout',
   registration = '/registration',
   chats = '/chats',
+  password = '/users-pwd',
+  images = '/images',
 }
 
 const enum RoutePath {
@@ -24,6 +25,10 @@ const enum RoutePath {
   messages = '/messages',
   friends = '/friends',
   settings = '/settings',
+  language = 'language',
+  editProfile = 'edit-profile',
+  theme = 'theme',
+  security = 'security',
 }
 
 const enum ReducerNames {

@@ -127,7 +127,7 @@ export default function FriendCard({ user, isRequest }: IFriendCardProps) {
           <CardHeader
             avatar={<ClickableAvatar user={user} width="50px" height="50px" />}
             title={user.name}
-            subheader={user.country}
+            subheader={idAuthorizedUser !== user.id && user.hidden ? `${t('profile.hiddenInfo')}` : user.country}
             sx={{ wordWrap: 'break-word', wordBreak: 'break-word' }}
           />
         </CardActionArea>

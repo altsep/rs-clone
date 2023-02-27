@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 import { TransitionGroup } from 'react-transition-group';
 import {
@@ -26,11 +27,12 @@ import { TUpdatePostArg } from '../../types/postsApi';
 import { updatePost } from '../../api/postsApi';
 import ClickableAvatar from '../ClickableAvatar';
 import PostHeader from './PostHeader';
-import temporary from '../../assets/temporary-1.jpg';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { updatePostInState } from '../../store/reducers/postsState';
 import Comment from '../Comment';
 import CommentCreator from './CommentCreator';
+import { getHexStr } from '../../utils/common';
+import { fetcher } from '../../utils/fetcher';
 
 interface IPostProps {
   postData: IPost;
@@ -52,25 +54,26 @@ export default function Post({ postData }: IPostProps) {
     updatePost
   );
 
+  const triggerAndUpdate = async (argUpdatePost: TUpdatePostArg): Promise<void> => {
+    const dataResponse = await triggerUpdatePost(argUpdatePost);
+    if (dataResponse) {
+      dispatch(updatePostInState(dataResponse));
+    }
+  };
+
   const handleClickLikeButton = async (): Promise<void> => {
     if (postData.likedUserIds && postData.likedUserIds.includes(idAuthorizedUser)) {
       const argUpdatePost: TUpdatePostArg = {
         likes: postData.likes - 1,
         likedUserIds: postData.likedUserIds.filter((likedUserId) => likedUserId !== idAuthorizedUser),
       };
-      const dataResponse = await triggerUpdatePost(argUpdatePost);
-      if (dataResponse) {
-        dispatch(updatePostInState(dataResponse));
-      }
+      await triggerAndUpdate(argUpdatePost);
     } else {
       const argUpdatePost: TUpdatePostArg = {
         likes: postData.likes + 1,
         likedUserIds: postData.likedUserIds ? [...postData.likedUserIds, idAuthorizedUser] : [idAuthorizedUser],
       };
-      const dataResponse = await triggerUpdatePost(argUpdatePost);
-      if (dataResponse) {
-        dispatch(updatePostInState(dataResponse));
-      }
+      await triggerAndUpdate(argUpdatePost);
     }
   };
 
@@ -78,10 +81,8 @@ export default function Post({ postData }: IPostProps) {
     const argUpdatePost: TUpdatePostArg = {
       description: valueInputDescription,
     };
-    const dataResponse = await triggerUpdatePost(argUpdatePost);
-    if (dataResponse) {
-      dispatch(updatePostInState(dataResponse));
-    }
+
+    await triggerAndUpdate(argUpdatePost);
 
     setIsEdit(false);
   };
@@ -95,6 +96,12 @@ export default function Post({ postData }: IPostProps) {
   const handleClickComments = (): void => {
     setIsOpenComments(!isOpenComments);
   };
+
+  const { data: images = [] } = useSWR<string[], Error>(
+    postData.hasImages ? `${API_BASE_URL}${ApiPath.images}?name=post&id=${postData.id}` : null,
+    fetcher,
+    { revalidateOnFocus: false }
+  );
 
   return (
     <Card sx={{ borderRadius: 4, boxShadow: { xs: 4, md: 0 }, mb: 2 }}>
@@ -115,12 +122,14 @@ export default function Post({ postData }: IPostProps) {
               sx={{ flexGrow: 1, width: '100%' }}
             />
             <Button onClick={handleClickSaveButton} sx={{ ml: 'auto' }}>
-              Save
+              {t('settings.buttons.save')}
             </Button>
           </Box>
         )}
       </CardContent>
-      <CardMedia component="img" height="200" image={temporary} />
+      {images.map((img) => (
+        <CardMedia key={getHexStr()} component="img" height="200" image={img} />
+      ))}
       <Box
         sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', px: 2, py: 1, height: '44px' }}
       >

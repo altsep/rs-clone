@@ -5,6 +5,7 @@ import {
   ILoginUser,
   IRegistrationUser,
   IEditUserProps,
+  IChangePassword,
 } from '../types/usersApi';
 import { IUser } from '../types/data';
 
@@ -95,4 +96,39 @@ const editUser = async (url: string, { arg }: IEditUserProps): Promise<Response>
   return response;
 };
 
-export { addUser, updateUser, hideUser, loginUser, registerUser, refreshToken, logoutUser, editUser };
+const changePassword = async (url: string, { arg }: IChangePassword): Promise<Response> => {
+  const response = await fetch(url, {
+    method: 'PATCH',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(arg),
+  });
+  return response;
+};
+
+const deleteUser = async (id: number, url: string, data: Pick<IUser, 'password'>) => {
+  const res = await fetch(url, {
+    method: 'DELETE',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  return res;
+};
+
+export {
+  addUser,
+  updateUser,
+  hideUser,
+  loginUser,
+  registerUser,
+  refreshToken,
+  logoutUser,
+  editUser,
+  changePassword,
+  deleteUser,
+};

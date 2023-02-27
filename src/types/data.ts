@@ -16,6 +16,8 @@ interface IPost {
   likes: number;
   likedUserIds?: number[];
   commentsIds?: number[];
+  images: string[];
+  hasImages: boolean;
 }
 
 interface IUser {
@@ -28,11 +30,16 @@ interface IUser {
   birthDate: string;
   createdAt: string;
   alias?: string;
-  avatarURL?: string;
   postsIds?: number[];
   friendsIds?: number[];
   isActivated?: boolean;
   pendingFriendsIds?: number[];
+  isOnline: boolean;
+  lastSeen?: string;
+  images: {
+    avatar: string;
+    cover: string;
+  };
 }
 
 interface ILogin {

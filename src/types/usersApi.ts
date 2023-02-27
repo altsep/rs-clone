@@ -12,10 +12,11 @@ type TUpdateUserArg = Partial<
     | 'country'
     | 'birthDate'
     | 'alias'
-    | 'avatarURL'
     | 'postsIds'
     | 'friendsIds'
     | 'pendingFriendsIds'
+    | 'hidden'
+    | 'images'
   >
 >;
 
@@ -45,6 +46,13 @@ interface IRegistrationUser {
   arg: Omit<IFormValues, 'passwordConfirm'>;
 }
 
+interface IChangePassword {
+  arg: {
+    userId: number;
+    password: string;
+  };
+}
+
 export type {
   TAddUserArg,
   TUpdateUserArg,
@@ -55,4 +63,5 @@ export type {
   ILoginUser,
   IRegistrationUser,
   IEditUserProps,
+  IChangePassword,
 };

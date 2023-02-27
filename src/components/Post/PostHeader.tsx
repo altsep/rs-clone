@@ -1,7 +1,9 @@
 import useSWRMutation from 'swr/mutation';
 import React, { useState } from 'react';
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
+import NoAccountsIcon from '@mui/icons-material/NoAccounts';
 import { CardHeader, IconButton } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import ClickableAvatar from '../ClickableAvatar';
 import { IPost } from '../../types/data';
 import MoreMenu from './MoreMenu';
@@ -20,6 +22,7 @@ interface IPostHeaderProps {
 }
 
 export default function PostHeader({ postData, setIsEdit }: IPostHeaderProps) {
+  const { t } = useTranslation();
   const currentLocale = useAppSelector((state) => state.language.lang);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
@@ -65,15 +68,13 @@ export default function PostHeader({ postData, setIsEdit }: IPostHeaderProps) {
     setIsEdit(true);
   };
 
-  if (!currentUser) {
-    return <CardHeader>User not found</CardHeader>;
-  }
-
   return (
     <>
       <CardHeader
-        avatar={<ClickableAvatar user={currentUser} />}
-        title={currentUser.name}
+        avatar={
+          currentUser ? <ClickableAvatar user={currentUser} /> : <NoAccountsIcon color="secondary" fontSize="large" />
+        }
+        title={currentUser ? currentUser.name : t('deletedAccount')}
         subheader={new Date(postData.createdAt).toLocaleString(currentLocale, {
           day: 'numeric',
           month: 'short',

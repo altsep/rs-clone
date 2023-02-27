@@ -42,7 +42,7 @@
       },
       "name": {
         "required": "Name is required",
-        "validation": "It's too short. The name must have at least 5 characters"
+        "validation": "It's too short. The name must have at least 4 characters"
       },
       "country": {
         "required": "Country is required",
@@ -53,7 +53,7 @@
         "validation": "Invalid date. Age cannot be less than 14"
       },
       "alias": {
-        "validation": "Alias must be at least 5 characters long. Whitespaces not allowed"
+        "validation": "Alias must contain at least 5 characters (a-z A-Z 0-9 _ -). Whitespaces not allowed"
       }
     },
     "registrationErrors": {
@@ -65,7 +65,8 @@
     "menu": {
       "language": "Language",
       "theme": "Theme",
-      "editProfile": "Edit Profile"
+      "editProfile": "Edit Profile",
+      "security": "Security"
     },
     "language": {
       "title": "Language",
@@ -79,6 +80,13 @@
         "dark": "Dark"
       }
     },
+    "security": {
+      "title": "Security",
+      "closeProfile": "Сlose profile",
+      "changePassword": "Change password",
+      "changeSuccess": "Password changed successfully",
+      "changeError": "Unsuccessful attempt to change password. Try again"
+    },
     "editProfile": {
       "title": "Edit Profile",
       "form": {
@@ -86,8 +94,7 @@
         "email": "Email",
         "alias": "Alias",
         "country": "Country",
-        "birthDate": "Birthdate",
-        "password": "Password"
+        "birthDate": "Birthdate"
       },
       "aliasError": "Invalid value or user {{ alias }} already exist"
     },
@@ -144,10 +151,31 @@
       "placeholder": "Write a comment..."
     },
     "notFound": "User not found",
-    "intro": "Intro"
+    "intro": "Information",
+    "hiddenUser": "This user chose to hide their data",
+    "hiddenInfo": "Information is hidden",
+    "lastSeen": "Last seen",
+    "online": "Online",
+    "offline": "Offline"
   },
   "messages": {
     "title": "Messages",
     "message": "Type something here..."
+  },
+  "imageAlert": "Max file size 5MB",
+  "deletedAccount": "Deleted account",
+  "delete": {
+    "title": "Delete account",
+    "content1": "Are you sure you want to delete your account? This action is irreversible.",
+    "content2": "To confirm, enter the password and click the 'delete' button.",
+    "cancelBtn": "Cancel",
+    "deleteBtn": "Delete",
+    "placeholder": "Enter password",
+    "error": "Invalid password"
+  },
+  "footer": {
+    "description": "This social network for dating and chatting with friends was created by the students of the course RSSchool JavaScript/Front-end 2022Q3",
+    "team": "Our team:",
+    "courses": "Courses:"
   }
 }

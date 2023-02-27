@@ -20,7 +20,7 @@ export default function App() {
     <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
       <CssBaseline />
       <Header />
-      <Box component="main" sx={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+      <Box component="main" sx={{ flex: 1, display: 'flex', justifyContent: 'center', pb: '5vh' }}>
         <Routes />
       </Box>
       <Footer />

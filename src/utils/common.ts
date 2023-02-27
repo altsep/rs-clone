@@ -49,5 +49,6 @@ const findLastIndex = <T>(array: Array<T>, predicate: (value: T, index: number, 
   }
   return -1;
 };
+const getHexStr = (n = 32) => Array.from({ length: n }, () => Math.round(Math.random() * 0x10).toString(16)).join('');
 
-export { getFirstLetter, setToken, removeToken, getToken, getActionString, setLastMessages, findLastIndex };
+export { getFirstLetter, setToken, removeToken, getToken, getActionString, getHexStr, setLastMessages, findLastIndex };

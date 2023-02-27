@@ -1,5 +1,7 @@
 import { Avatar } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useAppSelector } from '../../hooks/redux';
+import useImage from '../../hooks/useImage';
 import { IUser } from '../../types/data';
 import { getFirstLetter } from '../../utils/common';
 
@@ -12,18 +14,25 @@ interface IClickableAvatarProps {
 export default function ClickableAvatar({ user, width, height }: IClickableAvatarProps) {
   const navigate = useNavigate();
 
-  const handleClickAvatar = (id: number): void => {
-    if (user?.alias) {
-      navigate(`/${user.alias}`);
-    } else {
-      navigate(`/id${id}`);
+  const { idCurrentProfile } = useAppSelector((state) => state.users);
+
+  const { data: avatar } = useImage(user.id, 'user-avatar');
+
+  const handleClickAvatar = (): void => {
+    if (idCurrentProfile !== user.id) {
+      if (user?.alias) {
+        navigate(`/${user.alias}`);
+      } else {
+        navigate(`/id${user.id}`);
+      }
     }
   };
+
   if (width === '20px' && height === '20px') {
     return (
       <Avatar
-        src={user.avatarURL}
-        onClick={() => handleClickAvatar(user.id)}
+        src={idCurrentProfile !== user.id && user.hidden ? '' : avatar}
+        onClick={handleClickAvatar}
         sx={{ textTransform: 'capitalize', cursor: 'pointer', width, height, fontSize: 'small' }}
       >
         {getFirstLetter(user.name)}
@@ -33,8 +42,8 @@ export default function ClickableAvatar({ user, width, height }: IClickableAvata
 
   return (
     <Avatar
-      src={user.avatarURL}
-      onClick={() => handleClickAvatar(user.id)}
+      src={idCurrentProfile !== user.id && user.hidden ? '' : avatar}
+      onClick={handleClickAvatar}
       sx={{ textTransform: 'capitalize', cursor: 'pointer', width, height }}
     >
       {getFirstLetter(user.name)}

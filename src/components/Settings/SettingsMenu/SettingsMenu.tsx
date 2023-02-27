@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { Box, List, ListItemButton, Typography } from '@mui/material';
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 import TranslateOutlinedIcon from '@mui/icons-material/TranslateOutlined';
+import SecurityIcon from '@mui/icons-material/Security';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
@@ -48,7 +49,6 @@ export default function SettingsMenu() {
           <Link to="language">
             <TranslateOutlinedIcon fontSize="small" sx={{ mr: '15px' }} />
             <Typography variant="body2" sx={{ flex: 1, mr: '20px' }}>
-              {' '}
               {t('settings.menu.language')}
             </Typography>
           </Link>
@@ -57,8 +57,15 @@ export default function SettingsMenu() {
           <Link to="theme">
             <LightModeIcon fontSize="small" sx={{ mr: '15px' }} />
             <Typography variant="body2" sx={{ flex: 1, mr: '20px' }}>
-              {' '}
               {t('settings.menu.theme')}
+            </Typography>
+          </Link>
+        </MenuItemWrapper>
+        <MenuItemWrapper divider selected={location.pathname === '/settings/security'}>
+          <Link to="security">
+            <SecurityIcon fontSize="small" sx={{ mr: '15px' }} />
+            <Typography variant="body2" sx={{ flex: 1, mr: '20px' }}>
+              {t('settings.menu.security')}
             </Typography>
           </Link>
         </MenuItemWrapper>

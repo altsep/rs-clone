@@ -12,7 +12,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { closeLeftSideBar } from '../../store/reducers/leftSideBarState';
 import { logoutUser } from '../../api/usersApi';
 import { setAuth, setLoading } from '../../store/reducers/authSlice';
-import { removeToken, setLastMessages } from '../../utils/common';
+import { getActionString, setLastMessages, removeToken } from '../../utils/common';
 import Search from '../Search/Search';
 import NotificationCounter from '../NotificationCounter';
 
@@ -27,21 +27,29 @@ export default function LeftSideBar() {
   const { totalNumberOfUnreadMessages, numberOfUnreadMessagesInChats, lastMessagesInChats, chats } = useAppSelector(
     (state) => state.chats
   );
+  const { messagesWs } = useAppSelector((state) => state.users);
+
+  const sendOfflineStatus = (): void => {
+    const isOnline = false;
+    const userStatusMsg = getActionString('userStatus', { userId: idAuthorizedUser, isOnline });
+    messagesWs?.send(userStatusMsg);
+  };
 
   const logout = async (): Promise<void> => {
     dispatch(setLoading(true));
     const res = await logoutUser(`${API_BASE_URL}${ApiPath.logout}`);
     if (res.ok) {
       setLastMessages({ chats, numberOfUnreadMessagesInChats, lastMessagesInChats, idAuthorizedUser });
-
+      sendOfflineStatus();
       removeToken();
       dispatch(setAuth(false));
       dispatch(setLoading(false));
       localStorage.removeItem(`${LSKeys.path}_${KEY_LOCAL_STORAGE}`);
       navigate('/');
+    } else {
+      dispatch(setLoading(false));
     }
   };
-
   const sideBarButtonsInfo: TSideBarButtonsInfo = [
     {
       text: t('sideBar.profile'),

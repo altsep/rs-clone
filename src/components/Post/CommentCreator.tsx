@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import useSWRMutation from 'swr/mutation';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
-import { Box, Button, CardContent, TextField } from '@mui/material';
+import { Box, Button, CardContent, CircularProgress, TextField } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import ClickableAvatar from '../ClickableAvatar';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
@@ -21,6 +21,7 @@ interface ICommentCreatorProps {
 
 export default function CommentCreator({ postData, setIsOpenComments }: ICommentCreatorProps) {
   const { t } = useTranslation();
+  const [isLoading, setLoading] = useState(false);
   const [valueInputComment, setValueInputComment] = useState('');
 
   const dispatch = useAppDispatch();
@@ -38,6 +39,7 @@ export default function CommentCreator({ postData, setIsOpenComments }: IComment
   };
 
   const handleClickSendButton = async (): Promise<void> => {
+    setLoading(true);
     const argAddComment: TAddCommentArg = {
       userId: idAuthorizedUser,
       postId: postData.id,
@@ -58,6 +60,7 @@ export default function CommentCreator({ postData, setIsOpenComments }: IComment
     }
     setValueInputComment('');
     setIsOpenComments(true);
+    setLoading(false);
   };
 
   const handleKeyDownCreateComment = async (e: React.KeyboardEvent<HTMLDivElement>): Promise<void> => {
@@ -77,7 +80,12 @@ export default function CommentCreator({ postData, setIsOpenComments }: IComment
         onChange={handleChangeInputComment}
         size="small"
       />
-      <Button endIcon={<SendOutlinedIcon />} onClick={handleClickSendButton} disabled={!valueInputComment} />
+
+      {isLoading ? (
+        <CircularProgress size={20} sx={{ mr: 3 }} />
+      ) : (
+        <Button endIcon={<SendOutlinedIcon />} onClick={handleClickSendButton} disabled={!valueInputComment} />
+      )}
     </CardContent>
   );
 }

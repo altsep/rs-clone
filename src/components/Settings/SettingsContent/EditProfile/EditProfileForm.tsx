@@ -26,16 +26,11 @@ export default function EditProfileForm() {
 
   const schema = yup.object().shape({
     email: yup.string().email(),
-    password: yup
-      .string()
-      .nullable()
-      .transform((value: string, origin: string) => (origin === '' ? null : value))
-      .matches(/(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,15}/),
     name: yup
       .string()
       .nullable()
       .transform((value: string, origin: string) => (origin === '' ? null : value))
-      .min(5),
+      .min(4),
     country: yup
       .string()
       .nullable()
@@ -52,14 +47,12 @@ export default function EditProfileForm() {
       .string()
       .nullable()
       .transform((value: string, origin: string) => (origin === '' ? null : value))
-      .min(5)
-      .test('alias', (value: string | null | undefined): boolean => (value === null ? true : !value?.includes(' '))),
+      .matches(/^[a-z0-9_-]{5,}$/i),
   });
 
-  const defaultValues: IEditFormValues = {
+  const defaultValues: Partial<IEditFormValues> = {
     email: authUser?.email || '',
     name: authUser?.name || '',
-    password: '',
     country: authUser?.country || '',
     birthDate: null,
     alias: authUser?.alias || '',
@@ -144,15 +137,6 @@ export default function EditProfileForm() {
             control={control}
           >
             {t('settings.editProfile.form.email')}
-          </EditProfileInput>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <EditProfileInput
-            helperText={errors.password ? t('registration.errors.password.validation') : ''}
-            name="password"
-            control={control}
-          >
-            {t('settings.editProfile.form.password')}
           </EditProfileInput>
         </Grid>
         <Grid item xs={12} md={6}>

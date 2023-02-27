@@ -20,6 +20,7 @@ type TUsersState = {
   messagesWs: WebSocket | null;
   usersOfExistingChats: (IUser | undefined)[];
   userOfActiveChat: IUser | null;
+  avatarUrl: string;
 };
 
 type TThemeState = {
@@ -57,6 +58,8 @@ type TChatsState = {
   lastMessagesInChats: TLastMessage[] | null;
 };
 
+type TChangeStatus = Pick<IUser, 'isOnline' | 'lastSeen'>;
+
 export type {
   IInputsState,
   ILeftSideBarState,
@@ -67,4 +70,5 @@ export type {
   TAuthState,
   TLoginFormState,
   TChatsState,
+  TChangeStatus,
 };
