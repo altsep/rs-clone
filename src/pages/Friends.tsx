@@ -12,7 +12,7 @@ export default function Friends() {
   const [value, setValue] = useState(0);
 
   const dispatch = useAppDispatch();
-  const { users, authorizedUser, authorizedUserFriends, authorizedUserPendingFriends } = useAppSelector(
+  const { users, idAuthorizedUser, authorizedUserFriends, authorizedUserPendingFriends } = useAppSelector(
     (state) => state.users
   );
 
@@ -21,11 +21,14 @@ export default function Friends() {
   };
 
   useEffect(() => {
-    if (authorizedUser && users) {
-      dispatch(definePendingFriends(authorizedUser.pendingFriendsIds || []));
-      dispatch(defineFriends(authorizedUser.friendsIds || []));
+    if (idAuthorizedUser !== 0 && users) {
+      const authorizedUser = users.find((user) => user.id === idAuthorizedUser);
+      if (authorizedUser) {
+        dispatch(definePendingFriends(authorizedUser.pendingFriendsIds || []));
+        dispatch(defineFriends(authorizedUser.friendsIds || []));
+      }
     }
-  }, [dispatch, authorizedUser, users]);
+  }, [dispatch, idAuthorizedUser, users]);
 
   return (
     <Container sx={{ mt: '5vh', mb: '5vh', display: 'flex' }}>
