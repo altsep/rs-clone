@@ -62,6 +62,9 @@ const darkTheme: Theme = createTheme({
         root: {
           borderRadius: '5px',
           textTransform: 'capitalize',
+          '&.Mui-disabled': {
+            color: '#757575',
+          },
         },
       },
     },
