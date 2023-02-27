@@ -9,7 +9,6 @@ import { setUserOfActiveChat } from '../../../store/reducers/usersState';
 import { setActiveChat } from '../../../store/reducers/chatsState';
 import MessageCreator from './MessageCreator';
 import { INIT_MESSAGE, RoutePath } from '../../../constants';
-import useUsers from '../../../hooks/useUsers';
 
 export default function ActiveChat() {
   const { id } = useParams();
@@ -36,13 +35,13 @@ export default function ActiveChat() {
 
   useEffect(() => {
     if (endRef.current) {
-      endRef.current.scrollIntoView({ behavior: 'auto' });
+      endRef.current.scrollIntoView({ behavior: 'auto', block: 'nearest' });
     }
   }, [activeChatIndex]);
 
   useEffect(() => {
     if (endRef.current) {
-      endRef.current.scrollIntoView({ behavior: 'smooth' });
+      endRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
   }, [activeChatMessages]);
 
