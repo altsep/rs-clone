@@ -25,7 +25,7 @@ export default function ChatItem({ chat, user, numberOfUnreadMessages }: IChatIt
   };
 
   if (!user) {
-    return <ListItemButton>User is not found</ListItemButton>;
+    return null;
   }
   return (
     <>
