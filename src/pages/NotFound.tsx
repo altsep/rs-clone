@@ -7,11 +7,10 @@ import { useAppSelector } from '../hooks/redux';
 export default function NotFound() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { isAuth } = useAppSelector((state) => state.auth);
   const { idAuthorizedUser, authorizedUser } = useAppSelector((state) => state.users);
 
   const onClick = (): void => {
-    navigate(!isAuth ? '/' : `${authorizedUser?.alias ? `/${authorizedUser?.alias}` : `/id${idAuthorizedUser}`}`);
+    navigate(authorizedUser?.alias ? `/${authorizedUser?.alias}` : `/id${idAuthorizedUser}`);
   };
 
   return (
