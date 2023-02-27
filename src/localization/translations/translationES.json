@@ -160,7 +160,8 @@
   },
   "messages": {
     "title": "Mensajes",
-    "message": "Escribe algo aquí..."
+    "message": "Escribe algo aquí...",
+    "empty": "Añade a alguien como amigo y podrás iniciar un diálogo"
   },
   "imageAlert": "Tamaño máximo de archivo 5 MB",
   "deletedAccount": "Сuenta eliminada",

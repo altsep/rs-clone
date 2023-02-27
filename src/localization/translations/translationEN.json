@@ -160,7 +160,8 @@
   },
   "messages": {
     "title": "Messages",
-    "message": "Type something here..."
+    "message": "Type something here...",
+    "empty": "Add someone as a friend and you can start a conversation"
   },
   "imageAlert": "Max file size 5MB",
   "deletedAccount": "Deleted account",

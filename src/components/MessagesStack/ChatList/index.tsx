@@ -5,6 +5,7 @@ import ChatItem from './ChatItem';
 import { useAppSelector } from '../../../hooks/redux';
 import { RoutePath } from '../../../constants';
 import useUsers from '../../../hooks/useUsers';
+import useUserChats from '../../../hooks/useUserChats';
 
 export default function ChatList() {
   const location = useLocation();
@@ -14,11 +15,30 @@ export default function ChatList() {
   const { usersOfExistingChats, idAuthorizedUser } = useAppSelector((state) => state.users);
 
   const { isLoadingUsers } = useUsers();
+  const { isLoadingChats } = useUserChats(idAuthorizedUser);
+
+  if (!isLoadingChats && !isLoadingUsers && chats.length === 0) {
+    return (
+      <Typography
+        variant="h5"
+        sx={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          textAlign: 'center',
+        }}
+      >
+        {t('messages.empty')}
+      </Typography>
+    );
+  }
 
   return (
     <List
       sx={{
-        boxShadow: { xs: 0, sm: 1 },
+        boxShadow: { xs: 4, sm: 1 },
         backgroundColor: 'background.paper',
         p: 2,
         borderRadius: { xs: 0, sm: 4 },
@@ -30,7 +50,8 @@ export default function ChatList() {
       <Typography variant="h5" sx={{ textAlign: 'center', mb: 2 }}>
         {t('messages.title')}
       </Typography>
-      {!isLoadingUsers ? (
+
+      {!isLoadingUsers && !isLoadingChats ? (
         chats.map((chat, i) => (
           <ChatItem
             key={chat.id}

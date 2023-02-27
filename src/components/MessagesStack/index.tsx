@@ -9,8 +9,8 @@ export default function MessagesStack() {
       direction="row"
       sx={{
         gap: 3,
-        borderRadius: 4,
-        boxShadow: 4,
+        borderRadius: { xs: 0, sm: 4 },
+        boxShadow: { xs: 0, sm: 4 },
         bgcolor: 'secondary.main',
         width: '100%',
         p: { xs: 0, sm: 3 },

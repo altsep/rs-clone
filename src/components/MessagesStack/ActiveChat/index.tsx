@@ -9,6 +9,7 @@ import { setUserOfActiveChat } from '../../../store/reducers/usersState';
 import { setActiveChat } from '../../../store/reducers/chatsState';
 import MessageCreator from './MessageCreator';
 import { INIT_MESSAGE, RoutePath } from '../../../constants';
+import useUsers from '../../../hooks/useUsers';
 
 export default function ActiveChat() {
   const { id } = useParams();
@@ -21,7 +22,7 @@ export default function ActiveChat() {
   const { activeChatMessages, activeChatIndex } = useAppSelector((state) => state.chats);
 
   useEffect(() => {
-    if (id) {
+    if (id && usersOfExistingChats.length !== 0) {
       const foundUser = usersOfExistingChats.find((user) => user && user.id === +id);
 
       if (foundUser) {
@@ -53,7 +54,7 @@ export default function ActiveChat() {
         flexDirection: 'column',
         background: 'primary.main',
         borderRadius: { xs: 0, sm: 4 },
-        boxShadow: { xs: 0, sm: 1 },
+        boxShadow: { xs: 4, sm: 1 },
         minHeight: '100%',
       }}
     >
