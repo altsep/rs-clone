@@ -9,7 +9,7 @@ export default function ProfileFriends() {
 
   if (currentProfile && currentProfile.friendsIds && currentProfile.friendsIds.length > 0) {
     return (
-      <Card sx={{ borderRadius: 4, boxShadow: { xs: 4, md: 0 } }}>
+      <Card sx={{ borderRadius: { xs: 0, sm: 4 }, boxShadow: { xs: 0, sm: 4, md: 0 } }}>
         <CardHeader title={t('profile.friends.title')} sx={{ textAlign: 'center' }} />
         <Divider />
         <CardContent>

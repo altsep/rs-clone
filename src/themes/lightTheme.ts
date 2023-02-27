@@ -60,6 +60,14 @@ const lightTheme: Theme = createTheme({
         },
       },
     },
+    MuiContainer: {
+      styleOverrides: {
+        root: {
+          paddingLeft: 0,
+          paddingRight: 0,
+        },
+      },
+    },
   },
 });
 

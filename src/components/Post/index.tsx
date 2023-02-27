@@ -15,7 +15,10 @@ import {
   Divider,
   List,
   Collapse,
+  Badge,
+  Popover,
 } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
@@ -39,9 +42,11 @@ interface IPostProps {
 }
 
 export default function Post({ postData }: IPostProps) {
+  const Mobile = useMediaQuery('(min-width:600px)');
   const { t } = useTranslation();
   const [isEdit, setIsEdit] = useState(false);
   const [isOpenComments, setIsOpenComments] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   const [valueInputDescription, setValueInputDescription] = useState(postData.description);
 
@@ -103,8 +108,16 @@ export default function Post({ postData }: IPostProps) {
     { revalidateOnFocus: false }
   );
 
+  const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
-    <Card sx={{ borderRadius: 4, boxShadow: { xs: 4, md: 0 }, mb: 2 }}>
+    <Card sx={{ borderRadius: { xs: 0, sm: 4 }, boxShadow: { xs: 0, sm: 4, md: 0 }, mb: 2 }}>
       <PostHeader postData={postData} setIsEdit={setIsEdit} />
       <CardContent>
         {!isEdit ? (
@@ -130,7 +143,7 @@ export default function Post({ postData }: IPostProps) {
       {images.map((img) => (
         <CardMedia key={getHexStr()} component="img" height="200" image={img} />
       ))}
-      <Box
+      {/* <Box
         sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', px: 2, py: 1, height: '44px' }}
       >
         {postData.likedUserIds && (
@@ -149,16 +162,17 @@ export default function Post({ postData }: IPostProps) {
               })}
           </AvatarGroup>
         )}
-        <Typography sx={{ ml: 'auto' }}>{`${postData.commentsIds ? postData.commentsIds.length : 0} ${t(
-          'profile.post.comments'
-        )}`}</Typography>
-      </Box>
+      </Box> */}
       <Divider sx={{ width: '94%', mx: 'auto' }} />
       <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Button
           aria-label="Like"
           sx={{ display: 'flex', alignItems: 'center', gap: 1, p: { xs: 0, sm: '6px' } }}
           onClick={handleClickLikeButton}
+          aria-owns={anchorEl ? 'mouse-over-popover' : undefined}
+          aria-haspopup="true"
+          onMouseEnter={handlePopoverOpen}
+          onMouseLeave={handlePopoverClose}
         >
           {postData.likedUserIds && postData.likedUserIds.includes(idAuthorizedUser) ? (
             <FavoriteOutlinedIcon />
@@ -166,20 +180,67 @@ export default function Post({ postData }: IPostProps) {
             <FavoriteBorderOutlinedIcon />
           )}
 
-          <Typography sx={{ display: { xs: 'none', md: 'block' } }}>{t('profile.post.like')}</Typography>
+          <Typography sx={{ display: { xs: 'none', lg: 'block' } }}>{t('profile.post.like')}</Typography>
         </Button>
+        {Mobile && postData.likedUserIds && postData.likedUserIds.length !== 0 && (
+          <Popover
+            id="mouse-over-popover"
+            sx={{
+              pointerEvents: 'none',
+            }}
+            open={Boolean(anchorEl)}
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'left',
+            }}
+            transformOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left',
+            }}
+            onClose={handlePopoverClose}
+            disableRestoreFocus
+          >
+            <Box>
+              <AvatarGroup max={4}>
+                {postData.likedUserIds
+                  .slice()
+                  .reverse()
+                  .map((likedUserId) => {
+                    if (users) {
+                      const currentUser = users.find((val) => val.id === likedUserId);
+                      return (
+                        currentUser && (
+                          <ClickableAvatar key={likedUserId} user={currentUser} width="20px" height="20px" />
+                        )
+                      );
+                    }
+                    return '';
+                  })}
+              </AvatarGroup>
+            </Box>
+          </Popover>
+        )}
         <Button
           aria-label="Comments"
           onClick={handleClickComments}
           disabled={!postData.commentsIds || (postData.commentsIds && postData.commentsIds.length === 0)}
           sx={{ gap: 1, p: { xs: 0, sm: '6px' } }}
         >
-          <CommentOutlinedIcon />
-          <Typography sx={{ display: { xs: 'none', md: 'block' } }}>{t('profile.post.comments')}</Typography>
+          <Badge
+            badgeContent={
+              postData.commentsIds && (
+                <Box sx={{ position: 'absolute', right: '3px' }}>{postData.commentsIds.length}</Box>
+              )
+            }
+          >
+            <CommentOutlinedIcon />
+          </Badge>
+          <Typography sx={{ display: { xs: 'none', lg: 'block' } }}>{t('profile.post.comments')}</Typography>
         </Button>
         <Button aria-label="Share" sx={{ gap: 1, p: { xs: 0, sm: '6px' } }}>
           <ReplyOutlinedIcon sx={{ transform: 'scaleX(-1)' }} />
-          <Typography sx={{ display: { xs: 'none', md: 'block' } }}>{t('profile.post.share')}</Typography>
+          <Typography sx={{ display: { xs: 'none', lg: 'block' } }}>{t('profile.post.share')}</Typography>
         </Button>
       </CardActions>
       <Divider sx={{ width: '94%', mx: 'auto' }} />

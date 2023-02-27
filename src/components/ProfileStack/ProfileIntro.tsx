@@ -10,7 +10,7 @@ export default function ProfileIntro() {
   const { currentProfile } = useAppSelector((state) => state.users);
 
   return (
-    <Card sx={{ borderRadius: 4, boxShadow: { xs: 4, md: 0 } }}>
+    <Card sx={{ borderRadius: { xs: 0, sm: 4 }, boxShadow: { xs: 0, sm: 4, md: 0 } }}>
       <CardHeader title={t('profile.intro')} sx={{ textAlign: 'center' }} />
       <Divider />
       <CardContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>

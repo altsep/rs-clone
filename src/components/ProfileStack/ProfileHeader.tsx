@@ -139,14 +139,33 @@ export default function ProfileHeader() {
 
   return (
     <>
-      <Box sx={{ borderRadius: 4, boxShadow: 4, overflow: 'hidden' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          borderRadius: { xs: 0, sm: 4 },
+          boxShadow: { xs: 0, sm: 4 },
+          overflow: 'hidden',
+        }}
+      >
         <Box
           component="img"
           src={cover || coverBackground}
           alt="Background image"
-          sx={{ width: '100%', height: '300px', objectFit: 'cover', display: coverLoading ? 'none' : '' }}
+          sx={{
+            width: '100%',
+            height: { xs: '150px', sm: '300px' },
+            objectFit: 'cover',
+            display: coverLoading ? 'none' : '',
+          }}
         />
-        {coverLoading && <Skeleton variant="rectangular" animation={false} sx={{ width: '100%', height: '300px' }} />}
+        {coverLoading && (
+          <Skeleton
+            variant="rectangular"
+            animation={false}
+            sx={{ width: '100%', height: { xs: '150px', sm: '300px' } }}
+          />
+        )}
         <Box sx={{ px: 2 }}>
           <Box sx={{ position: 'relative' }}>
             <Box
@@ -168,7 +187,12 @@ export default function ProfileHeader() {
                   badgeContent={
                     idCurrentProfile === idAuthorizedUser ? (
                       <IconButton
-                        sx={{ background: 'white', p: 0.5, borderRadius: '50%', minWidth: '0' }}
+                        sx={{
+                          backgroundColor: 'common.white',
+                          p: 0.5,
+                          borderRadius: '50%',
+                          minWidth: '0',
+                        }}
                         onClick={() => handlePicker(avatarPicker)}
                       >
                         <input
@@ -178,7 +202,7 @@ export default function ProfileHeader() {
                           ref={avatarPicker}
                           onChange={handleAvatarChange}
                         />
-                        <CloudDownloadOutlinedIcon />
+                        <CloudDownloadOutlinedIcon fontSize="small" />
                       </IconButton>
                     ) : null
                   }
@@ -187,7 +211,12 @@ export default function ProfileHeader() {
                   <Avatar
                     src={isAvatarHidden ? '' : avatar}
                     alt="Avatar"
-                    sx={{ width: 150, height: 150, border: 3, borderColor: 'common.white' }}
+                    sx={{
+                      width: { xs: 100, sm: 150 },
+                      height: { xs: 100, sm: 150 },
+                      border: 3,
+                      borderColor: 'common.white',
+                    }}
                   >
                     {isAvatarHidden ? <VisibilityOffOutlinedIcon fontSize="large" /> : null}
                   </Avatar>
@@ -198,9 +227,9 @@ export default function ProfileHeader() {
                       height: '15px',
                       borderRadius: '50%',
                       position: 'absolute',
-                      top: '60%',
+                      top: { xs: '55%', sm: '60%' },
                       right: 0,
-                      transform: 'translateX(20%)',
+                      transform: { xs: 'translateX(30%)', sm: 'translateX(20%)' },
                     }}
                   />
                 </Badge>
@@ -225,10 +254,12 @@ export default function ProfileHeader() {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
+            backgroundColor: { xs: 'background.default', sm: 'transparent' },
             px: 2,
             pb: 3,
-            pt: 5,
+            pt: { xs: 3, sm: 5 },
             minHeight: '36.5px',
+            gap: 1,
           }}
         >
           <Stack>
@@ -251,7 +282,11 @@ export default function ProfileHeader() {
             ) : null}
           </Stack>
           {idCurrentProfile === idAuthorizedUser && (
-            <Button variant="outlined" onClick={handleClickEditBasicInfo} sx={{ background: 'secondary.main' }}>
+            <Button
+              variant="outlined"
+              onClick={handleClickEditBasicInfo}
+              sx={{ background: 'secondary.main', minWidth: '130px' }}
+            >
               {t('profile.header.editInfo')}
             </Button>
           )}
