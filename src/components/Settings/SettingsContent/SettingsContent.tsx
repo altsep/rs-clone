@@ -15,6 +15,7 @@ export default function SettingsContent() {
         <Route path={RoutePath.editProfile} element={<EditProfile />} />
         <Route path={RoutePath.theme} element={<Theme />} />
         <Route path={RoutePath.security} element={<Security />} />
+        <Route path="*" element={<Navigate to={RoutePath.editProfile} replace />} />
       </Routes>
     </Box>
   );
