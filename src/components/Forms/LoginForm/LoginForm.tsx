@@ -15,7 +15,7 @@ import { loginUser } from '../../../api/usersApi';
 import { ILogin } from '../../../types/data';
 import { setAuth, setAuthError, setConfirmError } from '../../../store/reducers/authSlice';
 import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
-import { getActionString, setToken } from '../../../utils/common';
+import { setToken } from '../../../utils/common';
 import { setUser } from '../../../store/reducers/usersState';
 
 export default function LoginForm() {
@@ -24,7 +24,6 @@ export default function LoginForm() {
   const [loginError, setLoginError] = useState<boolean>(false);
   const authError = useAppSelector((state) => state.auth.authError);
   const confirmError = useAppSelector((state) => state.auth.confirmError);
-  const { messagesWs } = useAppSelector((state) => state.users);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -46,11 +45,6 @@ export default function LoginForm() {
     resolver: yupResolver(schema),
   });
 
-  const sendOnlineStatus = (id: number): void => {
-    const isOnline = true;
-    const userStatusMsg = getActionString('userStatus', { userId: id, isOnline });
-    messagesWs?.send(userStatusMsg);
-  };
   const { trigger } = useSWRMutation(`${API_BASE_URL}${ApiPath.login}`, loginUser);
 
   const onSubmit = async (data: TLoginValues): Promise<void> => {
@@ -68,9 +62,6 @@ export default function LoginForm() {
         dispatch(setAuth(true));
         dispatch(setUser(user));
         navigate(user.alias ? `/${user.alias}` : `/id${id}`);
-        if (messagesWs) {
-          sendOnlineStatus(id);
-        }
       } else {
         dispatch(setConfirmError(true));
       }

@@ -70,6 +70,12 @@ const usersStateSlice = createSlice({
         state.currentProfile = action.payload;
       }
     },
+    resetUser: (state) => {
+      state.currentProfile = null;
+      state.idCurrentProfile = 0;
+      state.authorizedUser = null;
+      state.idAuthorizedUser = 0;
+    },
     definePendingFriends: (state, action: PayloadAction<number[]>) => {
       state.authorizedUserPendingFriends = state.users.filter((user) => action.payload.includes(user.id));
     },
@@ -120,6 +126,7 @@ export const {
   usersLoadingSuccess,
   defineProfile,
   updateUserInState,
+  resetUser,
   setUser,
   definePendingFriends,
   defineFriends,

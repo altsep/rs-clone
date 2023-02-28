@@ -15,6 +15,7 @@ import { setAuth, setLoading } from '../../store/reducers/authSlice';
 import { getActionString, setLastMessages, removeToken } from '../../utils/common';
 import Search from '../Search/Search';
 import NotificationCounter from '../NotificationCounter';
+import { resetUser } from '../../store/reducers/usersState';
 
 export default function LeftSideBar() {
   const { t } = useTranslation();
@@ -23,11 +24,10 @@ export default function LeftSideBar() {
 
   const dispatch = useAppDispatch();
   const { isOpen } = useAppSelector((state) => state.leftSideBar);
-  const { idAuthorizedUser, authorizedUser } = useAppSelector((state) => state.users);
+  const { idAuthorizedUser, authorizedUser, messagesWs } = useAppSelector((state) => state.users);
   const { totalNumberOfUnreadMessages, numberOfUnreadMessagesInChats, lastMessagesInChats, chats } = useAppSelector(
     (state) => state.chats
   );
-  const { messagesWs } = useAppSelector((state) => state.users);
 
   const sendOfflineStatus = (): void => {
     const isOnline = false;
@@ -39,8 +39,9 @@ export default function LeftSideBar() {
     dispatch(setLoading(true));
     const res = await logoutUser(`${API_BASE_URL}${ApiPath.logout}`);
     if (res.ok) {
-      setLastMessages({ chats, numberOfUnreadMessagesInChats, lastMessagesInChats, idAuthorizedUser });
       sendOfflineStatus();
+      resetUser();
+      setLastMessages({ chats, numberOfUnreadMessagesInChats, lastMessagesInChats, idAuthorizedUser });
       removeToken();
       dispatch(setAuth(false));
       dispatch(setLoading(false));
