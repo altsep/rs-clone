@@ -13,6 +13,9 @@ export default function useMessagesWs() {
   useEffect(() => {
     let messagesWs: WebSocket | undefined;
     let timeoutId: NodeJS.Timeout | undefined;
+    let pingIntervalId: NodeJS.Timeout | undefined;
+    let reconnectIntervalId: NodeJS.Timeout | undefined;
+    const wsUrl = new URL('messages', WS_BASE_URL);
 
     const modifyAuthorizedUserStatus = (isOnline: boolean) => {
       if (userData) {
@@ -28,16 +31,31 @@ export default function useMessagesWs() {
 
     const handleOpen = () => {
       const accessToken = getToken();
-      const watchMsg = { type: 'watch', payload: { userId, accessToken } };
+      const watchMsg = getActionString('watch', { userId, accessToken });
 
-      messagesWs?.send(JSON.stringify(watchMsg));
+      messagesWs?.send(watchMsg);
 
       sendStatusMsg(true);
+
+      pingIntervalId = setInterval(() => {
+        if (messagesWs?.readyState !== 1) {
+          clearInterval(pingIntervalId);
+          return;
+        }
+
+        const pingMsg = getActionString('ping', 'ping');
+
+        messagesWs.send(pingMsg);
+      }, 5000);
     };
 
     const handleMessage = (e: MessageEvent) => {
       if (typeof e.data === 'string') {
         const { type, payload } = JSON.parse(e.data) as { type: string; payload: unknown };
+
+        if (type === 'error') {
+          console.error('WS (messages): %s', payload);
+        }
 
         if (type === 'system') {
           console.log('WS (messages): %s', payload);
@@ -57,6 +75,30 @@ export default function useMessagesWs() {
       }
     };
 
+    const reconnect = () => {
+      const handleReconnect = () => {
+        if (messagesWs?.readyState === 1) {
+          clearInterval(reconnectIntervalId);
+          reconnectIntervalId = undefined;
+          return;
+        }
+
+        if (messagesWs?.readyState !== 0 && userId) {
+          messagesWs = new WebSocket(wsUrl);
+          messagesWs.addEventListener('open', handleOpen);
+          messagesWs.addEventListener('message', handleMessage);
+          messagesWs.addEventListener('close', reconnect);
+          messagesWs.addEventListener('error', reconnect);
+
+          dispatch(setMessagesWs(messagesWs));
+        }
+      };
+
+      if (reconnectIntervalId == null) {
+        reconnectIntervalId = setInterval(handleReconnect, 10000);
+      }
+    };
+
     const handleFocus = () => {
       clearTimeout(timeoutId);
       sendStatusMsg(true);
@@ -66,22 +108,35 @@ export default function useMessagesWs() {
       timeoutId = setTimeout(() => sendStatusMsg(false), 10000);
     };
 
-    if (userId) {
-      const wsUrl = new URL('messages', WS_BASE_URL);
-      messagesWs = new WebSocket(wsUrl);
+    const handleUnload = () => {
+      sendStatusMsg(false);
+      messagesWs?.close();
+    };
 
+    const cleanup = () => {
+      clearInterval(pingIntervalId);
+      clearInterval(reconnectIntervalId);
+      clearTimeout(timeoutId);
+
+      window.removeEventListener('focus', handleFocus);
+      window.removeEventListener('blur', handleBlur);
+      window.removeEventListener('beforeunload', handleUnload);
+    };
+
+    if (userId) {
+      messagesWs = new WebSocket(wsUrl);
       messagesWs.addEventListener('open', handleOpen);
       messagesWs.addEventListener('message', handleMessage);
+      messagesWs.addEventListener('close', reconnect);
+      messagesWs.addEventListener('error', reconnect);
 
       dispatch(setMessagesWs(messagesWs));
 
       window.addEventListener('focus', handleFocus);
       window.addEventListener('blur', handleBlur);
-      window.addEventListener('beforeunload', () => sendStatusMsg(false));
+      window.addEventListener('beforeunload', handleUnload);
     }
 
-    return () => {
-      if (timeoutId) clearTimeout(timeoutId);
-    };
+    return cleanup;
   }, [dispatch, userId]);
 }
