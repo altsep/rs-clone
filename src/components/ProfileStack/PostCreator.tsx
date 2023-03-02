@@ -114,7 +114,7 @@ export default function PostCreator() {
     if (files?.length) {
       const newPhotos = [...files].filter((f) => !postPhotos.some((ph) => ph.name === f.name));
 
-      const incorrectFileSize = newPhotos.some((f) => f.size / 1024 / 1024 > 5);
+      const incorrectFileSize = newPhotos.some((f) => f.size / 1024 / 1024 > 1);
 
       if (incorrectFileSize) {
         return setPhotoError(true);

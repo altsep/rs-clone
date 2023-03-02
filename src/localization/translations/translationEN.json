@@ -164,7 +164,7 @@
     "message": "Type something here...",
     "empty": "Add someone as a friend and you can start a conversation"
   },
-  "imageAlert": "Max file size 5MB",
+  "imageAlert": "Max file size 1MB",
   "deletedAccount": "Deleted account",
   "delete": {
     "title": "Delete account",

@@ -98,8 +98,15 @@ export default function ProfileHeader() {
 
   const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
     if (e.target.files) {
+      const [file] = e.target.files;
+
+      if (file.size / 1024 / 1024 > 1) {
+        setImageError(true);
+        return;
+      }
+
       const formData: FormData = new FormData();
-      formData.append('user-avatar', e.target.files[0]);
+      formData.append('user-avatar', file);
       const res: Response | undefined = await triggerAvatarChange(formData);
 
       if (!res?.ok) {
@@ -112,8 +119,15 @@ export default function ProfileHeader() {
 
   const handleCoverChange = async (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
     if (e.target.files) {
+      const [file] = e.target.files;
+
+      if (file.size / 1024 / 1024 > 1) {
+        setImageError(true);
+        return;
+      }
+
       const formData: FormData = new FormData();
-      formData.append('user-cover', e.target.files[0]);
+      formData.append('user-cover', file);
       const res: Response | undefined = await triggerCoverChange(formData);
 
       if (!res?.ok) {
