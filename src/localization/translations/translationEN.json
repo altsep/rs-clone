@@ -1,0 +1,188 @@
+{
+  "login": {
+    "title": "Sign In",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "footerText": "Don't have an account yet?",
+    "errors": {
+      "email": "Email is required",
+      "password": "Password is required"
+    },
+    "loginError": "Wrong password or email address",
+    "authError": "Authorization error. Re-login required",
+    "confirmError": "Authorization error. Email confirmation required"
+  },
+  "registration": {
+    "title": "Sign Up",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "email": "Your Email",
+    "name": "Your Name",
+    "passwordCreate": "Create Password",
+    "passwordConfirm": "Confirm Password",
+    "country": "Country",
+    "birthDate": "Your Birthdate",
+    "footerText": "Already have an account?",
+    "successMessage": "To verify your account, follow the link sent to your email",
+    "errorMessage": "User with this email already exists",
+    "errors": {
+      "email": {
+        "required": "Email is required",
+        "validation": "yourmail@example.com"
+      },
+      "password": {
+        "required": "Password is required",
+        "validation": "Password must be 8-15 characters, include at least one lowercase letter, one uppercase letter, and a number"
+      },
+      "passwordConfirm": {
+        "required": "Password confirmation required",
+        "validation": "Passwords must match"
+      },
+      "name": {
+        "required": "Name is required",
+        "validation": "It's too short. The name must have at least 4 characters"
+      },
+      "country": {
+        "required": "Country is required",
+        "validation": "It's too short. Country must be at least 3 characters long. Whitespace is not allowed"
+      },
+      "birthDate": {
+        "required": "Birthdate is required",
+        "validation": "Invalid date. Age cannot be less than 14"
+      },
+      "alias": {
+        "validation": "Alias must contain at least 5 characters (a-z A-Z 0-9 _ -). Whitespaces not allowed"
+      }
+    },
+    "registrationErrors": {
+      "email": "User with email {{ email }} already exist"
+    },
+    "registrationSuccess": "To complete registration, follow the link sent to your email"
+  },
+  "settings": {
+    "menu": {
+      "language": "Language",
+      "theme": "Theme",
+      "editProfile": "Edit Profile",
+      "security": "Security"
+    },
+    "language": {
+      "title": "Language",
+      "subtitle": "Change RSSpace language"
+    },
+    "theme": {
+      "title": "Theme",
+      "subtitle": "Change RSSpace color theme",
+      "selectItems": {
+        "light": "Light",
+        "dark": "Dark"
+      }
+    },
+    "security": {
+      "title": "Security",
+      "closeProfile": "Сlose profile",
+      "changePassword": "Change password",
+      "changeSuccess": "Password changed successfully",
+      "changeError": "Unsuccessful attempt to change password. Try again"
+    },
+    "editProfile": {
+      "title": "Edit Profile",
+      "form": {
+        "name": "Full Name",
+        "email": "Email",
+        "alias": "Alias",
+        "country": "Country",
+        "birthDate": "Birthdate"
+      },
+      "aliasError": "Invalid value or user {{ alias }} already exist"
+    },
+    "buttons": {
+      "save": "Save",
+      "saved": "Saved!",
+      "cancel": "Cancel"
+    }
+  },
+  "search": "Users not found",
+  "searchPlaceholder": "Find friends",
+  "sideBar": {
+    "profile": "Profile",
+    "messages": "Messages",
+    "friends": "Friends",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "friends": {
+    "friends": "Friends",
+    "friendRequests": "Friend requests",
+    "friendsEmpty": "Empty. First add someone as a friend.",
+    "requestsEmpty": "Empty. You don't have friend requests.",
+    "friendCard": {
+      "message": "Write message",
+      "remove": "Remove friend",
+      "accept": "Accept",
+      "ignore": "Ignore"
+    }
+  },
+  "profile": {
+    "header": {
+      "editCover": "Edit Cover",
+      "editInfo": "Edit Basic Info",
+      "acceptRequest": "Accept friend request",
+      "message": "Write message",
+      "sentRequest": "Friend request sent",
+      "addFriend": "Add friend"
+    },
+    "addPost": {
+      "label": "What's happening?",
+      "button": "Post",
+      "photo": "Photo"
+    },
+    "friends": {
+      "title": "Friends",
+      "content": "Empty. First add someone as a friend."
+    },
+    "post": {
+      "delete": "Delete post",
+      "edit": "Edit",
+      "like": "Like",
+      "comments": "Comments",
+      "share": "Share",
+      "placeholder": "Write a comment..."
+    },
+    "notFound": "User not found",
+    "intro": "Information",
+    "hiddenUser": "This user chose to hide their data",
+    "hiddenInfo": "Information is hidden",
+    "lastSeen": "Last seen",
+    "online": "Online",
+    "offline": "Offline"
+  },
+  "messages": {
+    "title": "Messages",
+    "message": "Type something here...",
+    "empty": "Add someone as a friend and you can start a conversation"
+  },
+  "imageAlert": "Max file size 1MB",
+  "deletedAccount": "Deleted account",
+  "delete": {
+    "title": "Delete account",
+    "content1": "Are you sure you want to delete your account? This action is irreversible.",
+    "content2": "To confirm, enter the password and click the 'delete' button.",
+    "cancelBtn": "Cancel",
+    "deleteBtn": "Delete",
+    "placeholder": "Enter password",
+    "error": "Invalid password"
+  },
+  "footer": {
+    "description": "This social network for connecting and chatting with friends was created by the students of the course RSSchool JavaScript/Front-end 2022Q3",
+    "team": "Our team:",
+    "courses": "Courses:"
+  },
+  "404": {
+    "title": "Page not found",
+    "text": "This Page doesn`t exist or was removed! We suggest you back to home.",
+    "link": "Go to main page"
+  }
+}
