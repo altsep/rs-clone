@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Box, Card, CardHeader, Divider, List } from '@mui/material';
-
 import ClickableAvatar from '../../ClickableAvatar';
 import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
 import Message from './Message';
@@ -9,7 +8,6 @@ import { setUserOfActiveChat } from '../../../store/reducers/usersState';
 import { setActiveChat } from '../../../store/reducers/chatsState';
 import MessageCreator from './MessageCreator';
 import { INIT_MESSAGE, RoutePath } from '../../../constants';
-import useUsers from '../../../hooks/useUsers';
 import useUserChats from '../../../hooks/useUserChats';
 
 export default function ActiveChat() {
@@ -22,10 +20,9 @@ export default function ActiveChat() {
   const { authorizedUser, userOfActiveChat, usersOfExistingChats, idAuthorizedUser } = useAppSelector(
     (state) => state.users
   );
-  const { chats, activeChatMessages, activeChatIndex } = useAppSelector((state) => state.chats);
+  const { activeChatMessages, activeChatIndex } = useAppSelector((state) => state.chats);
 
-  const { isLoadingUsers } = useUsers();
-  const { isLoadingChats } = useUserChats(idAuthorizedUser);
+  const { userChats } = useUserChats(idAuthorizedUser);
 
   useEffect(() => {
     if (id && usersOfExistingChats.length !== 0) {
@@ -53,10 +50,10 @@ export default function ActiveChat() {
   }, [activeChatMessages]);
 
   useEffect(() => {
-    if (!isLoadingChats && !isLoadingUsers && chats.length === 0) {
+    if (userChats && userChats.length === 0) {
       navigate(RoutePath.notFound);
     }
-  }, [isLoadingChats, isLoadingUsers, chats, navigate]);
+  }, [userChats, navigate]);
 
   return (
     <Card
