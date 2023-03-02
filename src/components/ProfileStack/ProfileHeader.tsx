@@ -237,7 +237,7 @@ export default function ProfileHeader() {
                       >
                         <input
                           hidden
-                          accept=".jpg, .png"
+                          accept=".jpg, .jpeg, .png, .webp"
                           type="file"
                           ref={avatarPicker}
                           onChange={handleAvatarChange}
@@ -281,7 +281,13 @@ export default function ProfileHeader() {
               )}
               {idCurrentProfile === idAuthorizedUser && (
                 <Button variant="contained" sx={{ gap: 1 }} onClick={() => handlePicker(coverPicker)}>
-                  <input hidden accept=".jpg, .png" type="file" ref={coverPicker} onChange={handleCoverChange} />
+                  <input
+                    hidden
+                    accept=".jpg, .jpeg, .png, .webp"
+                    type="file"
+                    ref={coverPicker}
+                    onChange={handleCoverChange}
+                  />
                   <CloudDownloadOutlinedIcon />
                   <Typography sx={{ display: { xs: 'none', md: 'block' } }}>{t('profile.header.editCover')}</Typography>
                 </Button>
